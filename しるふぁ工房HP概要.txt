@@ -1,0 +1,197 @@
+site:
+  name: しるふぁ工房
+  name_en: Shilfa Studio
+  type: indie_game_developer_portal
+  concept: >
+    個人制作によるゲーム・ツール開発スタジオの公式ポータル。
+    作品紹介を中心に、開発者としての活動・技術・思想も発信する。
+
+branding:
+  tagline:
+    - 光を記録し、物語を紡ぐ。
+    - Indie Games & Creative Tools by Shilfa Studio
+  tone:
+    - calm
+    - creative
+    - technical
+    - indie
+  target_audience:
+    - ゲームプレイヤー
+    - 同人ユーザー
+    - 開発者・クリエイター
+    - 将来のコラボ・支援者
+
+navigation:
+  main_menu:
+    - Home
+    - Works
+    - Tools
+    - Devlog
+    - About
+    - Links
+  footer_menu:
+    - Contact
+    - Privacy
+    - Copyright
+
+pages:
+
+  Home:
+    purpose: サイト入口・最新情報の提示
+    sections:
+      hero:
+        content:
+          - 最新作品ビジュアル
+          - キャッチコピー
+          - 代表作品へのリンク
+      news:
+        type: list
+        items:
+          - release_info
+          - update_info
+          - event_info
+      featured_works:
+        display: card_grid
+        items:
+          - LuminusArchive
+          - TeacherStarFighter
+      featured_tools:
+        display: card_grid
+        items:
+          - VNS
+      creator_message:
+        content: 制作方針や一言コメント
+
+  Works:
+    purpose: ゲーム作品一覧
+    layout: card_grid
+    fields:
+      - title
+      - thumbnail
+      - genre
+      - platform
+      - status
+      - short_description
+      - link_to_detail
+    detail_page:
+      sections:
+        - overview
+        - screenshots
+        - movie_optional
+        - features
+        - download_or_store_link
+        - development_note_optional
+
+  Tools:
+    purpose: 開発ツール紹介
+    layout: card_grid
+    items:
+      - VNS
+    detail_page:
+      sections:
+        - overview
+        - features
+        - target_users
+        - screenshots
+        - documentation_link
+        - download_link
+        - version_info
+
+  Devlog:
+    purpose: 開発記録・技術発信
+    type: blog
+    categories:
+      - game_dev
+      - VNS
+      - graphics
+      - MSX
+      - tools
+      - design
+    article_fields:
+      - title
+      - date
+      - category
+      - content
+      - tags
+
+  About:
+    purpose: スタジオ紹介
+    sections:
+      profile:
+        fields:
+          - studio_name
+          - creator_name
+          - description
+          - development_style
+      philosophy:
+        content:
+          - 個人制作
+          - レトロ志向
+          - 技術と表現の融合
+      skills:
+        categories:
+          - Game Development (Unity)
+          - Visual Novel Engine
+          - Retro / MSX
+          - Audio / DTM
+      history:
+        type: timeline
+
+  Links:
+    purpose: 外部導線
+    items:
+      - BOOTH
+      - GitHub
+      - X (Twitter)
+      - YouTube_optional
+      - itch.io_optional
+
+  Contact:
+    purpose: 問い合わせ
+    methods:
+      - email
+      - external_form_optional
+      - SNS_DM_note
+
+content_management:
+
+  update_frequency:
+    news: occasional
+    devlog: optional
+    works: release_based
+
+  scalability:
+    future_works: unlimited
+    multiple_tools: supported
+    multi_language: possible
+
+technical:
+
+  structure:
+    type: static_site
+    recommended:
+      - HTML + CSS
+      - Static Site Generator_optional
+
+  performance:
+    mobile_friendly: true
+    lightweight: true
+
+  SEO:
+    meta_tags: true
+    OGP: true
+
+  assets:
+    image_format:
+      - webp
+      - png
+    thumbnail_size: 800x450
+
+future_expansion:
+
+  features:
+    - 多言語対応 (JP / EN)
+    - ダウンロードページ統合
+    - 二次創作ガイドライン
+    - プレスキット
+    - メディア掲載情報

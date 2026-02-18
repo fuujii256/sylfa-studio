@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>しるふぁ工房 | Indie Games &amp; Creative Tools</title>
+  <meta name="description" content="個人制作によるゲーム・ツール開発スタジオ「しるふぁ工房」の公式サイト。インディーゲームやビジュアルノベルエンジンVNStudioを開発・公開しています。">
+  <meta name="keywords" content="しるふぁ工房, インディーゲーム, VNStudio, ビジュアルノベル, 同人ゲーム">
+
+  <!-- OGP -->
+  <meta property="og:title" content="しるふぁ工房 | Indie Games &amp; Creative Tools">
+  <meta property="og:description" content="個人制作によるゲーム・ツール開発スタジオ。光を記録し、物語を紡ぐ。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shilfa-studio.example.com/">
+  <meta property="og:image" content="assets/ogp/ogp.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+  <!-- ============================================================
+    ナビゲーション
+  ============================================================ -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+        <span>しるふぁ工房</span>
+      </a>
+
+      <ul class="nav__menu" role="list">
+        <li><a href="index.html" class="nav__link">Home</a></li>
+        <li><a href="works.html" class="nav__link">Works</a></li>
+        <li><a href="tools.html" class="nav__link">Tools</a></li>
+        <li><a href="devlog.html" class="nav__link">Devlog</a></li>
+        <li><a href="about.html" class="nav__link">About</a></li>
+        <li><a href="links.html" class="nav__link">Links</a></li>
+      </ul>
+
+      <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+    ヒーローセクション
+  ============================================================ -->
+  <section class="hero" aria-label="ヒーロー">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Shilfa Studio — Indie Game Developer</p>
+
+      <h1 class="hero__title">
+        <span class="hero__title-main">しるふぁ工房</span>
+        <span class="hero__title-sub">Shilfa Studio</span>
+      </h1>
+
+      <p class="hero__tagline">光を記録し、物語を紡ぐ。</p>
+
+      <div class="hero__cta">
+        <a href="works.html" class="btn btn--primary">
+          <span>✦</span> 作品を見る
+        </a>
+        <a href="about.html" class="btn btn--outline">
+          スタジオについて
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span>SCROLL</span>
+    </div>
+  </section>
+
+  <main>
+
+    <!-- ============================================================
+      ニュースセクション
+    ============================================================ -->
+    <section class="section section--sm" aria-labelledby="news-heading">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-label">News</span>
+          <h2 class="section-title" id="news-heading">最新情報</h2>
+          <div class="divider"></div>
+        </div>
+
+        <ul class="news-list fade-in fade-in-delay-1" role="list">
+          <li class="news-item">
+            <time class="news-item__date" datetime="2026-02-18">2026.02.18</time>
+            <span class="news-item__badge news-item__badge--new">NEW</span>
+            <p class="news-item__title">しるふぁ工房 公式サイトをオープンしました</p>
+          </li>
+          <li class="news-item">
+            <time class="news-item__date" datetime="2026-02-01">2026.02.01</time>
+            <span class="news-item__badge news-item__badge--update">UPDATE</span>
+            <p class="news-item__title">VNStudio 開発中 — ビジュアルノベルエンジンを鋭意制作中</p>
+          </li>
+          <li class="news-item">
+            <time class="news-item__date" datetime="2025-12-01">2025.12.01</time>
+            <span class="news-item__badge news-item__badge--new">INFO</span>
+            <p class="news-item__title">MSX版ランタイム実装プロジェクト始動</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+      注目作品セクション
+    ============================================================ -->
+    <section class="section" aria-labelledby="works-heading">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-label">Featured Works</span>
+          <h2 class="section-title" id="works-heading">注目の作品</h2>
+          <div class="divider"></div>
+          <p class="section-desc">しるふぁ工房が手がけるインディーゲーム作品をご紹介します。</p>
+        </div>
+
+        <div class="card-grid card-grid--2">
+          <!-- LuminusArchive -->
+          <article class="card fade-in fade-in-delay-1">
+            <div class="card__thumb">
+              <span>🌟</span>
+            </div>
+            <div class="card__body">
+              <div class="card__tags">
+                <span class="tag">ビジュアルノベル</span>
+                <span class="tag tag--blue">PC</span>
+                <span class="tag tag--gold">開発中</span>
+              </div>
+              <h3 class="card__title">LuminusArchive</h3>
+              <p class="card__desc">光と記憶をテーマにしたビジュアルノベル。独自エンジン「VNStudio」で制作中の意欲作。</p>
+            </div>
+            <div class="card__footer">
+              <span class="text-muted" style="font-size:0.8rem;">Coming Soon</span>
+              <a href="works.html" class="btn btn--sm btn--outline">詳細 →</a>
+            </div>
+          </article>
+
+          <!-- TeacherStarFighter -->
+          <article class="card fade-in fade-in-delay-2">
+            <div class="card__thumb">
+              <span>⭐</span>
+            </div>
+            <div class="card__body">
+              <div class="card__tags">
+                <span class="tag tag--pink">シューティング</span>
+                <span class="tag tag--blue">PC</span>
+                <span class="tag">公開済</span>
+              </div>
+              <h3 class="card__title">TeacherStarFighter</h3>
+              <p class="card__desc">個性豊かな先生たちが宇宙で戦う、ユニークなシューティングゲーム。</p>
+            </div>
+            <div class="card__footer">
+              <span class="text-muted" style="font-size:0.8rem;">Released</span>
+              <a href="works.html" class="btn btn--sm btn--outline">詳細 →</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="text-center mt-xl fade-in">
+          <a href="works.html" class="btn btn--outline">すべての作品を見る →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+      ツールセクション
+    ============================================================ -->
+    <section class="section"
+      style="background: linear-gradient(180deg, transparent, rgba(201,167,240,0.03), transparent);"
+      aria-labelledby="tools-heading">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-label">Featured Tools</span>
+          <h2 class="section-title" id="tools-heading">開発ツール</h2>
+          <div class="divider"></div>
+          <p class="section-desc">クリエイターのための自作ツールを公開しています。</p>
+        </div>
+
+        <div class="card-grid card-grid--2">
+          <article class="card fade-in fade-in-delay-1" style="border-color: rgba(201,167,240,0.25);">
+            <div class="card__thumb"
+              style="background: linear-gradient(135deg, rgba(201,167,240,0.15), rgba(167,201,240,0.15));">
+              <span>🛠️</span>
+            </div>
+            <div class="card__body">
+              <div class="card__tags">
+                <span class="tag">ビジュアルノベルエンジン</span>
+                <span class="tag tag--blue">Unity</span>
+                <span class="tag tag--gold">開発中</span>
+              </div>
+              <h3 class="card__title">VNStudio</h3>
+              <p class="card__desc">Unityベースのビジュアルノベル制作エンジン。独自スクリプト言語でシナリオを記述でき、MSX版ランタイムにも対応予定。</p>
+            </div>
+            <div class="card__footer">
+              <span class="text-muted" style="font-size:0.8rem;">In Development</span>
+              <a href="tools.html" class="btn btn--sm btn--primary">詳細 →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+      クリエイターメッセージ
+    ============================================================ -->
+    <section class="section section--sm" aria-labelledby="message-heading">
+      <div class="container">
+        <div class="creator-message fade-in" style="max-width: 720px; margin: 0 auto;">
+          <blockquote class="creator-message__quote">
+            ゲームを作ることは、小さな世界を創ること。<br>
+            技術と表現の境界を探りながら、<br>
+            ひとりで、でも誠実に、作り続けています。
+          </blockquote>
+          <p class="creator-message__author">— しるふぁ工房</p>
+          <div class="mt-lg">
+            <a href="about.html" class="btn btn--outline btn--sm">スタジオについて →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+    フッター
+  ============================================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="nav__logo-icon" aria-hidden="true">✦</div>
+            しるふぁ工房
+          </div>
+          <p class="footer__tagline">
+            光を記録し、物語を紡ぐ。<br>
+            Indie Games &amp; Creative Tools by Shilfa Studio
+          </p>
+        </div>
+
+        <nav aria-label="フッターナビゲーション1">
+          <p class="footer__nav-title">Pages</p>
+          <ul class="footer__nav-list" role="list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="works.html">Works</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="devlog.html">Devlog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="links.html">Links</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="フッターナビゲーション2">
+          <p class="footer__nav-title">Info</p>
+          <ul class="footer__nav-list" role="list">
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+        <div class="footer__links">
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

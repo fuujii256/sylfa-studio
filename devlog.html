@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devlog — しるふぁ工房</title>
+    <meta name="description" content="しるふぁ工房の開発記録。ゲーム開発・VNStudio・グラフィックス・MSX・ツール・デザインに関する技術記事を発信。">
+    <meta property="og:title" content="Devlog — しるふぁ工房">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        /* ── カテゴリフィルター ── */
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.35rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            transition: all var(--transition-fast);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(201, 167, 240, 0.12);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* ── 記事カード ── */
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+        }
+
+        .article-card:hover {
+            border-color: var(--color-border-hover);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .article-card__meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-card__date {
+            font-family: var(--font-accent);
+            font-size: 0.75rem;
+            color: var(--color-text-dim);
+        }
+
+        .article-card__title {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .article-card__excerpt {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .article-card__arrow {
+            display: flex;
+            align-items: center;
+            color: var(--color-text-dim);
+            font-size: 1.2rem;
+            transition: transform var(--transition-fast), color var(--transition-fast);
+            align-self: center;
+        }
+
+        .article-card:hover .article-card__arrow {
+            transform: translateX(4px);
+            color: var(--color-primary);
+        }
+
+        /* ── 準備中バナー ── */
+        .coming-soon-banner {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--color-bg-card);
+            border: 1px dashed var(--color-border);
+            border-radius: var(--radius-xl);
+        }
+
+        .coming-soon-banner__icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon-banner__title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon-banner__desc {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">
+                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="works.html" class="nav__link">Works</a></li>
+                <li><a href="tools.html" class="nav__link">Tools</a></li>
+                <li><a href="devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="about.html" class="nav__link">About</a></li>
+                <li><a href="links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-hero">
+        <div class="container">
+            <span class="page-hero__label">Devlog</span>
+            <h1 class="page-hero__title">開発記録</h1>
+            <p class="page-hero__desc">ゲーム開発・ツール制作の記録と、技術的な知見を発信します。</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section--sm">
+            <div class="container" style="max-width:800px;">
+
+                <!-- カテゴリフィルター -->
+                <div class="filter-bar fade-in">
+                    <button class="filter-btn active">すべて</button>
+                    <button class="filter-btn">game_dev</button>
+                    <button class="filter-btn">VNS</button>
+                    <button class="filter-btn">graphics</button>
+                    <button class="filter-btn">MSX</button>
+                    <button class="filter-btn">tools</button>
+                    <button class="filter-btn">design</button>
+                </div>
+
+                <!-- サンプル記事（今後追加予定） -->
+                <div class="article-list">
+                    <article class="article-card fade-in fade-in-delay-1">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-18">2026.02.18</time>
+                                <span class="tag">VNS</span>
+                            </div>
+                            <h2 class="article-card__title">VNStudio — MSX版ランタイムの実装を始めました</h2>
+                            <p class="article-card__excerpt">
+                                UnityベースのVNStudioをMSX実機で動かすため、C言語によるランタイムの実装を開始。
+                                フォントシステムやBDOSコールの扱いについて記録します。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </article>
+
+                    <article class="article-card fade-in fade-in-delay-2">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-01">2026.02.01</time>
+                                <span class="tag tag--blue">MSX</span>
+                            </div>
+                            <h2 class="article-card__title">MSX2実機でビジュアルノベルを動かす挑戦</h2>
+                            <p class="article-card__excerpt">
+                                レトロコンピューターMSX2上でビジュアルノベルを動かすという無謀な挑戦の記録。
+                                メモリ制約・グラフィックモード・フォントシステムの設計について。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </article>
+
+                    <article class="article-card fade-in fade-in-delay-3">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2025-12-15">2025.12.15</time>
+                                <span class="tag tag--pink">design</span>
+                            </div>
+                            <h2 class="article-card__title">ビジュアルノベルのUI設計 — 読みやすさと美しさの両立</h2>
+                            <p class="article-card__excerpt">
+                                テキストウィンドウのデザイン、フォント選択、行間・字間の調整など、
+                                VNのUI設計で考えたことをまとめます。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </article>
+                </div>
+
+                <!-- 今後の記事予告 -->
+                <div class="coming-soon-banner fade-in mt-xl">
+                    <div class="coming-soon-banner__icon">✍️</div>
+                    <p class="coming-soon-banner__title">記事を随時追加予定</p>
+                    <p class="coming-soon-banner__desc">開発の進捗に合わせて、技術記事・開発日誌を更新していきます。</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="works.html">Works</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="devlog.html">Devlog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
