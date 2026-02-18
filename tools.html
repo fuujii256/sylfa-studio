@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools — しるふぁ工房</title>
+    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VNStudio」を公開予定。">
+    <meta property="og:title" content="Tools — しるふぁ工房">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        /* ── VNStudio 機能リスト ── */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            transition: border-color var(--transition-fast);
+        }
+
+        .feature-item:hover {
+            border-color: var(--color-border-hover);
+        }
+
+        .feature-item__icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .feature-item__title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-item__desc {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── ターゲットユーザー ── */
+        .target-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .target-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(201, 167, 240, 0.08);
+            border: 1px solid rgba(201, 167, 240, 0.2);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">
+                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="works.html" class="nav__link">Works</a></li>
+                <li><a href="tools.html" class="nav__link">Tools</a></li>
+                <li><a href="devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="about.html" class="nav__link">About</a></li>
+                <li><a href="links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-hero">
+        <div class="container">
+            <span class="page-hero__label">Tools</span>
+            <h1 class="page-hero__title">開発ツール</h1>
+            <p class="page-hero__desc">クリエイターのために作った、自作ツールを公開しています。</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section--sm">
+            <div class="container">
+
+                <!-- VNStudio メインカード -->
+                <div class="card fade-in" style="max-width:860px; margin:0 auto;">
+                    <div class="card__thumb"
+                        style="aspect-ratio:21/9; background:linear-gradient(135deg, rgba(201,167,240,0.15) 0%, rgba(167,201,240,0.15) 100%); font-size:4rem;">
+                        🛠️
+                    </div>
+                    <div class="card__body">
+                        <div class="card__tags">
+                            <span class="tag">ビジュアルノベルエンジン</span>
+                            <span class="tag tag--blue">Unity</span>
+                            <span class="tag tag--gold">開発中</span>
+                        </div>
+                        <h2 class="card__title" style="font-size:1.6rem;">VNStudio</h2>
+                        <p class="card__desc" style="font-size:0.95rem; margin-top:0.5rem;">
+                            Unityベースのビジュアルノベル制作エンジン。独自スクリプト言語でシナリオを記述でき、
+                            背景・キャラクター・BGM・テキスト演出などを柔軟に制御できます。
+                            MSX版ランタイムへの移植も進行中で、レトロプラットフォームへの対応も視野に入れています。
+                        </p>
+
+                        <!-- 機能一覧 -->
+                        <div class="fade-in fade-in-delay-1">
+                            <h3
+                                style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem; color:var(--color-primary);">
+                                主な機能</h3>
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">📝</span>
+                                    <div>
+                                        <p class="feature-item__title">独自スクリプト言語</p>
+                                        <p class="feature-item__desc">直感的な構文でシナリオ・演出を記述できる専用スクリプト言語</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">🎨</span>
+                                    <div>
+                                        <p class="feature-item__title">背景・キャラクター管理</p>
+                                        <p class="feature-item__desc">レイヤー構造で背景・立ち絵・エフェクトを柔軟に制御</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">🎵</span>
+                                    <div>
+                                        <p class="feature-item__title">BGM・SE制御</p>
+                                        <p class="feature-item__desc">フェードイン/アウト対応の音楽・効果音システム</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">💬</span>
+                                    <div>
+                                        <p class="feature-item__title">テキスト演出</p>
+                                        <p class="feature-item__desc">タイプライター効果・フォントサイズ変更・ルビ対応</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">🔀</span>
+                                    <div>
+                                        <p class="feature-item__title">選択肢・分岐</p>
+                                        <p class="feature-item__desc">プレイヤーの選択に応じたシナリオ分岐システム</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">🕹️</span>
+                                    <div>
+                                        <p class="feature-item__title">MSX版ランタイム</p>
+                                        <p class="feature-item__desc">MSX/MSX2実機向けのランタイム移植を開発中</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 対象ユーザー -->
+                        <div class="fade-in fade-in-delay-2">
+                            <h3
+                                style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem; color:var(--color-primary);">
+                                こんな方に</h3>
+                            <div class="target-grid">
+                                <div class="target-chip">🎮 ビジュアルノベルを作りたい方</div>
+                                <div class="target-chip">✍️ シナリオライター</div>
+                                <div class="target-chip">🎨 同人ゲーム制作者</div>
+                                <div class="target-chip">🕹️ レトロゲームファン</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card__footer">
+                        <div>
+                            <p style="font-size:0.75rem; color:var(--color-text-dim);">現在開発中 — 公開時期は未定</p>
+                        </div>
+                        <a href="links.html" class="btn btn--sm btn--outline">GitHub →</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="works.html">Works</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="devlog.html">Devlog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — しるふぁ工房</title>
+    <meta name="description" content="しるふぁ工房について。個人制作スタジオのプロフィール・制作哲学・スキルセット・活動歴を紹介。">
+    <meta property="og:title" content="About — しるふぁ工房">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        /* ── プロフィールカード ── */
+        .profile-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: start;
+            padding: 2rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-card__avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-lg);
+            background: var(--grad-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .profile-card__name {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-card__role {
+            font-family: var(--font-accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .profile-card__desc {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        /* ── 哲学カード ── */
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .philosophy-card {
+            padding: 1.5rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+
+        .philosophy-card:hover {
+            border-color: var(--color-border-hover);
+            transform: translateY(-4px);
+        }
+
+        .philosophy-card__icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .philosophy-card__title {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.4rem;
+        }
+
+        .philosophy-card__desc {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* ── スキルセクション ── */
+        .skill-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-section__title {
+            font-family: var(--font-accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .profile-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .profile-card__avatar {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">
+                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="works.html" class="nav__link">Works</a></li>
+                <li><a href="tools.html" class="nav__link">Tools</a></li>
+                <li><a href="devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="about.html" class="nav__link">About</a></li>
+                <li><a href="links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-hero">
+        <div class="container">
+            <span class="page-hero__label">About</span>
+            <h1 class="page-hero__title">スタジオについて</h1>
+            <p class="page-hero__desc">しるふぁ工房は、ひとりで作るインディーゲーム開発スタジオです。</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- プロフィール -->
+        <section class="section section--sm" aria-labelledby="profile-heading">
+            <div class="container" style="max-width:860px;">
+                <h2 id="profile-heading" class="sr-only">プロフィール</h2>
+                <div class="profile-card fade-in">
+                    <div class="profile-card__avatar" aria-hidden="true">✦</div>
+                    <div>
+                        <h2 class="profile-card__name">しるふぁ工房</h2>
+                        <p class="profile-card__role">Indie Game Developer / Tool Creator</p>
+                        <p class="profile-card__desc">
+                            個人制作によるゲーム・ツール開発スタジオ。<br>
+                            ビジュアルノベルを中心に、レトロコンピューターへの移植や自作エンジン開発など、
+                            技術と表現の境界を探りながら制作活動を続けています。<br><br>
+                            「光を記録し、物語を紡ぐ」をコンセプトに、ひとりで、でも誠実に、作り続けています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 制作哲学 -->
+        <section class="section section--sm" aria-labelledby="philosophy-heading">
+            <div class="container" style="max-width:860px;">
+                <div class="section-header fade-in">
+                    <span class="section-label">Philosophy</span>
+                    <h2 class="section-title" id="philosophy-heading">制作哲学</h2>
+                    <div class="divider"></div>
+                </div>
+                <div class="philosophy-grid">
+                    <div class="philosophy-card fade-in fade-in-delay-1">
+                        <div class="philosophy-card__icon">🧑‍💻</div>
+                        <h3 class="philosophy-card__title">個人制作</h3>
+                        <p class="philosophy-card__desc">企画・プログラム・グラフィック・音楽まで、ひとりで手がける一貫したものづくり</p>
+                    </div>
+                    <div class="philosophy-card fade-in fade-in-delay-2">
+                        <div class="philosophy-card__icon">🕹️</div>
+                        <h3 class="philosophy-card__title">レトロ志向</h3>
+                        <p class="philosophy-card__desc">MSXなどのレトロコンピューターへの愛着と、その技術的挑戦を大切にする</p>
+                    </div>
+                    <div class="philosophy-card fade-in fade-in-delay-3">
+                        <div class="philosophy-card__icon">⚗️</div>
+                        <h3 class="philosophy-card__title">技術と表現の融合</h3>
+                        <p class="philosophy-card__desc">エンジンを自作し、表現の可能性を広げることで、唯一無二の作品を目指す</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- スキルセット -->
+        <section class="section section--sm" aria-labelledby="skills-heading">
+            <div class="container" style="max-width:860px;">
+                <div class="section-header fade-in">
+                    <span class="section-label">Skills</span>
+                    <h2 class="section-title" id="skills-heading">スキルセット</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="fade-in fade-in-delay-1">
+                    <div class="skill-section">
+                        <p class="skill-section__title">Game Development</p>
+                        <div class="skill-grid">
+                            <span class="skill-badge">🎮 Unity</span>
+                            <span class="skill-badge">C#</span>
+                            <span class="skill-badge">ゲームデザイン</span>
+                            <span class="skill-badge">シナリオ設計</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-section">
+                        <p class="skill-section__title">Visual Novel Engine</p>
+                        <div class="skill-grid">
+                            <span class="skill-badge">🛠️ VNStudio</span>
+                            <span class="skill-badge">スクリプト言語設計</span>
+                            <span class="skill-badge">UI/UXデザイン</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-section">
+                        <p class="skill-section__title">Retro / MSX</p>
+                        <div class="skill-grid">
+                            <span class="skill-badge">🕹️ MSX / MSX2</span>
+                            <span class="skill-badge">C言語</span>
+                            <span class="skill-badge">アセンブラ</span>
+                            <span class="skill-badge">BDOS</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-section">
+                        <p class="skill-section__title">Audio / DTM</p>
+                        <div class="skill-grid">
+                            <span class="skill-badge">🎵 DTM</span>
+                            <span class="skill-badge">効果音制作</span>
+                            <span class="skill-badge">BGM制作</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-section">
+                        <p class="skill-section__title">Web / Design</p>
+                        <div class="skill-grid">
+                            <span class="skill-badge">🌐 HTML / CSS</span>
+                            <span class="skill-badge">JavaScript</span>
+                            <span class="skill-badge">グラフィックデザイン</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 活動歴タイムライン -->
+        <section class="section section--sm" aria-labelledby="history-heading">
+            <div class="container" style="max-width:860px;">
+                <div class="section-header fade-in">
+                    <span class="section-label">History</span>
+                    <h2 class="section-title" id="history-heading">活動歴</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="timeline fade-in fade-in-delay-1">
+                    <div class="timeline-item">
+                        <p class="timeline-item__year">2026</p>
+                        <h3 class="timeline-item__title">しるふぁ工房 公式サイト開設</h3>
+                        <p class="timeline-item__desc">スタジオの公式ポータルサイトをオープン。VNStudio・MSX版ランタイム開発を継続中。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-item__year">2025</p>
+                        <h3 class="timeline-item__title">VNStudio 開発開始 / MSX版ランタイム着手</h3>
+                        <p class="timeline-item__desc">Unityベースのビジュアルノベルエンジン「VNStudio」の開発を本格化。MSX実機向けランタイムの実装も開始。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-item__year">2024</p>
+                        <h3 class="timeline-item__title">LuminusArchive 企画・制作開始</h3>
+                        <p class="timeline-item__desc">光と記憶をテーマにしたビジュアルノベル「LuminusArchive」の企画・制作を開始。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-item__year">〜</p>
+                        <h3 class="timeline-item__title">個人ゲーム制作活動</h3>
+                        <p class="timeline-item__desc">インディーゲーム・同人ゲームの制作活動を継続。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="works.html">Works</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="devlog.html">Devlog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
