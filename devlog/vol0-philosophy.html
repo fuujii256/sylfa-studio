@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vol.0: 哲学編 — なぜ RS Studio を作るのか | しるふぁ工房</title>
+    <title>Vol.0: 哲学編 — なぜ いま　VN Studio を作るのか | しるふぁ工房</title>
     <meta name="description" content="制約が創造性を解放する——Unityの描画力を活かしながら、UIを徹底的にシンプルにした次世代ビジュアルノベルエンジン RS Studio の設計思想。">
     <meta property="og:title" content="Vol.0: 哲学編 — なぜ RS Studio を作るのか | しるふぁ工房">
     <meta property="og:type" content="article">
@@ -62,9 +62,9 @@
                     </p>
 
                     <p>
-                        一方、<strong>吉里吉里</strong>や<strong>Ren'Py</strong>のような専用エンジンは、
-                        ビジュアルノベルに特化しているぶん手軽ですが、表現力に天井があります。
-                        「もう少しリッチな演出がしたい」と思った瞬間、壁にぶつかります。
+                        一方、ビジュアルノベル向けの専用エンジンは、
+                        ビジュアルノベルに特化している分手軽ですが、表現力に天井があり、
+                        「もう少し「こう」したい、「ああ」したい」と思うとき、壁にぶつかります。
                     </p>
 
                     <blockquote>
@@ -73,7 +73,7 @@
                     </blockquote>
 
                     <p>
-                        RS Studio が目指すのは、この2つの世界の「いいとこ取り」です。
+                        VNStudio が目指すのは、この2つの世界の「いいとこ取り」です。
                         <strong>Unityの圧倒的な描画力</strong>はそのままに、
                         クリエイターが触る画面は<strong>徹底的にシンプル</strong>にする。
                         そのために選んだ手法が「リモートコントロール」です。
@@ -82,7 +82,7 @@
                     <h2>発想の転換 — Unity を「レンダラー」として使う</h2>
 
                     <p>
-                        RS Studio のアーキテクチャの核心は、
+                        VN Studio のアーキテクチャの核心は、
                         <strong>Unity を直接触らせない</strong>ことにあります。
                     </p>
 
@@ -95,8 +95,8 @@
                     </p>
 
                     <p>
-                        そこで RS Studio では、<strong>WPF (.NET) で作られた専用エディタ</strong>を用意し、
-                        そこからUnityランタイムを<strong>外部からリモートコントロール</strong>します。
+                        そこで VN Studio では、<strong>WPF (.NET) で作られた専用エディタ</strong>を用意し、
+                        そこからゲーム画面（Unity）を<strong>外部からリモートコントロール</strong>します。
                     </p>
 
                     <!-- アーキテクチャ図 -->
@@ -130,14 +130,14 @@ bg school_rooftop
 show heroine smile 200 0
 bgm play twilight
 
-ヒロイン "ねえ、この景色——好きだよ。"
+say しるふぁ "ねえ、この風景・・・素敵よね。"
 
 fade out screen 1.5
 wait 1
 bg night_sky
 fade in screen 1.5
 
-ヒロイン "いつまでも、覚えていてね。"</code></pre>
+say しるふぁ "いつまでも、忘れないよ。"</code></pre>
 
                     <p>
                         この数行のテキストが、Unityの強力なレンダリングパイプラインを通じて、
@@ -148,8 +148,8 @@ fade in screen 1.5
 
                     <p>
                         Unity は汎用エンジンだからこそ、ゲームジャンルに応じて無数の設定が存在します。
-                        しかし RS Studio は<strong>ビジュアルノベル専用</strong>と割り切ることで、
-                        UIからは不要な複雑さを徹底的に排除しました。
+                        しかし VN Studio は<strong>ビジュアルノベル専用</strong>と割り切ることで、
+                        UIからは不要な「複雑さ」を徹底的に排除しました。
                     </p>
 
                     <ul>
@@ -167,8 +167,8 @@ fade in screen 1.5
                     <h2>そして、レトロPCへ</h2>
 
                     <p>
-                        もう一つ、RS Studio のユニークな特徴があります。
-                        同じ WPF エディタから、Unity だけでなく <strong>MSX</strong>（1983年発売のレトロPC）にも
+                        もう一つ、VN Studio のユニークな特徴があります。
+                        同じ WPF エディタから、Windows だけでなく <strong>MSX2(TurboR)</strong>（1985年発売のレトロPC）にも
                         プレビューを送ることができるのです。
                     </p>
 
@@ -180,7 +180,7 @@ fade in screen 1.5
 
                     <p>
                         同じ物語が、最新の Unity6 レンダラーでも、40年前のレトロPCでも体験できる。
-                        それが RS Studio の描く未来です。
+                        それが VNStudio の描く未来です。
                     </p>
 
                     <h2>次回予告</h2>
