@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.3: レイヤーシステム編 — 映画的な奥行きを生む | しるふぁ工房</title>
+    <meta name="description" content="デュアルレイヤーと背景4枚重ねによる演出設計。シンプルなスクリプトで映画的な場面転換を実現する仕組み。">
+    <meta property="og:title" content="Vol.3: レイヤーシステム編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.3 — LAYER SYSTEM</span>
+                    <h1 class="article__title">映画的な奥行きを生む</h1>
+                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                </header>
+
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>なぜレイヤーが必要なのか</h2>
+
+                    <p>
+                        映画のシーンを思い浮かべてください。
+                        遠景の山並み、その手前に建物、さらに手前に人物、そして最前面にテロップ。
+                        この「奥行きの重なり」が、映像に深みと臨場感を与えます。
+                    </p>
+
+                    <p>
+                        ビジュアルノベルでも同じです。RS Studio は <strong>デュアルレイヤー構造</strong>と
+                        <strong>背景4枚重ね</strong>によって、この映画的な奥行きを実現します。
+                    </p>
+
+                    <h2>デュアルレイヤー — Main と Menu</h2>
+
+                    <p>
+                        RS Studio の画面は、大きく2つのレイヤーで構成されています:
+                    </p>
+
+                    <ul>
+                        <li><strong>Main レイヤー</strong> — ゲーム本編（背景、キャラクター、テキスト、エフェクト）</li>
+                        <li><strong>Menu レイヤー</strong> — メニュー画面（セーブ/ロード、システム設定）</li>
+                    </ul>
+
+                    <p>
+                        Menu レイヤーは Main レイヤーとは<strong>完全に独立</strong>して動作します。
+                        メニューを開いても本編の状態は一切影響を受けず、
+                        メニューを閉じれば即座に元のシーンに戻れます。
+                    </p>
+
+                    <p>
+                        この分離は <code>call</code> / <code>return</code> の仕組みで実現されており、
+                        メニュー呼び出し時には <strong>VisualSnapshot</strong> が
+                        Main レイヤーの状態（BG、キャラ、BGM）を丸ごと保存します。
+                    </p>
+
+                    <h2>背景4枚重ね — bg0 〜 bg3</h2>
+
+                    <p>
+                        Main レイヤーの背景は、4枚のレイヤーで構成されています:
+                    </p>
+
+                    <pre><code># レイヤー構造（手前 → 奥）
+┌──────────────────────────────┐
+│ bg3: 最前面エフェクト（光・パーティクル）│
+│ bg2: 前景オブジェクト                   │
+│ bg1: 中景（合成用）                     │
+│ bg0: 基本背景                          │
+└──────────────────────────────┘</code></pre>
+
+                    <p>
+                        スクリプトでは、以下のように直感的に制御できます:
+                    </p>
+
+                    <pre><code># 夕暮れの教室
+bg school_classroom            # bg0: 教室の基本背景
+bg1 sunset_overlay fade 2.0    # bg1: 夕焼けのオーバーレイを2秒フェード
+bg3 light_particles            # bg3: 窓からの光のパーティクル</code></pre>
+
+                    <p>
+                        これにより「背景に夕焼けのフィルターをかけ、光のパーティクルを浮かべる」
+                        といった演出が、わずか3行のスクリプトで実現できます。
+                    </p>
+
+                    <h2>VisualSnapshot — 状態の保存と復元</h2>
+
+                    <p>
+                        レイヤーシステムの影の立役者が、<strong>VisualSnapshot</strong> です。
+                        これは <code>call</code> コマンド（別スクリプトの呼び出し）を実行する際に、
+                        現在の画面状態を丸ごとキャプチャする仕組みです。
+                    </p>
+
+                    <ul>
+                        <li><strong>保存される情報</strong>: 各bgレイヤーの画像パス、キャラクター位置・表情、BGMファイル、テキスト設定</li>
+                        <li><strong>復元タイミング</strong>: <code>return</code> コマンド実行時に、保存した状態を即座に再適用</li>
+                    </ul>
+
+                    <p>
+                        これにより、メインストーリーから回想シーンに飛んで戻ってきても、
+                        画面が正確に元の状態に復元されます。
+                    </p>
+
+                    <h2>次回予告</h2>
+
+                    <p>
+                        Vol.4 では、これらの画像や音声ファイルを
+                        <strong>「フォルダに置くだけ」で自動認識する AssetLoader</strong> の設計を解説します。
+                    </p>
+
+                </div>
+
+                <nav class="article-nav fade-in">
+                    <a href="vol2-script-engine.html">← Vol.2: スクリプトエンジン編</a>
+                    <a href="vol4-asset-loader.html">Vol.4: 動的リソース管理編 →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

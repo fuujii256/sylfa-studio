@@ -1,0 +1,210 @@
+/* ============================================================
+ * article.css — Devlog 記事ページ共通スタイル
+ *
+ * 各記事ページ (devlog/volN-*.html) で読み込む。
+ * 本文の見出し、段落、引用、コードブロック、ナビゲーションの
+ * 統一的なスタイルを定義する。
+ * ============================================================ */
+
+/* ── 記事コンテナ ── */
+.article {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ── 記事ヘッダー ── */
+.article__header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.article__vol {
+    display: inline-block;
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    background: rgba(201, 167, 240, 0.12);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 1rem;
+}
+
+.article__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.article__date {
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+}
+
+/* ── 記事本文 ── */
+.article__body h2 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    border-left: 4px solid var(--color-primary);
+}
+
+.article__body h3 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.article__body p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+}
+
+.article__body strong {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+/* 引用ブロック — 哲学的メッセージや格言の強調に使う */
+.article__body blockquote {
+    margin: 1.5rem 0;
+    padding: 1.25rem 1.5rem;
+    background: rgba(201, 167, 240, 0.06);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+/* リスト */
+.article__body ul,
+.article__body ol {
+    margin: 1rem 0 1.5rem 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+.article__body li {
+    margin-bottom: 0.4rem;
+}
+
+/* ── コードブロック ── */
+.article__body pre {
+    margin: 1.5rem 0;
+    padding: 1.25rem 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+.article__body code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85em;
+    background: rgba(201, 167, 240, 0.08);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    color: var(--color-primary);
+}
+
+/* pre 内の code はリセット */
+.article__body pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+/* ── アーキテクチャ図 ── */
+.arch-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+    padding: 2rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.arch-box {
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 160px;
+}
+
+.arch-box--editor {
+    background: rgba(167, 201, 240, 0.12);
+    border: 1px solid rgba(167, 201, 240, 0.3);
+    color: var(--color-tertiary);
+}
+
+.arch-box--pipe {
+    background: rgba(201, 167, 240, 0.08);
+    border: 1px dashed rgba(201, 167, 240, 0.3);
+    color: var(--color-primary);
+    min-width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+}
+
+.arch-box--runtime {
+    background: rgba(240, 167, 201, 0.12);
+    border: 1px solid rgba(240, 167, 201, 0.3);
+    color: var(--color-secondary);
+}
+
+.arch-arrow {
+    color: var(--color-text-dim);
+    font-size: 1.2rem;
+}
+
+/* ── 記事ページ間ナビゲーション ── */
+.article-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.article-nav a {
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.article-nav a:hover {
+    opacity: 0.7;
+}

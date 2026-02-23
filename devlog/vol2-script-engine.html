@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.2: スクリプトエンジン編 — 文章を書くように演出する | しるふぁ工房</title>
+    <meta name="description" content="VNScript の設計思想——プログラミング経験がなくてもプロ級の演出が実現できるスクリプトシステムの全貌。">
+    <meta property="og:title" content="Vol.2: スクリプトエンジン編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.2 — SCRIPT ENGINE</span>
+                    <h1 class="article__title">文章を書くように演出する</h1>
+                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                </header>
+
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>「スクリプト」ではなく「演出台本」</h2>
+
+                    <p>
+                        RS Studio のスクリプト言語 <strong>VNScript</strong> は、
+                        プログラミング言語というよりも、<strong>演出台本</strong>に近い存在です。
+                        小説を書く感覚で、画面の動き・音・文字を制御できます。
+                    </p>
+
+                    <p>
+                        設計の出発点は「<strong>プログラマーでない人が読んでも意味が分かる</strong>」こと。
+                        そのため、コマンドは日本語の動作指示に近い命名を心がけました。
+                    </p>
+
+                    <h2>コマンド体系</h2>
+
+                    <h3>画面演出</h3>
+
+                    <pre><code># 背景の切り替え
+bg school_rooftop                    # 背景を学校の屋上に
+bg sunset_beach fade 2.0             # 2秒かけてフェードで切り替え
+
+# キャラクター表示
+show heroine smile 200 0             # ヒロインを笑顔で(200, 0)に表示
+show heroine sad 200 0 dissolve 1.0  # 悲しい顔に1秒でクロス</code></pre>
+
+                    <h3>テキスト表示</h3>
+
+                    <pre><code># セリフ — 話者名とテキストを分けて記述
+ヒロイン "おはよう。今日もいい天気だね。"
+
+# 地の文 — 話者名なし
+"窓の外では、桜の花びらが風に舞っている。"
+
+# テキスト速度の制御
+config text speed 80                 # 1文字80ミリ秒で表示</code></pre>
+
+                    <h3>音声・BGM</h3>
+
+                    <pre><code># BGMの再生
+bgm play morning_theme
+bgm play battle_theme fadein 2.0     # 2秒かけてフェードイン
+
+# 効果音
+se play door_open
+se play thunder                      # 雷の音</code></pre>
+
+                    <h2>RestoreState — 途中再開の魔法</h2>
+
+                    <p>
+                        ビジュアルノベルの開発中、スクリプトの途中からプレビューしたいことは非常に多いです。
+                        しかし「最初から再生して早送り」では時間がかかりすぎます。
+                    </p>
+
+                    <p>
+                        RS Studio では <strong>RestoreState</strong> という仕組みで、
+                        スクリプトの先頭から指定行まで<strong>高速スキャン</strong>します。
+                    </p>
+
+                    <ul>
+                        <li><strong>復元するコマンド</strong>: <code>bg</code>, <code>bgm</code>, <code>show</code>,
+                            <code>config</code>, <code>set</code>（変数代入）
+                        </li>
+                        <li><strong>スキップするコマンド</strong>: <code>say</code>, <code>wait</code>, <code>fade</code>,
+                            <code>se</code>, アニメーション系
+                        </li>
+                    </ul>
+
+                    <p>
+                        これにより、どのシーンからでも瞬時にプレビューが可能になります。
+                        エディタ上でダブルクリックした行まで、背景・キャラクター・BGMの状態が正確に再構築されるのです。
+                    </p>
+
+                    <blockquote>
+                        スクリプトのどこでも、ダブルクリックするだけで即座にプレビュー。
+                        これが RS Studio の開発体験です。
+                    </blockquote>
+
+                    <h2>フロー制御</h2>
+
+                    <p>
+                        VNScript は分岐やサブルーチンもサポートしています:
+                    </p>
+
+                    <pre><code># 選択肢
+branch "海に行く" beach_route "山に行く" mountain_route
+
+# ラベルとジャンプ
+*beach_route
+bg beach_sunny
+ヒロイン "やっぱり海が最高！"
+jump common_end
+
+# サブスクリプトの呼び出し
+call flashback.scn                   # 別ファイルを実行して戻ってくる</code></pre>
+
+                    <h2>次回予告</h2>
+
+                    <p>
+                        Vol.3 では、このスクリプトが制御する
+                        <strong>レイヤーシステム</strong>の内部構造を解説します。
+                        Main レイヤーと Menu レイヤーの分離、BG の4枚重ねがどう動くのかを紹介します。
+                    </p>
+
+                </div>
+
+                <nav class="article-nav fade-in">
+                    <a href="vol1-architecture.html">← Vol.1: アーキテクチャ編</a>
+                    <a href="vol3-layer-system.html">Vol.3: レイヤーシステム編 →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

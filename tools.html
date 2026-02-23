@@ -9,7 +9,7 @@
     <meta property="og:title" content="Tools — しるふぁ工房">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/images/nav_icon.png" type="image/png">
     <style>
         /* ── VNStudio 機能リスト ── */
         .feature-list {
@@ -80,7 +80,7 @@
     <nav class="nav" role="navigation" aria-label="メインナビゲーション">
         <div class="nav__inner">
             <a href="index.html" class="nav__logo">
-                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                 <span>しるふぁ工房</span>
             </a>
             <ul class="nav__menu" role="list">
@@ -101,7 +101,7 @@
         <div class="container">
             <span class="page-hero__label">Tools</span>
             <h1 class="page-hero__title">開発ツール</h1>
-            <p class="page-hero__desc">クリエイターのために作った、自作ツールを公開しています。</p>
+            <p class="page-hero__desc">貴方の「作ってみたい」を支援する、自作ツールを公開しています。</p>
         </div>
     </header>
 
@@ -109,94 +109,108 @@
         <section class="section section--sm">
             <div class="container">
 
-                <!-- VNStudio メインカード -->
+                <!-- RS Studio / VNStudio メインカード -->
                 <div class="card fade-in" style="max-width:860px; margin:0 auto;">
-                    <div class="card__thumb"
-                        style="aspect-ratio:21/9; background:linear-gradient(135deg, rgba(201,167,240,0.15) 0%, rgba(167,201,240,0.15) 100%); font-size:4rem;">
-                        🛠️
+                    <div class="card__thumb">
+                        <img src="assets/images/VN_Screenshot.webp" alt="VNStudio Editor Preview">
                     </div>
                     <div class="card__body">
                         <div class="card__tags">
-                            <span class="tag">ビジュアルノベルエンジン</span>
-                            <span class="tag tag--blue">Unity</span>
-                            <span class="tag tag--gold">開発中</span>
+                            <span class="tag">Next-Gen Visual Novel Engine</span>
+                            <span class="tag tag--blue">Unity6 + WPF</span>
+                            <span class="tag tag--gold">In Development</span>
                         </div>
-                        <h2 class="card__title" style="font-size:1.6rem;">VNStudio</h2>
-                        <p class="card__desc" style="font-size:0.95rem; margin-top:0.5rem;">
-                            Unityベースのビジュアルノベル制作エンジン。独自スクリプト言語でシナリオを記述でき、
-                            背景・キャラクター・BGM・テキスト演出などを柔軟に制御できます。
-                            MSX版ランタイムへの移植も進行中で、レトロプラットフォームへの対応も視野に入れています。
+                        <h2 class="card__title" style="font-size:1.8rem;">VNStudio (RS Studio)</h2>
+                        <p class="card__desc" style="font-size:1rem; margin-top:0.5rem; line-height:1.8;">
+                            <strong
+                                style="font-size: 1.3rem; color: var(--color-primary); display: block; margin-bottom: 0.25rem; letter-spacing: 0.02em;">『まるでiPadでお絵描きをするように…』</strong>
+                            <strong>「直感操作で、誰でもプロフェッショナルなノベルゲームを」</strong><br>
+                            高度なプログラミング技術を必要とせず、クリエイターが物語と演出の創造に集中できる環境を提供する次世代のビジュアルノベル開発ツールです。独自の軽量スクリプト言語により、文章を書くような感覚でリッチな演出を実現します。
                         </p>
 
-                        <!-- 機能一覧 -->
-                        <div class="fade-in fade-in-delay-1">
+                        <!-- アーキテクチャセクション -->
+                        <div class="fade-in fade-in-delay-1" style="margin-top: 2.5rem;">
                             <h3
-                                style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem; color:var(--color-primary);">
-                                主な機能</h3>
+                                style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; border-left: 4px solid var(--color-primary); padding-left: 1rem; margin-bottom: 1rem;">
+                                System Architecture</h3>
+                            <div class="card-grid"
+                                style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                                    <h4 style="font-size: 0.9rem; color: var(--color-tertiary); margin-bottom: 0.5rem;">
+                                        Unity6 Runtime</h4>
+                                    <p style="font-size: 0.8rem; color: var(--color-text-muted);">
+                                        圧倒的な描画パフォーマンスを誇るUnityをレンダリングエンジンとして採用。多彩な画像表現力を持ちます。将来的には3Dモデルの表示や最新の画像表現まで幅広く対応可能なポテンシャルを秘めています。
+                                    </p>
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                                    <h4
+                                        style="font-size: 0.9rem; color: var(--color-secondary); margin-bottom: 0.5rem;">
+                                        WPF (.NET) Editor</h4>
+                                    <p style="font-size: 0.8rem; color: var(--color-text-muted);">
+                                        　シンプルなコマンド体系。修正してクリックで再開したいところから即再生。複雑な操作を覚える必要はなく、ストレスフリーな編集・管理が可能です。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 主な特長 -->
+                        <div class="fade-in fade-in-delay-2" style="margin-top: 2.5rem;">
+                            <h3
+                                style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; border-left: 4px solid var(--color-primary); padding-left: 1rem; margin-bottom: 1rem;">
+                                Features</h3>
                             <div class="feature-list">
                                 <div class="feature-item">
-                                    <span class="feature-item__icon">📝</span>
+                                    <span class="feature-item__icon">💻</span>
                                     <div>
-                                        <p class="feature-item__title">独自スクリプト言語</p>
-                                        <p class="feature-item__desc">直感的な構文でシナリオ・演出を記述できる専用スクリプト言語</p>
+                                        <p class="feature-item__title">ノーコード・ローコード開発</p>
+                                        <p class="feature-item__desc">文章感覚で書けるVNScriptと、即座に結果を確認できるリアルタイムプレビューを搭載。</p>
                                     </div>
                                 </div>
                                 <div class="feature-item">
                                     <span class="feature-item__icon">🎨</span>
                                     <div>
-                                        <p class="feature-item__title">背景・キャラクター管理</p>
-                                        <p class="feature-item__desc">レイヤー構造で背景・立ち絵・エフェクトを柔軟に制御</p>
+                                        <p class="feature-item__title">高度なレイヤー演出</p>
+                                        <p class="feature-item__desc">背景・キャラ・UIを自由に合成し、映画のような奥行きのある演出を可能にします。</p>
                                     </div>
                                 </div>
                                 <div class="feature-item">
-                                    <span class="feature-item__icon">🎵</span>
+                                    <span class="feature-item__icon">📂</span>
                                     <div>
-                                        <p class="feature-item__title">BGM・SE制御</p>
-                                        <p class="feature-item__desc">フェードイン/アウト対応の音楽・効果音システム</p>
+                                        <p class="feature-item__title">動的リソース管理</p>
+                                        <p class="feature-item__desc">ファイルをフォルダに置くだけで自動認識。インポート設定の手間をゼロにします。</p>
                                     </div>
                                 </div>
                                 <div class="feature-item">
-                                    <span class="feature-item__icon">💬</span>
+                                    <span class="feature-item__icon">🚀</span>
                                     <div>
-                                        <p class="feature-item__title">テキスト演出</p>
-                                        <p class="feature-item__desc">タイプライター効果・フォントサイズ変更・ルビ対応</p>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <span class="feature-item__icon">🔀</span>
-                                    <div>
-                                        <p class="feature-item__title">選択肢・分岐</p>
-                                        <p class="feature-item__desc">プレイヤーの選択に応じたシナリオ分岐システム</p>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <span class="feature-item__icon">🕹️</span>
-                                    <div>
-                                        <p class="feature-item__title">MSX版ランタイム</p>
-                                        <p class="feature-item__desc">MSX/MSX2実機向けのランタイム移植を開発中</p>
+                                        <p class="feature-item__title">マルチプラットフォーム計画</p>
+                                        <p class="feature-item__desc">PC（Windows/Web/Mobile）に加え、MSX等のレトロPCへの展開も視野に入れた設計。
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 対象ユーザー -->
-                        <div class="fade-in fade-in-delay-2">
+                        <!-- ターゲットユーザー -->
+                        <div class="fade-in fade-in-delay-3" style="margin-top: 2.5rem;">
                             <h3
-                                style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem; color:var(--color-primary);">
-                                こんな方に</h3>
+                                style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; border-left: 4px solid var(--color-primary); padding-left: 1rem; margin-bottom: 1rem;">
+                                Target Users</h3>
                             <div class="target-grid">
-                                <div class="target-chip">🎮 ビジュアルノベルを作りたい方</div>
-                                <div class="target-chip">✍️ シナリオライター</div>
-                                <div class="target-chip">🎨 同人ゲーム制作者</div>
-                                <div class="target-chip">🕹️ レトロゲームファン</div>
+                                <div class="target-chip">✍️ 物語をリッチに演出したいライター</div>
+                                <div class="target-chip">🎨 自身のイラストを動かしたい絵師様</div>
+                                <div class="target-chip">⚡ 開発効率を最大化したいインディー開発者</div>
+                                <div class="target-chip">🕹️ レトロPCへの移植に興味がある方</div>
                             </div>
                         </div>
                     </div>
                     <div class="card__footer">
                         <div>
-                            <p style="font-size:0.75rem; color:var(--color-text-dim);">現在開発中 — 公開時期は未定</p>
+                            <p style="font-size:0.75rem; color:var(--color-text-dim);">Coming Soon — In active
+                                development</p>
                         </div>
-                        <a href="links.html" class="btn btn--sm btn--outline">GitHub →</a>
+                        <a href="links.html" class="btn btn--sm btn--outline">Find out more →</a>
                     </div>
                 </div>
 
@@ -209,10 +223,10 @@
             <div class="footer__inner">
                 <div class="footer__brand">
                     <div class="footer__logo">
-                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                         しるふぁ工房
                     </div>
-                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
                 </div>
                 <nav aria-label="フッターナビゲーション1">
                     <p class="footer__nav-title">Pages</p>
