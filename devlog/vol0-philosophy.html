@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.0: 哲学編 — なぜ RS Studio を作るのか | しるふぁ工房</title>
+    <meta name="description" content="制約が創造性を解放する——Unityの描画力を活かしながら、UIを徹底的にシンプルにした次世代ビジュアルノベルエンジン RS Studio の設計思想。">
+    <meta property="og:title" content="Vol.0: 哲学編 — なぜ RS Studio を作るのか | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.0 — PHILOSOPHY</span>
+                    <h1 class="article__title">なぜ RS Studio を作るのか</h1>
+                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>制約が創造性を解放する</h2>
+
+                    <p>
+                        ビジュアルノベルを作りたい。そう思い立ったとき、選択肢は意外と少ないことに気づきます。
+                    </p>
+
+                    <p>
+                        <strong>Unity</strong> や <strong>Unreal Engine</strong> のような汎用エンジンは、確かに何でもできます。
+                        3Dのオープンワールドもアクションゲームも、シミュレーションも。
+                        しかし「何でもできる」ということは、「何をするにも膨大な設定と学習が必要」ということの裏返しです。
+                    </p>
+
+                    <p>
+                        一方、<strong>吉里吉里</strong>や<strong>Ren'Py</strong>のような専用エンジンは、
+                        ビジュアルノベルに特化しているぶん手軽ですが、表現力に天井があります。
+                        「もう少しリッチな演出がしたい」と思った瞬間、壁にぶつかります。
+                    </p>
+
+                    <blockquote>
+                        まるで iPad でお絵描きをするように——<br>
+                        直感操作で、誰でもプロフェッショナルなノベルゲームを。
+                    </blockquote>
+
+                    <p>
+                        RS Studio が目指すのは、この2つの世界の「いいとこ取り」です。
+                        <strong>Unityの圧倒的な描画力</strong>はそのままに、
+                        クリエイターが触る画面は<strong>徹底的にシンプル</strong>にする。
+                        そのために選んだ手法が「リモートコントロール」です。
+                    </p>
+
+                    <h2>発想の転換 — Unity を「レンダラー」として使う</h2>
+
+                    <p>
+                        RS Studio のアーキテクチャの核心は、
+                        <strong>Unity を直接触らせない</strong>ことにあります。
+                    </p>
+
+                    <p>
+                        通常、Unity でゲームを作るには Unity Editor を開き、
+                        シーンを組み、プレハブを作り、インスペクタでパラメータを調整し……
+                        と、膨大な手順が必要です。
+                        これはプログラマーや技術に精通したクリエイターには問題ありませんが、
+                        「物語を書きたい」「イラストを動かしたい」という人にとっては大きな障壁です。
+                    </p>
+
+                    <p>
+                        そこで RS Studio では、<strong>WPF (.NET) で作られた専用エディタ</strong>を用意し、
+                        そこからUnityランタイムを<strong>外部からリモートコントロール</strong>します。
+                    </p>
+
+                    <!-- アーキテクチャ図 -->
+                    <div class="arch-diagram">
+                        <div class="arch-box arch-box--editor">
+                            <div style="font-size:1.5rem; margin-bottom:0.3rem;">📝</div>
+                            WPF Editor<br>
+                            <span style="font-size:0.7rem; opacity:0.7;">スクリプト編集・管理</span>
+                        </div>
+                        <span class="arch-arrow">──</span>
+                        <div class="arch-box arch-box--pipe">
+                            NamedPipe<br>双方向通信
+                        </div>
+                        <span class="arch-arrow">──▶</span>
+                        <div class="arch-box arch-box--runtime">
+                            <div style="font-size:1.5rem; margin-bottom:0.3rem;">🎮</div>
+                            Unity6 Runtime<br>
+                            <span style="font-size:0.7rem; opacity:0.7;">描画・音声・演出</span>
+                        </div>
+                    </div>
+
+                    <p>
+                        クリエイターは WPF エディタの軽快なテキストエディタ上で、
+                        独自の軽量スクリプト（VNScript）を書きます。
+                        <code>bg school</code> と書けば学校の背景が表示され、
+                        <code>show heroine smile</code> と書けばキャラクターが笑顔に変わります。
+                    </p>
+
+                    <pre><code># シンプルなスクリプト例
+bg school_rooftop
+show heroine smile 200 0
+bgm play twilight
+
+ヒロイン "ねえ、この景色——好きだよ。"
+
+fade out screen 1.5
+wait 1
+bg night_sky
+fade in screen 1.5
+
+ヒロイン "いつまでも、覚えていてね。"</code></pre>
+
+                    <p>
+                        この数行のテキストが、Unityの強力なレンダリングパイプラインを通じて、
+                        美しいフェード演出や高品質なオーディオ再生として実現されるのです。
+                    </p>
+
+                    <h2>ゲームスタイルを「限定する」という戦略</h2>
+
+                    <p>
+                        Unity は汎用エンジンだからこそ、ゲームジャンルに応じて無数の設定が存在します。
+                        しかし RS Studio は<strong>ビジュアルノベル専用</strong>と割り切ることで、
+                        UIからは不要な複雑さを徹底的に排除しました。
+                    </p>
+
+                    <ul>
+                        <li>シーン管理？ → <strong>不要</strong>。スクリプトがシーンそのもの。</li>
+                        <li>プレハブ設計？ → <strong>不要</strong>。背景もキャラも画像ファイルを置くだけ。</li>
+                        <li>Inspector設定？ → <strong>不要</strong>。すべてスクリプトで宣言的に記述。</li>
+                        <li>アセットインポート設定？ → <strong>不要</strong>。フォルダに置けば自動認識。</li>
+                    </ul>
+
+                    <p>
+                        これは「機能が少ない」のではなく、<strong>「必要な機能だけが、最高の形で使える」</strong>ということです。
+                        制約は不自由ではなく、創造に集中するための環境なのです。
+                    </p>
+
+                    <h2>そして、レトロPCへ</h2>
+
+                    <p>
+                        もう一つ、RS Studio のユニークな特徴があります。
+                        同じ WPF エディタから、Unity だけでなく <strong>MSX</strong>（1983年発売のレトロPC）にも
+                        プレビューを送ることができるのです。
+                    </p>
+
+                    <p>
+                        これはエディタが「特定のランタイムに依存しない」設計だからこそ実現できました。
+                        スクリプトをバイトコードにコンパイルし、MSX 用の Z80 ランタイムで解釈する。
+                        Floyd-Steinberg ディザリングで画像を 256 色に減色し、美咲フォントで日本語を表示する。
+                    </p>
+
+                    <p>
+                        同じ物語が、最新の Unity6 レンダラーでも、40年前のレトロPCでも体験できる。
+                        それが RS Studio の描く未来です。
+                    </p>
+
+                    <h2>次回予告</h2>
+
+                    <p>
+                        Vol.1 では、このアーキテクチャの心臓部である
+                        <strong>NamedPipe によるリモートコントロールの仕組み</strong>を、
+                        コードレベルで詳しく解説します。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="../devlog.html">← 記事一覧に戻る</a>
+                    <a href="vol1-architecture.html">Vol.1: アーキテクチャ編 →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

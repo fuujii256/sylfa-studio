@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.4: 動的リソース管理編 — フォルダに置くだけ | しるふぁ工房</title>
+    <meta name="description" content="Unityのインポート設定を不要にした革新的な AssetLoader の設計。フォルダに置くだけでアセットを自動認識する仕組み。">
+    <meta property="og:title" content="Vol.4: 動的リソース管理編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.4 — ASSET LOADER</span>
+                    <h1 class="article__title">フォルダに置くだけ</h1>
+                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                </header>
+
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>Unity の「インポート地獄」を解消する</h2>
+
+                    <p>
+                        Unity でゲームを作る際、もっとも煩雑な作業の一つが
+                        <strong>アセットのインポート設定</strong>です。
+                        画像の圧縮形式、Max Size、Filter Mode、Sprite の Pivot Point……
+                        ゲームの本質とは関係のない設定に、多くの時間が奪われます。
+                    </p>
+
+                    <p>
+                        RS Studio では、この煩雑さを根本から排除しました。
+                        <strong>ファイルをフォルダに置くだけ</strong>で、エンジンが自動的に認識します。
+                    </p>
+
+                    <h2>AssetLoader の自動探索</h2>
+
+                    <p>
+                        AssetLoader はスクリプトで指定されたファイル名（例: <code>bg school</code>）を受け取ると、
+                        以下のプロセスで実ファイルを解決します:
+                    </p>
+
+                    <h3>1. 拡張子の自動補完</h3>
+
+                    <p>
+                        スクリプトでは拡張子を省略できます。AssetLoader が自動的に候補を探します:
+                    </p>
+
+                    <pre><code># スクリプトに書くのはこれだけ
+bg school
+
+# 内部で以下の順に探索される
+school.png → school.jpg → school.webp → school.bmp</code></pre>
+
+                    <h3>2. ResourceRoot の上方探索</h3>
+
+                    <p>
+                        プロジェクトフォルダが深い階層にあっても、最大 <strong>10階層</strong> 上まで
+                        <code>ResourceRoot</code>（アセットの基準フォルダ）を探索します。
+                        これにより、どこにプロジェクトを配置しても自動的にアセットが見つかります。
+                    </p>
+
+                    <h3>3. Unity の Resources.Load を使わない</h3>
+
+                    <p>
+                        通常の Unity 開発では、動的にロードするアセットは
+                        <code>Resources</code> フォルダに配置し、<code>Resources.Load()</code> で呼び出します。
+                        しかしこの方法には問題があります:
+                    </p>
+
+                    <ul>
+                        <li>アセットを Unity プロジェクト内に配置する必要がある（コピーが必要）</li>
+                        <li>アセット変更時に Unity のインポート処理が走る（時間がかかる）</li>
+                        <li>大量ファイルでメモリを圧迫する</li>
+                    </ul>
+
+                    <p>
+                        RS Studio は <strong>Unity プロジェクトの外</strong>にアセットを配置し、
+                        ファイルシステムから直接読み込みます。
+                        これにより、Unity のインポートプロセスを完全にバイパスし、
+                        <strong>画像を保存した瞬間にプレビューに反映</strong>されます。
+                    </p>
+
+                    <blockquote>
+                        イラストレーターが画像を保存 → 即座にゲーム内で確認。<br>
+                        Unity の再インポート待ちは不要です。
+                    </blockquote>
+
+                    <h2>ディレクトリ構造の規約</h2>
+
+                    <pre><code>ProjectRoot/
+├── scenario/          # スクリプトファイル (.scn)
+│   ├── Main.scn
+│   └── chapter1.scn
+├── image/             # 画像アセット
+│   ├── bg/            # 背景画像
+│   └── chara/         # キャラクター画像
+├── bgm/               # BGM ファイル
+├── se/                # 効果音ファイル
+└── system/            # システムリソース</code></pre>
+
+                    <p>
+                        この規約さえ守れば、あとは<strong>ファイルを置くだけ</strong>。
+                        Unity のインスペクタを開く必要は一度もありません。
+                    </p>
+
+                    <h2>次回予告</h2>
+
+                    <p>
+                        Vol.5 では、ここまで解説してきたすべての仕組みを
+                        <strong>MSX（レトロPC）に移植する挑戦</strong>を記録します。
+                        Z80 CPU、64KB メモリ、256色——究極の制約環境での実装記録です。
+                    </p>
+
+                </div>
+
+                <nav class="article-nav fade-in">
+                    <a href="vol3-layer-system.html">← Vol.3: レイヤーシステム編</a>
+                    <a href="vol5-msx-runtime.html">Vol.5: MSX移植編 →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

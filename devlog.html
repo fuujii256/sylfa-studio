@@ -9,7 +9,7 @@
     <meta property="og:title" content="Devlog — しるふぁ工房">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/images/nav_icon.png" type="image/png">
     <style>
         /* ── カテゴリフィルター ── */
         .filter-bar {
@@ -141,7 +141,7 @@
     <nav class="nav" role="navigation" aria-label="メインナビゲーション">
         <div class="nav__inner">
             <a href="index.html" class="nav__logo">
-                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                 <span>しるふぁ工房</span>
             </a>
             <ul class="nav__menu" role="list">
@@ -181,59 +181,130 @@
                     <button class="filter-btn">design</button>
                 </div>
 
-                <!-- サンプル記事（今後追加予定） -->
+                <!-- RS Studio 開発記録シリーズ -->
                 <div class="article-list">
-                    <article class="article-card fade-in fade-in-delay-1">
-                        <div>
-                            <div class="article-card__meta">
-                                <time class="article-card__date" datetime="2026-02-18">2026.02.18</time>
-                                <span class="tag">VNS</span>
-                            </div>
-                            <h2 class="article-card__title">VNStudio — MSX版ランタイムの実装を始めました</h2>
-                            <p class="article-card__excerpt">
-                                UnityベースのVNStudioをMSX実機で動かすため、C言語によるランタイムの実装を開始。
-                                フォントシステムやBDOSコールの扱いについて記録します。
-                            </p>
-                        </div>
-                        <span class="article-card__arrow" aria-hidden="true">→</span>
-                    </article>
 
-                    <article class="article-card fade-in fade-in-delay-2">
+                    <!-- Vol.0: 哲学編 -->
+                    <a href="devlog/vol0-philosophy.html" class="article-card fade-in fade-in-delay-1"
+                        style="text-decoration:none; color:inherit;">
                         <div>
                             <div class="article-card__meta">
-                                <time class="article-card__date" datetime="2026-02-01">2026.02.01</time>
-                                <span class="tag tag--blue">MSX</span>
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.0</span>
+                                <span class="tag">Philosophy</span>
                             </div>
-                            <h2 class="article-card__title">MSX2実機でビジュアルノベルを動かす挑戦</h2>
+                            <h2 class="article-card__title">Vol.0: 哲学編 — なぜ いま「VN Studio」を作るのか</h2>
                             <p class="article-card__excerpt">
-                                レトロコンピューターMSX2上でビジュアルノベルを動かすという無謀な挑戦の記録。
-                                メモリ制約・グラフィックモード・フォントシステムの設計について。
+                                「高度な表現力を持つ強力なランタイム」と、「徹底的にシンプルに構成された編集画面」。
+                                また「その組み合わせによるリアルタイム編集」という発想の転換が生まれた背景を語ります。
                             </p>
                         </div>
                         <span class="article-card__arrow" aria-hidden="true">→</span>
-                    </article>
+                    </a>
 
-                    <article class="article-card fade-in fade-in-delay-3">
+                    <!-- Vol.1: アーキテクチャ編 -->
+                    <a href="devlog/vol1-architecture.html" class="article-card fade-in fade-in-delay-2"
+                        style="text-decoration:none; color:inherit;">
                         <div>
                             <div class="article-card__meta">
-                                <time class="article-card__date" datetime="2025-12-15">2025.12.15</time>
-                                <span class="tag tag--pink">design</span>
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.1</span>
+                                <span class="tag tag--blue">Architecture</span>
                             </div>
-                            <h2 class="article-card__title">ビジュアルノベルのUI設計 — 読みやすさと美しさの両立</h2>
+                            <h2 class="article-card__title">Vol.1: アーキテクチャ編 — Editor ↔ Runtime のリモートコントロール</h2>
                             <p class="article-card__excerpt">
-                                テキストウィンドウのデザイン、フォント選択、行間・字間の調整など、
-                                VNのUI設計で考えたことをまとめます。
+                                WPF Editor と Unity Runtime を NamedPipe で接続する仕組みを解説。
+                                エディタでダブルクリックした瞬間にUnityがシーンを再現する、リアルタイムプレビューの実装について。
                             </p>
                         </div>
                         <span class="article-card__arrow" aria-hidden="true">→</span>
-                    </article>
+                    </a>
+
+                    <!-- Vol.2: スクリプトエンジン編 -->
+                    <a href="devlog/vol2-script-engine.html" class="article-card fade-in fade-in-delay-3"
+                        style="text-decoration:none; color:inherit;">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.2</span>
+                                <span class="tag">Script Engine</span>
+                            </div>
+                            <h2 class="article-card__title">Vol.2: スクリプトエンジン編 — 文章を書くように演出する</h2>
+                            <p class="article-card__excerpt">
+                                VNScript の設計思想と、なぜ「自然言語に近い構文」を選んだか。
+                                プログラミング経験がなくてもプロ級の演出が実現できるスクリプトシステムの全貌。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <!-- Vol.3: レイヤーシステム編 -->
+                    <a href="devlog/vol3-layer-system.html" class="article-card fade-in"
+                        style="text-decoration:none; color:inherit;">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.3</span>
+                                <span class="tag tag--pink">Visual</span>
+                            </div>
+                            <h2 class="article-card__title">Vol.3: レイヤーシステム編 — 映画的な奥行きを生む</h2>
+                            <p class="article-card__excerpt">
+                                デュアルレイヤー（Main / Menu）と背景4枚重ねによる演出設計。
+                                シンプルなスクリプトで映画のカットのような場面転換を実現する仕組み。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <!-- Vol.4: 動的リソース管理編 -->
+                    <a href="devlog/vol4-asset-loader.html" class="article-card fade-in"
+                        style="text-decoration:none; color:inherit;">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.4</span>
+                                <span class="tag tag--blue">System</span>
+                            </div>
+                            <h2 class="article-card__title">Vol.4: 動的リソース管理編 — フォルダに置くだけ</h2>
+                            <p class="article-card__excerpt">
+                                Unityの複雑なインポート設定を不要にした、革新的なアセット解決ロジック。
+                                「ファイルをフォルダに置くだけ」で画像・音声を自動認識する AssetLoader の設計。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <!-- Vol.5: MSX移植編 -->
+                    <a href="devlog/vol5-msx-runtime.html" class="article-card fade-in"
+                        style="text-decoration:none; color:inherit;">
+                        <div>
+                            <div class="article-card__meta">
+                                <time class="article-card__date" datetime="2026-02-19">2026.02.19</time>
+                                <span class="tag"
+                                    style="background:rgba(201,167,240,0.15); color:var(--color-primary);">Vol.5</span>
+                                <span class="tag tag--gold">MSX</span>
+                            </div>
+                            <h2 class="article-card__title">Vol.5: MSX移植編 — レトロPCへの挑戦</h2>
+                            <p class="article-card__excerpt">
+                                同じスクリプトがMSX2(TurboR)実機で動く——ScriptCompilerによるバイトコード変換、
+                                Z80 Cランタイム、美咲フォントUTF-8描画、Floyd-Steinbergディザリングの実装記録。
+                            </p>
+                        </div>
+                        <span class="article-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
                 </div>
 
                 <!-- 今後の記事予告 -->
                 <div class="coming-soon-banner fade-in mt-xl">
                     <div class="coming-soon-banner__icon">✍️</div>
-                    <p class="coming-soon-banner__title">記事を随時追加予定</p>
-                    <p class="coming-soon-banner__desc">開発の進捗に合わせて、技術記事・開発日誌を更新していきます。</p>
+                    <p class="coming-soon-banner__title">連載は随時更新予定</p>
+                    <p class="coming-soon-banner__desc">RS Studio の開発進捗に合わせて、各記事の内容を充実させていきます。</p>
                 </div>
 
             </div>
@@ -245,10 +316,10 @@
             <div class="footer__inner">
                 <div class="footer__brand">
                     <div class="footer__logo">
-                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                         しるふぁ工房
                     </div>
-                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
                 </div>
                 <nav aria-label="フッターナビゲーション1">
                     <p class="footer__nav-title">Pages</p>

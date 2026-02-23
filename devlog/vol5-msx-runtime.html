@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.5: MSX移植編 — レトロPCへの挑戦 | しるふぁ工房</title>
+    <meta name="description" content="同じスクリプトがMSX2実機で動く——バイトコード変換、Z80 Cランタイム、美咲フォントUTF-8描画の実装記録。">
+    <meta property="og:title" content="Vol.5: MSX移植編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.5 — MSX RUNTIME</span>
+                    <h1 class="article__title">レトロPCへの挑戦</h1>
+                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                </header>
+
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>40年前のPCで、ビジュアルノベルを動かす</h2>
+
+                    <p>
+                        <strong>MSX</strong>——1983年に登場した8ビットパソコンの共通規格。
+                        Z80 CPU（3.58MHz）、64KB RAM、256色表示（SCREEN 8）。
+                        現代のスマートフォンと比べれば、約100万倍以上の性能差があります。
+                    </p>
+
+                    <p>
+                        RS Studio は、この究極の制約環境でもビジュアルノベルを動かすことを目指しています。
+                        しかも <strong>Unity 版と同じスクリプト</strong>から。
+                    </p>
+
+                    <blockquote>
+                        WPF エディタで書いたスクリプトが、Unity でも MSX でも動く。<br>
+                        それが RS Studio の「Write Once, Play Anywhere」です。
+                    </blockquote>
+
+                    <h2>ScriptCompiler — .scn → .VNB バイトコード変換</h2>
+
+                    <p>
+                        MSX の Z80 CPU はテキストベースのスクリプトを直接解釈するには遅すぎます。
+                        そこで、WPF Editor に搭載された <strong>ScriptCompiler</strong> が、
+                        VNScript（<code>.scn</code>）をコンパクトな<strong>バイトコード（<code>.VNB</code>）</strong>に変換します。
+                    </p>
+
+                    <pre><code># VNScript (テキスト)
+bg school
+say ヒロイン "おはよう"
+wait_input
+
+# ↓ ScriptCompiler が変換
+
+# VNB (バイトコード)
+03 73 63 68 6F 6F 6C 00  # BG "school\0"
+01 ... UTF-8 text ... 00  # SAY (ヌル終端)
+02                         # WAIT_INPUT
+FF                         # END</code></pre>
+
+                    <h3>VM Opcodes</h3>
+
+                    <p>MSX ランタイムの仮想マシンが解釈するオペコードは最小限に抑えています:</p>
+
+                    <ul>
+                        <li><code>0x00</code> <strong>NOP</strong> — 何もしない</li>
+                        <li><code>0x01</code> <strong>SAY</strong> — 文字列表示 + 入力待ち</li>
+                        <li><code>0x02</code> <strong>WAIT_INPUT</strong> — キー入力待ち（カーソル点滅）</li>
+                        <li><code>0x03</code> <strong>BG</strong> — 画像読み込みと表示</li>
+                        <li><code>0x06</code> <strong>JUMP</strong> — スクリプトジャンプ</li>
+                        <li><code>0xFF</code> <strong>END</strong> — プログラム終了</li>
+                    </ul>
+
+                    <h2>VRAM と画像表示 — .SC8 フォーマット</h2>
+
+                    <p>
+                        MSX2 の SCREEN 8 モードでは、<strong>256色</strong>（各ピクセル1バイト）で
+                        <strong>512 × 212</strong> ドットの画面を表示できます。
+                        VRAM に直接ピクセルデータを書き込むことで、高速な画像表示を実現します。
+                    </p>
+
+                    <p>
+                        元画像（PNG/JPEG）は、WPF Editor 側で以下の変換を経て <code>.SC8</code> 形式になります:
+                    </p>
+
+                    <ol>
+                        <li><strong>リサイズ</strong> — 512 × 212 ドットに変換</li>
+                        <li><strong>Floyd-Steinberg ディザリング</strong> — MSX の 256色パレットに減色</li>
+                        <li><strong>.SC8 出力</strong> — 1ピクセル1バイトの生データ</li>
+                    </ol>
+
+                    <p>
+                        ディザリングにより、限られた色数でも驚くほど自然なグラデーションが再現されます。
+                    </p>
+
+                    <h2>美咲フォント — UTF-8 日本語表示</h2>
+
+                    <p>
+                        MSX で日本語を表示するために、<strong>美咲フォント</strong>（8×8 ビットマップフォント）を採用しました。
+                        このフォントは Unicode ベースのため、Z80 ランタイムにも
+                        <strong>UTF-8 デコーダ</strong>を実装しています。
+                    </p>
+
+                    <pre><code>// UTF-8 デコード処理（Z80 C 実装の概要）
+// 1バイト文字: 0xxxxxxx        → ASCII
+// 2バイト文字: 110xxxxx 10xxxxxx → ラテン拡張
+// 3バイト文字: 1110xxxx 10xxxxxx 10xxxxxx → 日本語</code></pre>
+
+                    <p>
+                        デコードされた Unicode コードポイントから美咲フォントのグリフを検索し、
+                        VRAM 上にピクセル単位で描画します。
+                    </p>
+
+                    <h2>MegaROM バンク切り替え</h2>
+
+                    <p>
+                        MSX の 64KB メモリでは、フォントデータだけで大きな領域を消費します。
+                        そこで <strong>MegaROM</strong>（ASCII8 Mapper）のバンク切り替えを活用し、
+                        フォントデータを独立したメモリセグメントに配置しています。
+                    </p>
+
+                    <ul>
+                        <li><strong>Segment 0</strong> — プログラムコード + スタック</li>
+                        <li><strong>Segment 1</strong> — フォントインデックス</li>
+                        <li><strong>Segment 2-3</strong> — フォントグリフデータ</li>
+                    </ul>
+
+                    <h2>まとめ — 制約の中で輝く創造性</h2>
+
+                    <p>
+                        MSX 版の開発は、RS Studio の哲学——「<strong>制約が創造性を解放する</strong>」——
+                        を最も体現するプロジェクトです。
+                    </p>
+
+                    <p>
+                        256色、64KB メモリ、3.58MHz の CPU。
+                        これらの制約があるからこそ、ディザリングの美しさ、バイトコードの効率性、
+                        メモリマッピングの繊細さが際立ちます。
+                    </p>
+
+                    <p>
+                        そして何より——<strong>40年前のハードウェアで、最新のツールで書かれた物語が動く</strong>。
+                        その事実そのものが、技術の力と可能性を証明しています。
+                    </p>
+
+                </div>
+
+                <nav class="article-nav fade-in">
+                    <a href="vol4-asset-loader.html">← Vol.4: 動的リソース管理編</a>
+                    <a href="../devlog.html">記事一覧に戻る →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

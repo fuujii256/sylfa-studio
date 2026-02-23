@@ -257,6 +257,14 @@ ol {
   font-size: 1rem;
 }
 
+.nav__logo-img {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
 .nav__menu {
   display: flex;
   align-items: center;

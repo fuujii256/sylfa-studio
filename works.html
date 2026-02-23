@@ -10,7 +10,7 @@
     <meta property="og:description" content="しるふぁ工房のゲーム作品一覧。">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/images/nav_icon.png" type="image/png">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
     <nav class="nav" role="navigation" aria-label="メインナビゲーション">
         <div class="nav__inner">
             <a href="index.html" class="nav__logo">
-                <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                 <span>しるふぁ工房</span>
             </a>
             <ul class="nav__menu" role="list">
@@ -61,9 +61,8 @@
 
                     <!-- LuminusArchive -->
                     <article class="card fade-in fade-in-delay-1">
-                        <div class="card__thumb"
-                            style="background: linear-gradient(135deg, rgba(201,167,240,0.2), rgba(240,167,201,0.1));">
-                            <span>🌟</span>
+                        <div class="card__thumb">
+                            <img src="assets/images/luminus_archive.webp" alt="LuminusArchive">
                         </div>
                         <div class="card__body">
                             <div class="card__tags">
@@ -85,9 +84,8 @@
 
                     <!-- TeacherStarFighter -->
                     <article class="card fade-in fade-in-delay-2">
-                        <div class="card__thumb"
-                            style="background: linear-gradient(135deg, rgba(167,201,240,0.2), rgba(240,217,167,0.1));">
-                            <span>⭐</span>
+                        <div class="card__thumb">
+                            <img src="assets/images/teacher_star_fighter.webp" alt="TeacherStarFighter">
                         </div>
                         <div class="card__body">
                             <div class="card__tags">
@@ -97,30 +95,38 @@
                             </div>
                             <h2 class="card__title">TeacherStarFighter</h2>
                             <p class="card__desc">
-                                個性豊かな先生たちが宇宙で戦う、ユニークなシューティングゲーム。
+                                先生がアロナ達と共に謎の敵と宇宙で戦う、ブルアカの横スクロールシューティングゲーム。
                                 ユーモアあふれるキャラクターと、テンポよく楽しめるゲームプレイが魅力。
                             </p>
                         </div>
                         <div class="card__footer">
                             <span class="text-muted" style="font-size:0.8rem;">Released</span>
-                            <a href="links.html" class="btn btn--sm btn--primary">入手する →</a>
+                            <a href="https://unityroom.com/games/teachersfv1" target="_blank" rel="noopener noreferrer"
+                                class="btn btn--sm btn--primary">プレイ →</a>
                         </div>
                     </article>
 
-                    <!-- 今後の作品プレースホルダー -->
-                    <article class="card fade-in fade-in-delay-3" style="opacity:0.5; pointer-events:none;">
+                    <!-- キョウカちゃんの新婚さんさんいらっしゃい！ -->
+                    <article class="card fade-in fade-in-delay-3">
                         <div class="card__thumb">
-                            <span>🔮</span>
+                            <img src="assets/images/kyoka_newlywed_adventure_gameplay.jpg" alt="キョウカちゃんの新婚さんいらっしゃい！">
                         </div>
                         <div class="card__body">
                             <div class="card__tags">
-                                <span class="tag">未発表</span>
+                                <span class="tag tag--pink">ビジュアルノベル</span>
+                                <span class="tag tag--blue">PC (Windows)</span>
+                                <span class="tag tag--gold">開発中</span>
                             </div>
-                            <h2 class="card__title">Next Project...</h2>
-                            <p class="card__desc">次回作を鋭意制作中。お楽しみに。</p>
+                            <h2 class="card__title">キョウカちゃんの新婚さんいらっしゃい！</h2>
+                            <p class="card__desc">
+                                キョウカちゃんと新婚さんになるお話。全年齢向けで、甘々な新婚生活が楽しめるライトノベルアドベンチャーです。
+                                なつかしいコマンド選択式のアドベンチャーゲームになっています。独自エンジン「VNStudio」の最新機能を活用しながら、鋭意制作中。
+                            </p>
                         </div>
                         <div class="card__footer">
-                            <span class="text-muted" style="font-size:0.8rem;">TBA</span>
+                            <span class="text-muted" style="font-size:0.8rem;">In Development</span>
+                            <a href="https://studio-sylfa.fanbox.cc/posts/11345840" target="_blank"
+                                rel="noopener noreferrer" class="btn btn--sm btn--primary">詳細 (FANBOX) →</a>
                         </div>
                     </article>
 
@@ -134,10 +140,10 @@
             <div class="footer__inner">
                 <div class="footer__brand">
                     <div class="footer__logo">
-                        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+                        <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
                         しるふぁ工房
                     </div>
-                    <p class="footer__tagline">光を記録し、物語を紡ぐ。</p>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
                 </div>
                 <nav aria-label="フッターナビゲーション1">
                     <p class="footer__nav-title">Pages</p>

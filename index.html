@@ -10,14 +10,14 @@
 
   <!-- OGP -->
   <meta property="og:title" content="しるふぁ工房 | Indie Games &amp; Creative Tools">
-  <meta property="og:description" content="個人制作によるゲーム・ツール開発スタジオ。光を記録し、物語を紡ぐ。">
+  <meta property="og:description" content="個人制作によるゲーム・ツール開発スタジオ。想いを記録にかえて、未来を紡ぐ。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://github.com/fuujii256/sylfa-studio">
+  <meta property="og:url" content="https://fuujii256.github.io/sylfa-studio/">
   <meta property="og:image" content="assets/ogp/ogp.png">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/images/nav_icon.png" type="image/png">
 </head>
 
 <body>
@@ -28,7 +28,7 @@
   <nav class="nav" role="navigation" aria-label="メインナビゲーション">
     <div class="nav__inner">
       <a href="index.html" class="nav__logo">
-        <div class="nav__logo-icon" aria-hidden="true">✦</div>
+        <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
         <span>しるふぁ工房</span>
       </a>
 
@@ -55,18 +55,19 @@
     <div class="hero__overlay" aria-hidden="true"></div>
 
     <div class="hero__content">
-      <p class="hero__eyebrow">Shilfa Studio — Indie Game Developer</p>
+      <p class="hero__eyebrow">sylfa Studio — Indie Game Developer</p>
 
       <h1 class="hero__title">
         <span class="hero__title-main">しるふぁ工房</span>
-        <span class="hero__title-sub">Shilfa Studio</span>
+        <span class="hero__title-sub">sylfa Studio</span>
       </h1>
 
-      <p class="hero__tagline">光を記録し、物語を紡ぐ。</p>
+      <p class="hero__tagline">想いを記録にかえて、未来を紡ぐ。</p>
 
       <div class="hero__cta">
         <a href="works.html" class="btn btn--primary">
-          <span>✦</span> 作品を見る
+          <img src="assets/images/nav_icon.png" alt=""
+            style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1);"> 作品を見る
         </a>
         <a href="about.html" class="btn btn--outline">
           スタジオについて
@@ -95,17 +96,17 @@
 
         <ul class="news-list fade-in fade-in-delay-1" role="list">
           <li class="news-item">
-            <time class="news-item__date" datetime="2026-02-18">2026.02.18</time>
+            <time class="news-item__date" datetime="2026-02-23">2026.02.23</time>
             <span class="news-item__badge news-item__badge--new">NEW</span>
             <p class="news-item__title">しるふぁ工房 公式サイトをオープンしました</p>
           </li>
           <li class="news-item">
-            <time class="news-item__date" datetime="2026-02-01">2026.02.01</time>
+            <time class="news-item__date" datetime="2026-02-23">2026.02.23</time>
             <span class="news-item__badge news-item__badge--update">UPDATE</span>
             <p class="news-item__title">VNStudio 開発中 — ビジュアルノベルエンジンを鋭意制作中</p>
           </li>
           <li class="news-item">
-            <time class="news-item__date" datetime="2025-12-01">2025.12.01</time>
+            <time class="news-item__date" datetime="2026-02-23">2025.02.23</time>
             <span class="news-item__badge news-item__badge--new">INFO</span>
             <p class="news-item__title">MSX版ランタイム実装プロジェクト始動</p>
           </li>
@@ -129,7 +130,7 @@
           <!-- LuminusArchive -->
           <article class="card fade-in fade-in-delay-1">
             <div class="card__thumb">
-              <span>🌟</span>
+              <img src="assets/images/luminus_archive.webp" alt="LuminusArchive">
             </div>
             <div class="card__body">
               <div class="card__tags">
@@ -149,7 +150,7 @@
           <!-- TeacherStarFighter -->
           <article class="card fade-in fade-in-delay-2">
             <div class="card__thumb">
-              <span>⭐</span>
+              <img src="assets/images/teacher_star_fighter.webp" alt="TeacherStarFighter">
             </div>
             <div class="card__body">
               <div class="card__tags">
@@ -158,7 +159,7 @@
                 <span class="tag">公開済</span>
               </div>
               <h3 class="card__title">TeacherStarFighter</h3>
-              <p class="card__desc">個性豊かな先生たちが宇宙で戦う、ユニークなシューティングゲーム。</p>
+              <p class="card__desc">先生がアロナ達と共に謎の敵と宇宙で戦う、ブルアカの横スクロールシューティングゲーム。</p>
             </div>
             <div class="card__footer">
               <span class="text-muted" style="font-size:0.8rem;">Released</span>
@@ -189,9 +190,8 @@
 
         <div class="card-grid card-grid--2">
           <article class="card fade-in fade-in-delay-1" style="border-color: rgba(201,167,240,0.25);">
-            <div class="card__thumb"
-              style="background: linear-gradient(135deg, rgba(201,167,240,0.15), rgba(167,201,240,0.15));">
-              <span>🛠️</span>
+            <div class="card__thumb">
+              <img src="assets/images/VN_Screenshot.webp" alt="VNStudio">
             </div>
             <div class="card__body">
               <div class="card__tags">
@@ -199,8 +199,9 @@
                 <span class="tag tag--blue">Unity</span>
                 <span class="tag tag--gold">開発中</span>
               </div>
-              <h3 class="card__title">VNStudio</h3>
-              <p class="card__desc">Unityベースのビジュアルノベル制作エンジン。独自スクリプト言語でシナリオを記述でき、MSX版ランタイムにも対応予定。</p>
+              <h3 class="card__title">VNStudio (RS Studio)</h3>
+              <p class="card__desc">
+                「まるでiPadでお絵描きするようにゲームづくり」を実現する次世代エンジン。Unity6の強力な描画力とWPFの快適な操作性を融合し、ノーコードでの高度なゲーム制作を支援します。</p>
             </div>
             <div class="card__footer">
               <span class="text-muted" style="font-size:0.8rem;">In Development</span>
@@ -240,11 +241,11 @@
       <div class="footer__inner">
         <div class="footer__brand">
           <div class="footer__logo">
-            <div class="nav__logo-icon" aria-hidden="true">✦</div>
+            <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
             しるふぁ工房
           </div>
           <p class="footer__tagline">
-            光を記録し、物語を紡ぐ。<br>
+            想いを記録にかえて、未来を紡ぐ。<br>
             Indie Games &amp; Creative Tools by Sylfa Studio
           </p>
         </div>
@@ -271,7 +272,7 @@
       </div>
 
       <div class="footer__bottom">
-        <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+        <p class="footer__copy">© 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
         <div class="footer__links">
           <a href="contact.html">Contact</a>
           <a href="privacy.html">Privacy</a>
