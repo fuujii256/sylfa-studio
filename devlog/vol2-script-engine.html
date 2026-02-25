@@ -75,18 +75,20 @@
 
                     <pre><code># 背景の切り替え
 bg school_rooftop                    # 背景を学校の屋上に
-bg sunset_beach fade 2.0             # 2秒かけてフェードで切り替え
+bg sunset_beach 
+fade in 2.0                          # 2秒かけてフェードで切り替え
 
 # キャラクター表示
 show heroine smile 200 0             # ヒロインを笑顔で(200, 0)に表示
-show heroine sad 200 0 dissolve 1.0  # 悲しい顔に1秒でクロス</code></pre>
+show heroine sad 200 0 
+fade in  1.0                         # 悲しい顔に1秒でフェード</code></pre>
 
                     <h3>テキスト表示</h3>
 
                     <pre><code># セリフ — 話者名とテキストを分けて記述
-ヒロイン "おはよう。今日もいい天気だね。"
+しるふぁ "おはよう。今日もいい天気だね。"
 
-# 地の文 — 話者名なし
+# 地の文 — （ナレーション）
 "窓の外では、桜の花びらが風に舞っている。"
 
 # テキスト速度の制御
@@ -96,7 +98,8 @@ config text speed 80                 # 1文字80ミリ秒で表示</code></pre>
 
                     <pre><code># BGMの再生
 bgm play morning_theme
-bgm play battle_theme fadein 2.0     # 2秒かけてフェードイン
+bgm play battle_theme 
+fade in 2.0                          # 2秒かけてフェードイン
 
 # 効果音
 se play door_open
@@ -124,13 +127,13 @@ se play thunder                      # 雷の音</code></pre>
                     </ul>
 
                     <p>
-                        これにより、どのシーンからでも瞬時にプレビューが可能になります。
-                        エディタ上でダブルクリックした行まで、背景・キャラクター・BGMの状態が正確に再構築されるのです。
+                        これにより、どのシーンからでも<strong>瞬時にプレビュー</strong>が可能になります。
+                        エディタ上でダブルクリックした行で、<strong>背景・キャラクター・BGMの状態が正確に再構築</strong>されるのです。
                     </p>
 
                     <blockquote>
                         スクリプトのどこでも、ダブルクリックするだけで即座にプレビュー。
-                        これが RS Studio の開発体験です。
+                        これが <strong>VN Studio</strong> の開発体験です。
                     </blockquote>
 
                     <h2>フロー制御</h2>
@@ -145,7 +148,7 @@ branch "海に行く" beach_route "山に行く" mountain_route
 # ラベルとジャンプ
 *beach_route
 bg beach_sunny
-ヒロイン "やっぱり海が最高！"
+しるふぁ "わかります！やっぱり海はいいですよね。"
 jump common_end
 
 # サブスクリプトの呼び出し
