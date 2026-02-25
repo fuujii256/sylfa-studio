@@ -14,7 +14,7 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vol.1: アーキテクチャ編 — Editor ↔ Runtime のリモートコントロール | しるふぁ工房</title>
-    <meta name="description" content="WPF Editor と Unity Runtime を NamedPipe で接続する RS Studio のリモートコントロールアーキテクチャを解説。">
+    <meta name="description" content="WPF Editor と Unity Runtime を NamedPipe で接続する VN Studio のリモートコントロールアーキテクチャを解説。">
     <meta property="og:title" content="Vol.1: アーキテクチャ編 | しるふぁ工房">
     <meta property="og:type" content="article">
     <link rel="stylesheet" href="../css/style.css">
@@ -32,9 +32,9 @@
             </a>
             <ul class="nav__menu" role="list">
                 <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
                 <li><a href="../works.html" class="nav__link">Works</a></li>
                 <li><a href="../tools.html" class="nav__link">Tools</a></li>
-                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
                 <li><a href="../about.html" class="nav__link">About</a></li>
                 <li><a href="../links.html" class="nav__link">Links</a></li>
             </ul>
@@ -91,7 +91,7 @@
                     <p>送受信されるメッセージは JSON 形式です。主要なコマンドは以下の通りです:</p>
 
                     <pre><code>// Editor → Runtime: スクリプトの読み込みと実行
-{ "type": "load_script", "payload": "bg school\nsay ヒロイン \"おはよう\"" }
+{ "type": "load_script", "payload": "bg school\nしるふぁ \"おはよう\"" }
 
 // Editor → Runtime: 特定行へのジャンプ（ダブルクリック時）
 { "type": "jump_to_source", "payload": "chapter1.scn:42" }
@@ -144,7 +144,7 @@
 
                 <nav class="article-nav fade-in">
                     <a href="vol0-philosophy.html">← Vol.0: 哲学編</a>
-                    <a href="#" class="disabled">Vol.2: スクリプトエンジン編 (準備中) →</a>
+                    <a href="vol2-script-engine.html">Vol.2: スクリプトエンジン編 →</a>
                 </nav>
 
             </article>
@@ -165,9 +165,9 @@
                     <p class="footer__nav-title">Pages</p>
                     <ul class="footer__nav-list" role="list">
                         <li><a href="../index.html">Home</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
                         <li><a href="../works.html">Works</a></li>
                         <li><a href="../tools.html">Tools</a></li>
-                        <li><a href="../devlog.html">Devlog</a></li>
                         <li><a href="../about.html">About</a></li>
                         <li><a href="../links.html">Links</a></li>
                     </ul>
