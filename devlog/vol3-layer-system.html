@@ -66,7 +66,7 @@
 
                     <p>
                         ビジュアルノベルでも同じです。VN Studio は <strong>デュアルレイヤー構造</strong>と
-                        <strong>背景4枚重ね</strong>によって、この映画的な奥行きを実現します。
+                        <strong>背景4枚重ね</strong>によって、この表現力を向上させ、映画的な奥行きを実現します。
                     </p>
 
                     <h2>デュアルレイヤー — Main と Menu</h2>
@@ -119,6 +119,8 @@ bg3 light_particles            # bg3: 窓からの光のパーティクル</code
                     <p>
                         これにより「背景に夕焼けのフィルターをかけ、光のパーティクルを浮かべる」
                         といった演出が、わずか3行のスクリプトで実現できます。
+                        また、背景に動画（WebP、APNG透過対応）を指定することもできます。
+                        スクリプト上ではファイル名の指定だけで、画像と動画の区別を意識する必要もありません。
                     </p>
 
                     <h2>VisualSnapshot — 状態の保存と復元</h2>
@@ -135,8 +137,9 @@ bg3 light_particles            # bg3: 窓からの光のパーティクル</code
                     </ul>
 
                     <p>
-                        これにより、メインストーリーから回想シーンに飛んで戻ってきても、
-                        画面が正確に元の状態に復元されます。
+                        このメニューレイヤーは、スクリプトによるカスタマイズも可能です。
+                        これにより、メインストーリーから、（例えば）アイテム選択画面に遷移させるなど、柔軟なゲーム設計が可能になっています。
+                        そして、メニューを閉じれば、画面が正確に元の状態に復元されます。
                     </p>
 
                     <h2>次回予告</h2>
@@ -150,7 +153,8 @@ bg3 light_particles            # bg3: 窓からの光のパーティクル</code
 
                 <nav class="article-nav fade-in">
                     <a href="vol2-script-engine.html">← Vol.2: スクリプトエンジン編</a>
-                    <a href="vol4-asset-loader.html">Vol.4: 動的リソース管理編 →</a>
+                    <span style="color: var(--color-text-dim); cursor: default;" aria-disabled="true">Vol.4: 動的リソース管理編 →
+                        <small style="font-size:0.75em; opacity:0.7;">(Coming Soon)</small></span>
                 </nav>
 
             </article>
