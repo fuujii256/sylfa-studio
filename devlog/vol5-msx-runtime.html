@@ -51,16 +51,16 @@
                 <header class="article__header fade-in">
                     <span class="article__vol">VOL.5 — MSX RUNTIME</span>
                     <h1 class="article__title">レトロPCへの挑戦</h1>
-                    <time class="article__date" datetime="2026-02-19">2026.02.19</time>
+                    <time class="article__date" datetime="2026-03-03">2026.03.03</time>
                 </header>
 
                 <div class="article__body fade-in fade-in-delay-1">
 
-                    <h2>40年前のPCで、ビジュアルノベルを動かす</h2>
+                    <h2>思い出の40年前のPCで、ビジュアルノベルを動かす</h2>
 
                     <p>
                         <strong>MSX</strong>——1983年に登場した8ビットパソコンの共通規格。
-                        Z80 CPU（3.58MHz）、64KB RAM、256色表示（SCREEN 8）。
+                        Z80 CPU（3.58MHz）、128KB RAM、256色表示（SCREEN 8）。
                         現代のスマートフォンと比べれば、約100万倍以上の性能差があります。
                     </p>
 
@@ -97,7 +97,7 @@ FF                         # END</code></pre>
 
                     <h3>VM Opcodes</h3>
 
-                    <p>MSX ランタイムの仮想マシンが解釈するオペコードは最小限に抑えています:</p>
+                    <p>MSX ランタイムの仮想マシンが解釈するオペコードは最小限に抑えて設計を進めています:</p>
 
                     <ul>
                         <li><code>0x00</code> <strong>NOP</strong> — 何もしない</li>
@@ -112,8 +112,8 @@ FF                         # END</code></pre>
 
                     <p>
                         MSX2 の SCREEN 8 モードでは、<strong>256色</strong>（各ピクセル1バイト）で
-                        <strong>512 × 212</strong> ドットの画面を表示できます。
-                        VRAM に直接ピクセルデータを書き込むことで、高速な画像表示を実現します。
+                        <strong>256 × 212</strong> ドットの画面を表示できます。
+                        Z80アセンブラを駆使し、VDPコマンドをうまく活用しながら、VRAM にピクセルデータを書き込むことで、高速な画像表示を実現します。
                     </p>
 
                     <p>
@@ -121,21 +121,21 @@ FF                         # END</code></pre>
                     </p>
 
                     <ol>
-                        <li><strong>リサイズ</strong> — 512 × 212 ドットに変換</li>
-                        <li><strong>Floyd-Steinberg ディザリング</strong> — MSX の 256色パレットに減色</li>
+                        <li><strong>リサイズ</strong> — 256 × 212 ドットに変換</li>
+                        <li><strong>（Floyd-Steinberg ディザリングなど）</strong> — MSX の 256色パレットに減色</li>
                         <li><strong>.SC8 出力</strong> — 1ピクセル1バイトの生データ</li>
                     </ol>
 
                     <p>
-                        ディザリングにより、限られた色数でも驚くほど自然なグラデーションが再現されます。
+                        ディザリングなどのこだわりをもったアルゴリズムにより、限られた色数でも元画像の魅力を損なわないように。
                     </p>
 
                     <h2>美咲フォント — UTF-8 日本語表示</h2>
 
                     <p>
-                        MSX で日本語を表示するために、<strong>美咲フォント</strong>（8×8 ビットマップフォント）を採用しました。
-                        このフォントは Unicode ベースのため、Z80 ランタイムにも
-                        <strong>UTF-8 デコーダ</strong>を実装しています。
+                        MSX2 で日本語を表示するために、<strong>美咲フォント</strong>（8×8 ビットマップフォント）を採用しました。
+                        Unicode ベースのこのフォントを最適化し、漢字VRAMのないMSX2でも
+                        windowsの日本語テキストをそのまま表示可能な<strong>UTF-8 デコーダ</strong>を新規開発しました。
                     </p>
 
                     <pre><code>// UTF-8 デコード処理（Z80 C 実装の概要）
@@ -166,18 +166,17 @@ FF                         # END</code></pre>
 
                     <p>
                         MSX 版の開発は、VN Studio の哲学——「<strong>制約が創造性を解放する</strong>」——
-                        を最も体現するプロジェクトです。
+                        を体現するとともに、「私が昔あこがれた、MSXでのゲーム作りを今ここで」を実現するプロジェクトです。
                     </p>
 
                     <p>
                         256色、64KB メモリ、3.58MHz の CPU。
-                        これらの制約があるからこそ、ディザリングの美しさ、バイトコードの効率性、
-                        メモリマッピングの繊細さが際立ちます。
+                        これらの制約を乗り越え、ぜひあなたのクリエイティビティを解き放ちましょう。
                     </p>
 
                     <p>
                         そして何より——<strong>40年前のハードウェアで、最新のツールで書かれた物語が動く</strong>。
-                        その事実そのものが、技術の力と可能性を証明しています。
+                        その事実そのものが、あらゆる未来の可能性を証明しています。
                     </p>
 
                 </div>
