@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.7: MSX3構想編 — 僕たちが夢見た「あの頃の未来」 | しるふぁ工房</title>
+    <meta name="description" content="アーケードの完全移植ができるMSX——少年時代の憧れを、Z80マルチコアと3画面出力という構想で具現化する。MSX3が描く「当時ほしかったパソコン」の姿。">
+    <meta property="og:title" content="Vol.7: MSX3構想編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.7 — MSX3 VISION</span>
+                    <h1 class="article__title">僕たちが夢見た「あの頃の未来」</h1>
+                    <time class="article__date" datetime="2026-03-19">2026.03.19</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>憧れのアーケードゲームが、家で動く</h2>
+
+                    <p>
+                        少年の頃、ゲームセンターで目にした光景を覚えているだろうか。
+                    </p>
+
+                    <p>
+                        巨大な筐体から溢れ出る、圧倒的なグラフィックス。
+                        多重スクロールする背景、滑らかに動くキャラクター、ステレオで鳴り響くFM音源——。
+                        あの世界を、家に持って帰りたい。
+                        少年だった僕たちの願いは、いつもそこにあった。
+                    </p>
+
+                    <p>
+                        <strong>X68000</strong>が、<strong>FM TOWNS</strong>が、その夢に応えてくれた時代があった。
+                        「アーケードの完全移植」という魔法の言葉に、僕たちは胸を躍らせた。
+                    </p>
+
+                    <p>
+                        でも、あの頃の自分に問いたい。
+                        もし<strong>MSX</strong>で、あの夢を叶えられていたら？
+                        もっと手軽に。もっと楽しみながら。
+                        僕たちが本当にほしかったのは、<strong>「MSXのまま進化したパソコン」</strong>だったのではないか。
+                    </p>
+
+                    <blockquote>
+                        MSX3とは——「あの頃、僕たちがほしかったMSX」を、いま具現化する試みである。
+                    </blockquote>
+
+                    <h2>設計原則 — MSX2の上位互換であること</h2>
+
+                    <p>
+                        MSX3を考えるにあたって、まず据えるべき大前提がある。
+                    </p>
+
+                    <p>
+                        <strong>MSX2のハードウェアアーキテクチャを完全に再現したうえで、その上位互換であること。</strong>
+                    </p>
+
+                    <p>
+                        これは単なるレトロ趣味の互換性要件ではない。設計思想の継承だ。
+                        MSX2を知る人なら、同じ発想で——新たに学ぶべき学習コストを最小限に抑えながら——
+                        より高性能なマシンをプログラミングできる。
+                        Z80アセンブラを書ける人は、そのままZ80アセンブラでMSX3のプログラムが書ける。
+                        BASICでゲームを作った経験は、そのまま活きる。
+                    </p>
+
+                    <p>
+                        過去の資産と経験を否定しない。その延長線上に、新しい世界を拓く。
+                        それがMSX3という構想の核心だ。
+                    </p>
+
+                    <h2>Z80マルチコア — 「あの基板」の構造を再現する</h2>
+
+                    <p>
+                        ここからが、この構想の面白いところだ。
+                    </p>
+
+                    <p>
+                        思い出してほしい。少年時代に憧れた名作アーケード基板——たとえばセガの<strong>System 16</strong>、
+                        あるいはカプコンの<strong>CP System</strong>。
+                        あれらの内部構造は、多くの場合こうなっていた。
+                    </p>
+
+                    <ul>
+                        <li><strong>MC68000 × 2</strong> — メイン演算とBG描画</li>
+                        <li><strong>Z80 × 1</strong> — サウンド制御</li>
+                    </ul>
+
+                    <p>
+                        複数のCPUがそれぞれ役割を分担し、協調して一つのゲーム体験を生み出していた。
+                        MSX3は、この構造を<strong>すべてZ80互換プロセッサで</strong>再現しようという提案だ。
+                    </p>
+
+                    <h3>プロセッサ構成</h3>
+
+                    <ul>
+                        <li>
+                            <strong>Z80互換 32bitプロセッサ × 1（マスターCPU）</strong><br>
+                            次世代の32bitプロセッサモードで稼働。各プロセッサの動作モードやアドレス割り当てを一括管理する、オーケストラの指揮者。
+                        </li>
+                        <li>
+                            <strong>Z80互換プロセッサ × 3（ワーカーCPU）</strong><br>
+                            よりZ80互換性を高めた高速CPU。それぞれが独立して動作する。
+                            たとえば「メインロジック」「BGM再生」「画像描画」と、機能を分けてプログラミングできる。
+                        </li>
+                    </ul>
+
+                    <p>
+                        Z80のマルチコアであれば、アセンブラレベルでは困難なマルチコア・マルチスレッディング・プログラミングが、
+                        比較的シンプルなメッセージパッシングで実現できる。
+                        学習障壁は低い。なぜなら、一つひとつのコアは、基本的に従来のMSXアーキテクチャを踏襲した、
+                        馴染みのあるZ80だからだ。
+                    </p>
+
+                    <blockquote>
+                        新しい命令セットを覚える必要はない。<br>
+                        「Z80が4つある」——ただそれだけのことだ。
+                    </blockquote>
+
+                    <h2>V9968 × 3 — 3画面出力という夢</h2>
+
+                    <p>
+                        CPUだけではない。映像出力も大胆に拡張する。
+                    </p>
+
+                    <p>
+                        MSX2+やMSX turboRに搭載された<strong>VDP V9958</strong>を高速化・高機能化した画像プロセッサ
+                        <strong>V9968</strong>（仮称）を、<strong>3基</strong>搭載する。
+                    </p>
+
+                    <p>
+                        3基のVDPは、2つのモードで動作する。
+                    </p>
+
+                    <h3>モード1：3画面独立出力</h3>
+
+                    <p>
+                        VGA/HDMIで3つのディスプレイにそれぞれ独立した映像を出力する。
+                        1つのVDPに1つのCPUを割り当て、3つの画面がそれぞれ独立したゲーム画面として機能する。
+                    </p>
+
+                    <h3>モード2：BG3面合成出力</h3>
+
+                    <p>
+                        3基のVDPの出力を重ね合わせ、1つの画面に合成する。
+                        透過処理付きの<strong>BG3面</strong>による、アーケードゲームさながらの多重スクロール表現が可能になる。
+                    </p>
+
+                    <h2>3画面が拓く新しい遊び</h2>
+
+                    <p>
+                        3画面出力とCPU間通信を組み合わせると、何が生まれるか。
+                    </p>
+
+                    <p>
+                        まず、真っ先に思い浮かぶのはこれだ。
+                    </p>
+
+                    <blockquote>
+                        MSX3、1台で——<strong>3画面ダライアス</strong>。
+                    </blockquote>
+
+                    <p>
+                        あの伝説的なアーケード筐体が実現した3画面の超横長ステージを、
+                        MSX3が1台あれば再現できる。3つのCPUが3つの画面を担当し、
+                        CPU間の相互通信でスクロール座標やボス戦のデータを共有する。
+                    </p>
+
+                    <p>
+                        だが、可能性はそれだけに留まらない。
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>ゲーム&ウォッチ風の2画面構成</strong> —
+                            任天堂DSのような上下2画面のゲームデザインも、MSX3なら自然に実現できる。
+                        </li>
+                        <li>
+                            <strong>マルチプレイ対戦</strong> —
+                            MSX3が1台あれば、レースゲームの画面分割を3画面で。
+                            友達がコントローラーさえ持ってくれば、それだけでパーティーが始まる。
+                        </li>
+                        <li>
+                            <strong>MSX2互換モード</strong> —
+                            1CPU + 1画面のみを動作させれば、過去のMSX2ソフトウェアが完全に動く。
+                            40年分の資産が、そのまま引き継がれる。
+                        </li>
+                    </ul>
+
+                    <h2>なぜ「Z80のまま」なのか</h2>
+
+                    <p>
+                        「ARMやRISC-Vのような現代的なプロセッサを使えばいいのでは？」
+                        そう思うかもしれない。実際、純粋な性能だけを追求するなら、それが正解だろう。
+                    </p>
+
+                    <p>
+                        だが、MSX3が目指しているのは「最新のスペックマシン」ではない。
+                        <strong>「MSXの文脈で進化したマシン」</strong>だ。
+                    </p>
+
+                    <p>
+                        Z80のニーモニックでプログラムを書き、VDPレジスタを叩いて画面を描き、
+                        PSGやFM音源を直接制御して音楽を鳴らす。
+                        あの感覚——ハードウェアのすべてが手の中にある実感——を残したまま、
+                        性能だけを引き上げる。
+                    </p>
+
+                    <p>
+                        それは懐古趣味ではない。<strong>創造の手触り</strong>を守るための選択だ。
+                    </p>
+
+                    <p>
+                        VOL.6の「透明な道具」で語ったように、道具が最も力を発揮するのは、
+                        使い手がその存在を忘れたときだ。
+                        Z80は、MSX世代のプログラマーにとって、もはや「意識しなくていいほど手に馴染んだ道具」なのだ。
+                        そこに新しいAPIや新しいアーキテクチャを持ち込めば、
+                        道具はふたたび前景に躍り出てしまう。
+                    </p>
+
+                    <h2>夢を語ることの意味</h2>
+
+                    <p>
+                        正直に言えば、この構想が現実のハードウェアとして世に出るかどうかはわからない。
+                        FPGAで試作することは技術的には可能だろう。
+                        openMSXのようなエミュレータ上で検証することもできるかもしれない。
+                    </p>
+
+                    <p>
+                        だが、それでもこの構想を書き残しておきたかった。
+                    </p>
+
+                    <p>
+                        なぜなら、「こんなマシンがほしい」と夢を語ることは——
+                        実はそのまま、「自分が何を作りたいのか」を言語化する行為だからだ。
+                    </p>
+
+                    <p>
+                        3画面ダライアスをMSXで遊びたい。
+                        Z80だけで構成されたアーケード基板のようなマシンがほしい。
+                        学習コストなく、昔のままの感覚で、でもかつてないほど高性能なMSXでプログラミングがしたい。
+                    </p>
+
+                    <p>
+                        これらの願いは、VN Studioの設計思想——
+                        <strong>「制約が創造性を解放する」</strong>——と、根っこでつながっている。
+                        制約を受け入れ、その中で最大限の表現を追求する。
+                        それが、僕たちのものづくりの原点だ。
+                    </p>
+
+                    <blockquote>
+                        少年の頃に夢見た「あの頃の未来」は、まだ終わっていない。<br>
+                        いま、この手で描き直す番だ。
+                    </blockquote>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol6-transparent-tool.html">← Vol.6: 透明な道具編</a>
+                    <a href="../devlog.html">記事一覧に戻る →</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
