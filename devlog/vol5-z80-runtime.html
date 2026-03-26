@@ -13,9 +13,9 @@
         gtag('config', 'G-9V3EP5FGPM');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vol.5: MSX移植編 — レトロPCへの挑戦 | しるふぁ工房</title>
-    <meta name="description" content="同じスクリプトがMSX2実機で動く——バイトコード変換、Z80 Cランタイム、美咲フォントUTF-8描画の実装記録。">
-    <meta property="og:title" content="Vol.5: MSX移植編 | しるふぁ工房">
+    <title>Vol.5: Z80移植編 — レトロPCへの挑戦 | しるふぁ工房</title>
+    <meta name="description" content="同じスクリプトがZ80実機で動く——バイトコード変換、Z80 Cランタイム、美咲フォントUTF-8描画の実装記録。">
+    <meta property="og:title" content="Vol.5: Z80移植編 | しるふぁ工房">
     <meta property="og:type" content="article">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
@@ -49,7 +49,7 @@
             <article class="article">
 
                 <header class="article__header fade-in">
-                    <span class="article__vol">VOL.5 — MSX RUNTIME</span>
+                    <span class="article__vol">VOL.5 — Z80 RUNTIME</span>
                     <h1 class="article__title">レトロPCへの挑戦</h1>
                     <time class="article__date" datetime="2026-03-03">2026.03.03</time>
                 </header>
@@ -59,8 +59,8 @@
                     <h2>思い出の40年前のPCで、ビジュアルノベルを動かす</h2>
 
                     <p>
-                        <strong>MSX2</strong>——1980年代に登場した8ビットパソコンの共通規格。
-                        Z80 CPU（3.58MHz）、128KB RAM、256色表示（SCREEN 8）。
+                        <strong>Z80</strong>——1976年にZilog社が開発した伝説的な8ビットCPU。
+                        クロック3.58MHz、64KB RAM。画像解像度はせいぜい384×256ドット程度。
                         現代のスマートフォンと比べれば、約100万倍以上の性能差があります。
                     </p>
 
@@ -70,14 +70,14 @@
                     </p>
 
                     <blockquote>
-                        WPF エディタで書いたスクリプトが、Unity でも MSX でも動く。<br>
+                        WPF エディタで書いたスクリプトが、Unity でも Z80 でも動く。<br>
                         それが VN Studio の「Write Once, Play Anywhere」です。
                     </blockquote>
 
                     <h2>ScriptCompiler — .scn → .VNB バイトコード変換</h2>
 
                     <p>
-                        MSX の Z80 CPU はテキストベースのスクリプトを直接解釈するには遅すぎます。
+                        Z80 CPU はテキストベースのスクリプトを直接解釈するには遅すぎます。
                         そこで、WPF Editor に搭載された <strong>ScriptCompiler</strong> が、
                         VNScript（<code>.scn</code>）をコンパクトな<strong>バイトコード（<code>.VNB</code>）</strong>に変換します。
                     </p>
@@ -97,7 +97,7 @@ FF                         # END</code></pre>
 
                     <h3>VM Opcodes</h3>
 
-                    <p>MSX ランタイムの仮想マシンが解釈するオペコードは最小限に抑えて設計を進めています:</p>
+                    <p>Z80 ランタイムの仮想マシンが解釈するオペコードは最小限に抑えて設計を進めています:</p>
 
                     <ul>
                         <li><code>0x00</code> <strong>NOP</strong> — 何もしない</li>
@@ -108,22 +108,20 @@ FF                         # END</code></pre>
                         <li><code>0xFF</code> <strong>END</strong> — プログラム終了</li>
                     </ul>
 
-                    <h2>VRAM と画像表示 — .SC8 フォーマット</h2>
+                    <h2>VRAM と画像表示 — フォーマット変換</h2>
 
                     <p>
-                        MSX2 の SCREEN 8 モードでは、<strong>256色</strong>（各ピクセル1バイト）で
-                        <strong>256 × 212</strong> ドットの画面を表示できます。
                         Z80アセンブラを駆使し、VDPコマンドをうまく活用しながら、VRAM にピクセルデータを書き込むことで、高速な画像表示を実現します。
                     </p>
 
                     <p>
-                        元画像（PNG/JPEG）は、WPF Editor 側で以下の変換を経て <code>.SC8</code> 形式になります:
+                        元画像（PNG/JPEG）は、WPF Editor 側で以下のような変換を経て Z80環境で表示可能な形式になります:
                     </p>
 
                     <ol>
-                        <li><strong>リサイズ</strong> — 256 × 212 ドットに変換</li>
-                        <li><strong>（Floyd-Steinberg ディザリングなど）</strong> — MSX の 256色パレットに減色</li>
-                        <li><strong>.SC8 出力</strong> — 1ピクセル1バイトの生データ</li>
+                        <li><strong>リサイズ</strong> — 384 × 256 ドットに変換</li>
+                        <li><strong>（Floyd-Steinberg ディザリングなど）</strong> — Z80 環境の 16色/256色に減色</li>
+                        <li><strong>出力</strong> — 1ピクセル1バイトの生データ</li>
                     </ol>
 
                     <p>
@@ -133,8 +131,8 @@ FF                         # END</code></pre>
                     <h2>美咲フォント — UTF-8 日本語表示</h2>
 
                     <p>
-                        MSX2 で日本語を表示するために、<strong>美咲フォント</strong>（8×8 ビットマップフォント）を採用しました。
-                        Unicode ベースのこのフォントを最適化し、漢字VRAMのないMSX2でも
+                        Z80 環境で日本語を表示するために、<strong>美咲フォント</strong>（8×8 ビットマップフォント）を採用したい。
+                        Unicode ベースのこのフォントを最適化し、漢字VRAMのないZ80環境でも
                         windowsの日本語テキストをそのまま表示可能な<strong>UTF-8 デコーダ</strong>を新規開発しました。
                     </p>
 
@@ -151,7 +149,7 @@ FF                         # END</code></pre>
                     <h2>MegaROM バンク切り替え</h2>
 
                     <p>
-                        MSX の 64KB メモリでは、フォントデータだけで大きな領域を消費します。
+                        Z80 の 64KB メモリ空間では、フォントデータだけで大きな領域を消費します。
                         そこで <strong>MegaROM</strong>（ASCII8 Mapper）のバンク切り替えを活用し、
                         フォントデータを独立したメモリセグメントに配置しています。
                     </p>
@@ -165,12 +163,12 @@ FF                         # END</code></pre>
                     <h2>まとめ — 制約の中で輝く創造性</h2>
 
                     <p>
-                        MSX 版の開発は、VN Studio の哲学——「<strong>制約が創造性を解放する</strong>」——
-                        を体現するとともに、「私が昔あこがれた、MSXでのゲーム作りを今ここで」を実現するプロジェクトです。
+                        Z80 版の開発は、VN Studio の哲学——「<strong>制約が創造性を解放する</strong>」——
+                        を体現するとともに、「私が昔あこがれた、Z80でのゲーム作りを今ここで」を実現するプロジェクトです。
                     </p>
 
                     <p>
-                        256色、64KB メモリ、3.58MHz の CPU。
+                        16色/256色、64KB メモリ、3.58MHz の CPU。
                         これらの制約を乗り越え、ぜひあなたのクリエイティビティを解き放ちましょう。
                     </p>
 
