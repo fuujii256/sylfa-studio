@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.7: 夢のマシン編 — Z80で動くX68000のような夢のマシン | しるふぁ工房</title>
+    <meta name="description" content="Z80を高速化しV9990と組み合わせた、かつてのX68000を超える夢のマシンをVMで実現する——FPGAへの道すら見据えた、レトロと未来の融合。">
+    <meta property="og:title" content="Vol.7: 夢のマシン編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.7 — DREAM MACHINE</span>
+                    <h1 class="article__title">Z80で動くX68000のような夢のマシン</h1>
+                    <time class="article__date" datetime="2026-03-28">2026.03.28</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——かつて、夢のパソコンがあった</h2>
+
+                    <p>
+                        <strong>X68000</strong>——MC68000搭載、512×512ドット・65536色同時発色、強力なスプライト機能。
+                        かつてあこがれた名作アーケードゲームが動かせる、文字通りの「夢のパソコン」だった。
+                    </p>
+
+                    <p>
+                        グラディウスが標準添付されたその夢のマシンには、未来があった。
+                        自分の部屋で本物のグラディウスが遊べる。
+                        そして、そんなゲームを自分でもいつか作れるようになるのではないか——。
+                        当時X1ユーザーであり、Z80アセンブラで自分のプログラムを書いていた私は、そんな夢を抱いた。
+                    </p>
+
+                    <p>
+                        しかし、当時の私にはMC68000は高度すぎた。
+                        X68000に標準装備されていたX-BASICはC言語ベースであり、Microsoft BASICに慣れた私にはなかなか理解できるものではなかった。
+                        後日X68000を入手はしたものの、これでプログラミングをする日々が訪れることはついになかった。
+                    </p>
+
+                    <h2>第1章：21世紀の混迷——失われたコンピューティングの原点</h2>
+
+                    <p>
+                        そして21世紀となった今、長い月日がたった今思う。
+                    </p>
+
+                    <blockquote>
+                        一体なんなのだ、この混迷したコンピューティングの世界は。
+                    </blockquote>
+
+                    <p>
+                        UIの氾濫、広告の氾濫、OSやアプリの都合に振り回されるユーザー、個人がプログラミングすることの限界。
+                        かつて「コンピューターを手に入れれば何でもできる」と信じられた時代の輝きは、どこへ行ってしまったのか。
+                    </p>
+
+                    <p>
+                        あの頃のパソコンは、電源を入れればBASICが起動した。
+                        10 PRINT "HELLO" と書けば、画面に文字が出た。
+                        コンピューターと人間のあいだに、余計な仲介者はいなかった。
+                    </p>
+
+                    <p>
+                        この現実を変える手立ては、もうないのだろうか。
+                    </p>
+
+                    <h2>第2章：答えは「ある」——いま、夢を取り戻す</h2>
+
+                    <p>
+                        ——ある。私はそう信じたい。
+                    </p>
+
+                    <p>
+                        いまある技術——当時より考えられないほど進化した半導体技術やAI技術を駆使すれば、きっと何かができる。
+                        そう確信した私は考えた。
+                    </p>
+
+                    <blockquote>
+                        いまこそ、昔見た夢をもう一度取り戻して、その夢をかなえる時だ。
+                    </blockquote>
+
+                    <p>
+                        VM（バーチャルマシン）で夢のマシンを作り上げる。
+                        そして、それを現実の未来へ引き上げる。
+                    </p>
+
+                    <h3>VMとは何か——「パソコンの中に作るパソコン」</h3>
+
+                    <p>
+                        ここで言うVM（バーチャルマシン）とは、いわば<strong>「パソコンの中にもう一台のパソコンを作る」</strong>技術のことだ。
+                    </p>
+
+                    <p>
+                        たとえば、あなたの目の前にあるWindowsパソコン。
+                        その中にソフトウェアで「仮想のファミコン」を作り、ファミコンのゲームを動かす——それがエミュレータであり、VMの一種だ。
+                        実物のファミコンがなくても、プログラムが「ファミコンのふりをして」ゲームを動かしてくれる。
+                    </p>
+
+                    <p>
+                        今回の挑戦は、それと同じ原理で<strong>「まだこの世に存在しないオリジナルのパソコン」</strong>を作ることにある。
+                        既存のマシンを再現するのではなく、自分が理想とするスペックのマシンを、まずソフトウェアの世界で設計し、組み立て、動かす。
+                        実物のハードウェアを一切作らなくても、画面にはそのマシンで動くゲームが映り、スピーカーからはその音源が奏でるサウンドが流れる。
+                    </p>
+
+                    <p>
+                        建築でいえば、実際にビルを建てる前にまず精密な3Dモデルを作り、その中を歩き回って設計を検証するようなものだ。
+                        VMという「設計図が動く世界」で夢のマシンを完成させ、そこから先の現実——FPGAによる実機化——へと進んでいく。
+                    </p>
+
+                    <h2>第3章：設計——Z80 × V9990、夢の構成</h2>
+
+                    <p>
+                        構想はこうだ。
+                        かつて相棒だった<strong>Z80を高速化</strong>して、幻のVDP・<strong>V9990</strong>と組み合わせたオリジナルマシンを作る。
+                    </p>
+
+                    <p>
+                        V9990——ヤマハが次期MSX用として開発を進め、開発を完了しながらも正式採用されることなく、幻とともに消えたビデオプロセッサ。
+                        最大512×424ドットで32768色同時発色、ハードウェアスクロール、強化されたスプライト機能。
+                        X68000が68000の力で実現した世界を、Z80の世界に持ち込む鍵がここにある。
+                    </p>
+
+                    <p>
+                        さらに、<strong>FM音源にPSGやPCM音源も搭載</strong>する。
+                        当時のアーケードゲームが奏でたあのサウンドを再現し、それを「自分が作れる」環境を構築するのだ。
+                    </p>
+
+                    <ul>
+                        <li><strong>CPU</strong> — Z80（高速クロック動作）</li>
+                        <li><strong>VDP</strong> — V9990（512×424・32768色・スプライト・ハードウェアスクロール）</li>
+                        <li><strong>Sound</strong> — FM音源 + PSG + PCM</li>
+                        <li><strong>Memory</strong> — バンク切り替えによる拡張メモリ空間</li>
+                    </ul>
+
+                    <p>
+                        Z80という慣れ親しんだCPUでありながら、X68000のようなグラフィックスとサウンドを手にする。
+                        それは、あの頃の自分が本当に欲しかったマシンそのものだ。
+                    </p>
+
+                    <h2>第4章：VMから実機へ——FPGAという未来</h2>
+
+                    <p>
+                        このマシンは、まずVM（バーチャルマシン）として実装する。
+                        Vol.5で紹介したZ80ランタイムの延長線上に、V9990エミュレーション、FM/PSG/PCMサウンドエミュレーションを構築していく。
+                    </p>
+
+                    <p>
+                        だが、話はそこで終わらない。
+                    </p>
+
+                    <blockquote>
+                        これをFPGAに移植することができれば、VMを超えて夢のマシンを実際に作り上げることも不可能ではない。
+                    </blockquote>
+
+                    <p>
+                        FPGA——「書き換え可能なICチップ」とでも言えばいいだろうか。
+                        通常の半導体チップは工場で回路が焼き付けられ、二度と変更できない。
+                        だがFPGAは違う。まるで粘土のように、中の回路構成をソフトウェアで何度でも書き換えることができる特殊なチップだ。
+                    </p>
+
+                    <p>
+                        つまり、VMの中でソフトウェアとして動いていたZ80のCPU、V9990の描画処理、FM音源の波形生成——これらすべてを、
+                        FPGAの中に<strong>本物の電子回路として</strong>焼き込むことができる。
+                        パソコンの画面の中だけで動いていた夢のマシンが、手で触れられる一枚の基板の上に、現実の姿で現れるのだ。
+                    </p>
+
+                    <p>
+                        VMで設計を固め、動作を検証し、そしてFPGAで実体化する。
+                        ソフトウェアとハードウェアの境界を超えて、「夢の先」にまで手が届きそうだ。
+                    </p>
+
+                    <h2>第5章：もう、じっとしていられない</h2>
+
+                    <p>
+                        Vol.5でZ80ランタイムを実装し、Vol.6で「透明な道具」の哲学を語った。
+                        その二つの流れが、ここで合流する。
+                    </p>
+
+                    <p>
+                        Z80の制約の中で輝く創造性。道具が消えて、作り手の意図だけが残る世界。
+                        その両方を体現するマシンを、自分の手で作る。
+                    </p>
+
+                    <p>
+                        かつてX1の前でZ80アセンブラを打ち込んでいた少年が見た夢。
+                        X68000のカタログを眺めながら想像した、自分だけの理想のマシン。
+                        あの夢を、40年の時を経て、いまの技術で実現する。
+                    </p>
+
+                    <blockquote>
+                        そう気がついた私は、もうじっとしていられなくなった。<br>
+                        いまやろう。
+                    </blockquote>
+
+                    <p>
+                        これは懐古ではない。
+                        コンピューティングの原点——人間が機械と直接対話し、自分の手で何かを作り出す喜び——を、
+                        未来（いま）の技術で再構築する試みだ。
+                    </p>
+
+                    <p>
+                        次回からは、このVM設計の具体的な実装について、より詳細に記録していきたい。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol6-transparent-tool.html">&larr; Vol.6: 透明な道具編</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
