@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.8: マルチコア編 — 「父のパソコンを超えろ。」Z80マルチコア＋トリプルVDPで描く「夢を実現する力」 | しるふぁ工房</title>
+    <meta name="description" content="4つのZ80と3つのV9990——マルチコア＋トリプルVDPで、ダライアスの3画面構成すら実現する夢のマシンの具体的設計。">
+    <meta property="og:title" content="Vol.8: マルチコア編 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.8 — MULTICORE Z80</span>
+                    <h1 class="article__title">「父のパソコンを超えろ。」<br>Z80マルチコア＋トリプルVDPで描く「夢を実現する力」</h1>
+                    <time class="article__date" datetime="2026-04-06">2026.04.06</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——夢の実現に向けて</h2>
+
+                    <p>
+                        <a href="vol7-dream-machine.html">前回</a>語った「夢のパソコン」。
+                        Z80とV9990を組み合わせ、X68000のような世界をZ80で実現するという構想だった。
+                    </p>
+
+                    <p>
+                        今回は、その夢の実現に向けた<strong>具体的な設計方針</strong>をまとめていきたい。
+                    </p>
+
+                    <blockquote>
+                        4つのZ80-CPUと、3つのV9990-VDPを搭載したマシンを作る。
+                    </blockquote>
+
+                    <p>
+                        ——そう、このマシンの心臓部は、一つではない。
+                    </p>
+
+                    <h2>第1章：なぜ「4つのZ80」なのか——アーケードに学ぶ設計思想</h2>
+
+                    <p>
+                        かつてのアーケードゲーム——ゲームセンターの筐体の中身は、実はCPUが一つではなかった。
+                        たとえば、メインのゲーム処理にMC68000を使いながら、音楽の再生には別のZ80を専用に割り当てる。
+                        こうしてCPUに「役割分担」をさせることで、一つのCPUだけでは実現が困難な、あの滑らかな動きと迫力あるサウンドの共演を実現していた。
+                    </p>
+
+                    <p>
+                        この発想を、今回の夢のマシンに持ち込む。
+                        ただし、<strong>すべてをZ80で構成する</strong>。
+                    </p>
+
+                    <p>
+                        高速Z80を4つ搭載し、マルチコア・マルチスレッドで同時に動かす。
+                        料理に例えるなら、一人のシェフがすべてを作るのではなく、4人のシェフがそれぞれ得意な料理を同時に調理する——そんなイメージだ。
+                        一人がゲームのメインロジックを担当し、一人がグラフィックスの描画計算を受け持ち、一人がサウンドを奏で、一人がデータの読み込みを行う。
+                        4つのZ80が息を合わせて働くことで、8ビットCPUの限界を超えた表現力が生まれる。
+                    </p>
+
+                    <h2>第2章：共有メモリ——4つの頭脳をつなぐもの</h2>
+
+                    <p>
+                        複数のCPUが同時に動くとき、問題になるのは「どうやって情報を共有するか」だ。
+                    </p>
+
+                    <p>
+                        たとえば4人のシェフがキッチンで働くとき、冷蔵庫が一台しかなければ、誰かが食材を取り出している間、他のシェフは待たなければならない。
+                        しかし、うまく整理された大きな冷蔵庫と、取り出しを仕切る優秀なアシスタントがいれば、4人が同時にスムーズに食材を取り出せる。
+                    </p>
+
+                    <p>
+                        このマシンでは、<strong>メインメモリを4MB搭載</strong>する。
+                        Z80の本来のメモリ空間は64KB——つまり、その約60倍以上の広大なメモリ空間を確保する。
+                        さらに、各CPUごとに専用のバンク切り替えレジスタを持たせ、専用のメモリコントローラが交通整理を行う。
+                    </p>
+
+                    <p>
+                        この設計により、どのCPUからもマルチコアを意識することなく、一つの共有メモリに自然にアクセスできる。
+                        プログラムを書く側から見れば、まるで一つのCPUしかないかのようにシンプルに扱える。
+                        複雑さはハードウェアが引き受け、クリエイターには見えない——Vol.6で語った「透明な道具」の哲学は、ここにも生きている。
+                    </p>
+
+                    <ul>
+                        <li><strong>CPU</strong> — 高速Z80 × 4（マルチコア構成）</li>
+                        <li><strong>メインメモリ</strong> — 4MB（各CPUからバンク切り替えでアクセス）</li>
+                        <li><strong>メモリコントローラ</strong> — 専用設計（CPUごとの独立バンクレジスタ）</li>
+                    </ul>
+
+                    <p>
+                        さらに、FM音源や複数のV9990にも、<strong>どのZ80からも区別なくアクセスできる</strong>ように設計する。
+                        4つのCPUのうちどれからでも画面を描き換え、音を鳴らせる。
+                        この柔軟性が、Z80の制約を可能な限り取り除きながら、その可能性を最大限に引き出す鍵となる。
+                    </p>
+
+                    <h2>第3章：トリプルVDP——3つの画面が拓く世界</h2>
+
+                    <p>
+                        ここからが、さらにユニークな部分だ。
+                    </p>
+
+                    <p>
+                        V9990を<strong>3つ搭載</strong>して、<strong>3画面出力</strong>を可能にする。
+                    </p>
+
+                    <p>
+                        3画面——。この言葉で、あるゲームを思い浮かべた方もいるのではないだろうか。
+                    </p>
+
+                    <blockquote>
+                        そう、往年のアーケード版「ダライアス」の3画面構成だ。
+                    </blockquote>
+
+                    <p>
+                        1986年、タイトーが送り出した「ダライアス」は、3台のモニターを横に並べた圧倒的なワイド画面で、
+                        プレイヤーの視界を埋め尽くす広大な宇宙を描き出した。
+                        あの体験は、ゲームセンターでしか味わえない特別なものだった。
+                    </p>
+
+                    <p>
+                        それを、Z80で実現可能にする。
+                    </p>
+
+                    <h3>サウンド構成</h3>
+
+                    <p>
+                        音源もアーケード級の構成を目指す。
+                    </p>
+
+                    <ul>
+                        <li><strong>FM音源</strong> — OPN（FM 3声 + PSG 3声）× 2チップ</li>
+                        <li><strong>PCM音源</strong> — 1チップ</li>
+                    </ul>
+
+                    <p>
+                        OPNを2つ搭載することで、FM 6声 + PSG 6声。
+                        これにPCMを加えれば、ドラムやSE（効果音）を高品質なサンプリング音で鳴らしながら、
+                        FM音源が厚みのあるメロディとベースラインを奏でる——まさに80年代後半のアーケードゲームのサウンドそのものだ。
+                    </p>
+
+                    <h3>画面モードの柔軟性</h3>
+
+                    <p>
+                        さらに、オリジナルのBIOS実装により、画面構成を自在に切り替えられるようにする。
+                    </p>
+
+                    <ul>
+                        <li><strong>3画面モード</strong> — ダライアスのような横長ワイド構成</li>
+                        <li><strong>2画面モード</strong> — Nintendo DSのような縦2画面構成</li>
+                        <li><strong>1画面モード</strong> — 256色/32768色での複数背景の重ね合わせ</li>
+                    </ul>
+
+                    <p>
+                        3つのVDPを横に並べれば、ダライアスのような横長シューティングが作れる。
+                        縦に並べれば、Nintendo DSのように上画面がゲーム、下画面がステータス表示という構成も実現できる。
+                        1画面に集中させれば、3つのVDPの出力を重ね合わせて、リッチな多層背景の演出が可能になる。
+                    </p>
+
+                    <p>
+                        一つのハードウェアでありながら、BIOSの切り替えひとつで、まったく異なるゲーム体験を生み出せる。
+                    </p>
+
+                    <h2>第4章：到達点——VMからRS Studioへ、そしてその先へ</h2>
+
+                    <p>
+                        まずは、この仕様でVMを開発し、VNStudioを動かせるようにする。
+                        Vol.5から積み重ねてきたZ80ランタイムが、ここでいよいよ本領を発揮する。
+                    </p>
+
+                    <p>
+                        そして——
+                    </p>
+
+                    <p>
+                        VNStudioを発展させた、シューティングゲーム版のスクリプトエンジン
+                        <strong>「RS（RetroShooting）Studio」</strong>を作り上げる。
+                    </p>
+
+                    <p>
+                        VNStudioが「台本を書くようにビジュアルノベルを作る」ツールだったように、
+                        RS Studioは「台本を書くようにシューティングゲームを作る」ツールとなる。
+                        敵の出現パターン、弾幕の軌道、ボスの行動パターン——これらをスクリプトで記述し、
+                        Z80マルチコアのVMの上でリアルタイムに動かす。
+                    </p>
+
+                    <blockquote>
+                        到達点は、「ダライアスのような横3画面のオリジナルシューティングゲームを作る」こと。
+                    </blockquote>
+
+                    <p>
+                        あの、ゲームセンターでしか体験できなかった3画面の没入感を、自分の手で、自分のマシンで、自分のゲームとして実現する。
+                    </p>
+
+                    <h2>「POWER TO MAKE YOUR DREAM COME TRUE」</h2>
+
+                    <p>
+                        この言葉を覚えているだろうか。
+                    </p>
+
+                    <p>
+                        かつて、あこがれのマシン・X68000XVIが掲げたキャッチコピー。
+                        「夢を実現する力」——あの時代、パソコンには確かにその力があった。
+                        電源を入れれば、そこには自分だけの創造の場が広がっていた。
+                    </p>
+
+                    <p>
+                        4つのZ80、3つのV9990、FM音源にPSGにPCM。
+                        スペックだけを見れば、40年前のテクノロジーの延長線に過ぎないかもしれない。
+                    </p>
+
+                    <p>
+                        だが、これは懐古のためのマシンではない。
+                    </p>
+
+                    <p>
+                        「自分の手で、自分のゲームを作る」——その原初的な喜びを、もう一度この手に取り戻すためのマシンだ。
+                        あのキャッチコピーが約束した「夢を実現する力」を、今度は自分自身の手で作り上げる。
+                    </p>
+
+                    <blockquote>
+                        Power To Make Your Dream Come True.<br>
+                        その実現の日は、近い。
+                    </blockquote>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol7-dream-machine.html">&larr; Vol.7: 夢のマシン編</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
