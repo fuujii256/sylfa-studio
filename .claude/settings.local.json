@@ -38,7 +38,13 @@
       "Bash(python hex_trace.py chain_01_disk2_page49 4)",
       "Bash(python hex_trace.py chain_01_disk2_page49 1)",
       "Bash(python hex_trace.py chain_01_disk2_page49 7)",
-      "Bash(ls /c/project/BuildStudioSylfaHP/devlog/vol8*)"
+      "Bash(ls /c/project/BuildStudioSylfaHP/devlog/vol8*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":8081\\\\|:8082\\\\|:8083\")",
+      "Bash(timeout 2)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8081/fray-music-player/index.html)",
+      "Bash(python -c \":*)",
+      "Bash(tasklist)"
     ]
   }
 }
