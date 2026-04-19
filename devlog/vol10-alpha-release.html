@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.10: アルファ版公開 — 言葉にできる喜びを、あなたの手に | しるふぁ工房</title>
+    <meta name="description" content="VN Studio アルファ版（v0.65）を無償配布開始。Vol.0〜4で語ってきた「ツールに込めた想い」を振り返りながら、ついに公開の日を迎えるまでの軌跡を綴ります。">
+    <meta property="og:title" content="Vol.10: アルファ版公開 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.10 — ALPHA RELEASE</span>
+                    <h1 class="article__title">言葉にできる喜びを、<br>あなたの手に</h1>
+                    <time class="article__date" datetime="2026-04-16">2026.04.16</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——ついに、公開の日</h2>
+
+                    <p>
+                        長く温め続けてきたツールを、ようやく世に送り出せる日が来ました。
+                    </p>
+
+                    <p>
+                        本日、<strong>VN Studio アルファ版（v0.65）</strong> を
+                        <a href="../tools.html">Booth にて無償配布</a>開始します。
+                        構想から、設計、実装、そして解説コンテンツの作り込みまで——。
+                        この小さなツールには、数え切れないほどの「こうあってほしい」が詰まっています。
+                    </p>
+
+                    <blockquote>
+                        自分の想いを、言葉にして伝えられる喜び。<br>
+                        そのささやかな体験を、このツールを通じて届けたい。
+                    </blockquote>
+
+                    <p>
+                        今回は配布開始の節目として、これまで語ってきた <a href="vol0-philosophy.html">Vol.0</a> から
+                        <a href="vol4-asset-loader.html">Vol.4</a> までの想いを、あらためて振り返らせてください。
+                    </p>
+
+                    <h2>第1章：原点——なぜ、今このツールを作るのか</h2>
+
+                    <p>
+                        <a href="vol0-philosophy.html">Vol.0</a> で語った原点は、
+                        「<strong>まるでiPadでお絵描きをするように、ゲームを作りたい</strong>」という素朴な願いでした。
+                    </p>
+
+                    <p>
+                        現代のゲームエンジンは強力です。けれど、ひとつの物語を形にするまでに、
+                        クリエイターが向き合わなければならないものが多すぎる。
+                        画面の構成、技術的な制約、無数の設定項目——。
+                        それらに気を取られているうちに、本当に描きたかったはずの「想い」が
+                        薄まってしまう。そんな場面を、私は何度も目にしてきました。
+                    </p>
+
+                    <blockquote>
+                        道具が複雑になるほど、想いは遠ざかる。<br>
+                        だから、透明であるほどいい。
+                    </blockquote>
+
+                    <p>
+                        制約の中でこそ創造性が花ひらく——。
+                        VN Studio は、その信念のもとに生まれました。
+                    </p>
+
+                    <h2>第2章：設計——エディタとランタイムを切り離す</h2>
+
+                    <p>
+                        <a href="vol1-architecture.html">Vol.1</a> では、VN Studio のアーキテクチャについて語りました。
+                        軽快な WPF エディタと、高品質な描画を担う Unity ランタイム。
+                        この二つを<strong>完全に分離</strong>し、NamedPipe による JSON プロトコルで繋ぐ——。
+                    </p>
+
+                    <p>
+                        なぜ、こんな回りくどい設計にしたのか。理由はひとつです。
+                        クリエイターが「書く」瞬間に、余計な待ち時間を挟みたくなかった。
+                        エディタは一瞬で立ち上がり、編集した行からワンクリックで即再生される。
+                        「<strong>書く</strong>」と「<strong>見る</strong>」の間にある壁を、できる限り薄くする。
+                    </p>
+
+                    <p>
+                        これは同時に、将来への布石でもあります。
+                        同じエディタ、同じスクリプトが、Unity ランタイムだけでなく、
+                        やがて Z80 搭載のレトロPCの上でも走るように——。
+                        その遠い夢への第一歩が、この分離設計でした。
+                    </p>
+
+                    <h2>第3章：言葉——プログラムではなく、演出として書く</h2>
+
+                    <p>
+                        <a href="vol2-script-engine.html">Vol.2</a> で紹介したスクリプトエンジンは、VN Studio の核です。
+                    </p>
+
+                    <p>
+                        VNScript は、プログラミング言語ではありません。
+                        <strong>演出の指示書</strong>です。
+                    </p>
+
+                    <pre><code>bg classroom
+show sylfa smile
+say しるふぁ "おはよう！"</code></pre>
+
+                    <p>
+                        読めば意味が分かる。書けばその通りに動く。
+                        この「書いたまま、伝わる」という感覚は、
+                        プログラマーでない方にとって、大きな解放になるはずです。
+                    </p>
+
+                    <p>
+                        さらに <code>RestoreState</code> の仕組みにより、
+                        スクリプトの任意の行から一瞬で再生を始められます。
+                        数時間の物語の中盤を直したいとき、最初から再生し直す必要はない。
+                        クリエイターの意識を、<strong>いま編集している一行</strong>にずっと留めておけるように——。
+                    </p>
+
+                    <h2>第4章：画面——映画のような奥行きを、単純なスクリプトから</h2>
+
+                    <p>
+                        <a href="vol3-layer-system.html">Vol.3</a> では、レイヤーシステムの設計思想を語りました。
+                    </p>
+
+                    <p>
+                        背景、前景、キャラクター、メニュー、演出エフェクト——。
+                        映画のように奥行きのある画面を、数行のスクリプトから自然に組み立てられるよう、
+                        複数の層で構成された背景スタックと、メインとメニューを分離するデュアルレイヤー構造を採用しました。
+                    </p>
+
+                    <p>
+                        メニューを開いても、プレイヤーが見ていたシーンはそのまま完全に保持されます。
+                        「戻る」を押したとき、ひとつの違和感もなくもとの物語へ帰ってこられる——。
+                        その自然さを、<strong>仕組みが気づかれない形で</strong>支えることを大切にしました。
+                    </p>
+
+                    <blockquote>
+                        よい道具は、使っているときにその存在を忘れさせる。
+                    </blockquote>
+
+                    <h2>第5章：素材——ただ、フォルダに置くだけ</h2>
+
+                    <p>
+                        <a href="vol4-asset-loader.html">Vol.4</a> で紹介したアセットローダーは、
+                        このツールの「やさしさ」を象徴する仕組みです。
+                    </p>
+
+                    <p>
+                        Unity の通常のワークフローでは、画像をプロジェクトに追加するたびに
+                        インポート設定が必要になります。けれど、創作の現場でそれは——
+                        想いを削り取っていく、余計な摩擦でした。
+                    </p>
+
+                    <p>
+                        VN Studio では、<code>Resources/</code> フォルダに画像や音声を置くだけで、
+                        そのままスクリプトから参照できます。拡張子すら書かなくていい。
+                        素材を差し替えたら、次のプレビューですぐに反映される。
+                    </p>
+
+                    <blockquote>
+                        「作りたい」と思った瞬間から、「見える」までの時間を、<br>
+                        可能な限りゼロに近づけたい。
+                    </blockquote>
+
+                    <p>
+                        それが、この仕組みに込めた願いです。
+                    </p>
+
+                    <h2>第6章：想い——言葉にできる喜びを、あなたへ</h2>
+
+                    <p>
+                        ここまで語ってきた設計の一つひとつは、すべて一点に向かっています。
+                    </p>
+
+                    <p>
+                        <strong>クリエイターと、その想いの間から、余計なものを取り除くこと。</strong>
+                    </p>
+
+                    <p>
+                        胸の中にある情景を、誰かに伝えたい。
+                        心に浮かんだキャラクターの声を、形にしたい。
+                        けれど、ツールの複雑さに阻まれて、
+                        最初の一歩を踏み出せずにいる人がいる——。
+                    </p>
+
+                    <p>
+                        そんな方にこそ、このツールを届けたかった。
+                    </p>
+
+                    <blockquote>
+                        自分の想いを、言葉にして伝えられる。<br>
+                        ただそれだけの、ささやかで、かけがえのない喜びを——<br>
+                        このツールを通して、感じてほしい。
+                    </blockquote>
+
+                    <p>
+                        そんな願いを込めて、VN Studio アルファ版をお届けします。
+                    </p>
+
+                    <h2>同梱内容と、これから</h2>
+
+                    <p>
+                        アルファ版には、以下が同梱されています。
+                    </p>
+
+                    <ul>
+                        <li>VNStudio Runtime（Unity6 ベースのゲーム実行環境）</li>
+                        <li>VNStudio Editor（WPF / .NET 9 ベースのスクリプトエディタ）</li>
+                        <li>チュートリアルスクリプト（ナビゲーター「しるふぁ」と一緒に学ぶ全 4 章）</li>
+                        <li>サンプルリソース（背景・キャラクター・BGM・SE）</li>
+                        <li>はじめてのコマンドガイド（htmlページ）</li>
+                        <li>コマンドリファレンス（htmlページ）</li>
+                        <li>VNStudio画面の見方ガイド</li>
+                    </ul>
+
+                    <p>
+                        動作要件は Windows 10 以降。
+                        <a href="../tools.html">Tools ページ</a>から Booth へアクセスいただけます。
+                    </p>
+
+                    <p>
+                        そして、次にめざす着地点は・・・ <strong>正式版となるv1.0の公開</strong> です。
+                        <a href="vol5-z80-runtime.html">Vol.5</a> 以降で語ってきた Z80-V9990 ハイブリッドコンピュータ「XZ80」上での動作に対応し、
+                        同じスクリプトがレトロPC の上でも息づく——
+                        そのユニークなデュアルプラットフォーム体験をお届けする予定です。
+                    </p>
+
+                    <h2>おわりに——ここからが、はじまり</h2>
+
+                    <p>
+                        アルファ版の公開は、ゴールではありません。
+                        むしろ、ここからが本当の始まりです。
+                    </p>
+
+                    <p>
+                        このツールを触ってくださった方が、何かひとつ、物語を紡いでくださること。
+                        そこで生まれた小さな想いが、誰かの心に届くこと。
+                        そんな循環の、ほんの最初のひとしずくになれたらと願っています。
+                    </p>
+
+                    <blockquote>
+                        想いを記録にかえて、未来を紡ぐ——。<br>
+                        このスタジオの合言葉のとおり、<br>
+                        あなたの想いが、未来へと紡がれていきますように。
+                    </blockquote>
+
+                    <p>
+                        まずは、触ってみてください。
+                        そして、よろしければ感想をお聞かせください。
+                        あなたの一言が、このツールを次の段階へ連れて行ってくれます。
+                    </p>
+
+                    <p>
+                        ——しるふぁ工房
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol9-salvage-sound.html">&larr; Vol.9: サウンド編</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
