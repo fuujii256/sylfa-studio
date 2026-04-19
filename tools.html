@@ -14,7 +14,7 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools — しるふぁ工房</title>
-    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VNStudio」を公開予定。">
+    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VN Studio」アルファ版を無償配布中。">
     <meta property="og:title" content="Tools — しるふぁ工房">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
@@ -81,6 +81,55 @@
             font-size: 0.85rem;
             color: var(--color-text);
         }
+
+        /* ── Alpha Release バッジ ── */
+        .tag--green {
+            background: rgba(80, 200, 120, 0.15);
+            color: #50c878;
+            border-color: rgba(80, 200, 120, 0.3);
+        }
+
+        /* ── ダウンロードボックス ── */
+        .download-box {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(200, 200, 200, 0.4);
+            border-radius: var(--radius-md);
+            color: #1a1a1a;
+        }
+
+        .download-box__title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-left: 4px solid #50c878;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-box__desc {
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+.download-box__actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .download-box__roadmap {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.7;
+        }
     </style>
 </head>
 
@@ -99,6 +148,7 @@
                 <li><a href="tools.html" class="nav__link">Tools</a></li>
                 <li><a href="about.html" class="nav__link">About</a></li>
                 <li><a href="links.html" class="nav__link">Links</a></li>
+                <li><a href="contact.html" class="nav__link">Contact</a></li>
             </ul>
             <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
                 <span></span><span></span><span></span>
@@ -120,14 +170,37 @@
 
                 <!-- VN Studio メインカード -->
                 <div class="card fade-in" style="max-width:860px; margin:0 auto;">
-                    <div class="card__thumb">
-                        <img src="assets/images/VN_Screenshot.webp" alt="VN Studio Editor Preview">
+                    <div class="card__thumb" style="position:relative; overflow:hidden;">
+                        <div class="vns-gallery" style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; gap:0;">
+                            <img src="assets/images/VN_Screenshot2.png" alt="VN Studio Script Editor Preview" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/VN_Screenshot.webp" alt="VN Studio Editor Preview" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                        </div>
+                        <div style="position:absolute; bottom:0.6rem; left:50%; transform:translateX(-50%); display:flex; gap:0.4rem;" class="vns-dots">
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.9);cursor:pointer;" data-idx="0"></span>
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="1"></span>
+                        </div>
                     </div>
+                    <script>
+                    (function(){
+                        var g = document.querySelector('.vns-gallery');
+                        var dots = document.querySelectorAll('.vns-dots span');
+                        dots.forEach(function(d){
+                            d.addEventListener('click', function(){
+                                var i = +this.getAttribute('data-idx');
+                                g.scrollTo({left: g.clientWidth * i, behavior:'smooth'});
+                            });
+                        });
+                        g.addEventListener('scroll', function(){
+                            var i = Math.round(g.scrollLeft / g.clientWidth);
+                            dots.forEach(function(d,j){ d.style.background = j===i ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)'; });
+                        });
+                    })();
+                    </script>
                     <div class="card__body">
                         <div class="card__tags">
                             <span class="tag">Next-Gen Visual Novel Engine</span>
                             <span class="tag tag--blue">Unity6 + WPF</span>
-                            <span class="tag tag--gold">In Development</span>
+                            <span class="tag tag--green">Alpha Release</span>
                         </div>
                         <h2 class="card__title" style="font-size:1.8rem;">VN Studio</h2>
                         <p class="card__desc" style="font-size:1rem; margin-top:0.5rem; line-height:1.8;">
@@ -136,6 +209,25 @@
                             <strong>「直感操作で、誰でもプロフェッショナルなノベルゲームを」</strong><br>
                             高度なプログラミング技術を必要とせず、クリエイターが物語と演出の創造に集中できる環境を提供する次世代のビジュアルノベル開発ツールです。独自の軽量スクリプト言語により、文章を書くような感覚でリッチな演出を実現します。
                         </p>
+
+                        <!-- ダウンロード -->
+                        <div class="download-box fade-in fade-in-delay-1" style="margin-top: 2rem;">
+                            <div class="download-box__actions">
+                                <a href="https://studio-sylfa.booth.pm/items/8206501" target="_blank" rel="noopener noreferrer" class="btn" style="font-size:1.1rem; padding:0.75rem 2rem;">💾 Download — Alpha v0.65</a>
+                            </div>
+                            <p class="download-box__desc" style="margin-top:1rem; margin-bottom:0;">
+                                Booth にて無償配布中。解説コンテンツ・サンプルリソース付き。Windows 10 以降対応。
+                            </p>
+                            <p class="download-box__roadmap">
+                                📌 v1.0 では Z80-V9990 ハイブリッドPC「XZ80」対応を追加予定
+                            </p>
+                            <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
+                                💬 ご感想・不具合報告は
+                                <a href="https://forms.gle/T8NaYoN61tEZe2o59" target="_blank" rel="noopener noreferrer"
+                                    style="color:#48bb78; text-decoration:underline;">フィードバックフォーム</a>
+                                からどうぞ
+                            </p>
+                        </div>
 
                         <!-- アーキテクチャセクション -->
                         <div class="fade-in fade-in-delay-1" style="margin-top: 2.5rem;">
@@ -216,11 +308,9 @@
                     </div>
                     <div class="card__footer">
                         <div>
-                            <p style="font-size:0.75rem; color:var(--color-text-dim);">Coming Soon — In active
-                                development</p>
+                            <p style="font-size:0.75rem; color:var(--color-text-dim);">Alpha v0.65 — 2026.04</p>
                         </div>
-                        <a href="https://github.com/fuujii256/VNStudio" class="btn btn--sm btn--outline" target="_blank"
-                            rel="noopener noreferrer">View on GitHub →</a>
+                        <a href="https://studio-sylfa.booth.pm/items/8206501" target="_blank" rel="noopener noreferrer" class="btn btn--sm">💾 Download</a>
                     </div>
                 </div>
 
