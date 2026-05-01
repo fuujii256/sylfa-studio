@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.11: 進捗報告 — XZ80、動く。 | しるふぁ工房</title>
+    <meta name="description"
+        content="XZ80 VMの基本実装が完了し、ミドルウェア層の開発へ。Z80コアとV9990を組み合わせた本VMのアーキテクチャと、V9990レジスタ構成の技術解説を含む進捗報告。">
+    <meta property="og:title" content="Vol.11: 進捗報告 — XZ80、ついに動く | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.11 — PROGRESS REPORT</span>
+                    <h1 class="article__title">XZ80、動く。<br>——VMコア実装完了と、その先へ</h1>
+                    <time class="article__date" datetime="2026-05-01">2026.05.01</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——構想から、実装へ</h2>
+
+                    <p>
+                        <a href="vol7-dream-machine.html">Vol.7</a>で「夢のマシン」の構想を語り、
+                        <a href="vol8-multicore-z80.html">Vol.8</a>で具体的な設計方針を示した。
+                        そして今、その夢が——ソフトウェアの中で——<strong>動き始めた</strong>。
+                    </p>
+
+                    <p>
+                        XZ80 VM（バーチャルマシン）の基本実装が完了し、
+                        現在はミドルウェア層の開発へと進んでいる。
+                        今回は、その進捗をお伝えするとともに、
+                        XZ80の心臓部であるコアアーキテクチャと、
+                        V9990のレジスタ構成について技術的な解説を交えて記録したい。
+                    </p>
+
+                    <h2>第1章：XZ80コアの基本構成——二つの世界を繋ぐもの</h2>
+
+                    <p>
+                        XZ80 VMは、大きく分けて二つのレイヤーで構成されている。
+                    </p>
+
+                    <p>
+                        一つは、<strong>Z80 CPUコア</strong>。
+                        1976年に生まれた8ビットプロセッサを、高速クロックでエミュレーションする。
+                        命令セットは完全互換——かつてX1やMSXの上で動いたZ80アセンブラのプログラムが、
+                        そのままこのVMの上でも動く。
+                    </p>
+
+                    <p>
+                        もう一つは、<strong>V9990 VDP（Video Display Processor）</strong>。
+                        ヤマハが次世代MSX用として開発しながらも、
+                        正式採用されることなく幻に終わったビデオチップを、
+                        ソフトウェアでエミュレーションする。
+                    </p>
+
+                    <p>
+                        この二つを<strong>I/Oポートマッピング</strong>で接続する。
+                        Z80はI/Oポートを通じてV9990のレジスタにアクセスし、
+                        描画コマンドの発行、パレットの設定、スクロール座標の制御を行う。
+                        まるで本物のハードウェアのように、CPUとVDPが対話しながら画面を構築していく。
+                    </p>
+
+                    <ul>
+                        <li><strong>CPU</strong> — Z80コア（高速クロック・命令セット完全互換）</li>
+                        <li><strong>VDP</strong> — V9990エミュレーション（I/Oポート経由でアクセス）</li>
+                        <li><strong>メモリ</strong> — 4MBメインRAM + 512KB VRAM</li>
+                        <li><strong>接続</strong> — I/Oポートマッピングによるハードウェア抽象化</li>
+                    </ul>
+
+                    <h2>第2章：V9990——幻のVDPの全貌</h2>
+
+                    <p>
+                        V9990を正しくエミュレーションするためには、
+                        そのレジスタ構成を深く理解する必要がある。
+                        ここでは、実装にあたって向き合ったV9990の主要レジスタ群を紹介したい。
+                    </p>
+
+                    <h3>スクリーンモードレジスタ</h3>
+
+                    <p>
+                        V9990は、複数のスクリーンモードをサポートしている。
+                        解像度と色数の組み合わせにより、用途に応じた画面構成を選択できる。
+                    </p>
+
+                    <ul>
+                        <li><strong>P1モード</strong> — 256×212、パターンベース（タイル＋スプライト向き）</li>
+                        <li><strong>P2モード</strong> — 512×212、高解像度パターンモード</li>
+                        <li><strong>B1〜B7モード</strong> — ビットマップモード（2色〜32768色）</li>
+                    </ul>
+
+                    <p>
+                        XZ80では主にビットマップモードを活用し、
+                        ビジュアルノベルの背景表示やキャラクター描画に使用している。
+                        256色モードでは1ピクセル1バイト、32768色モードでは1ピクセル2バイトとなり、
+                        VRAMの使い方もモードによって大きく変わる。
+                    </p>
+
+                    <h3>パレットレジスタ</h3>
+
+                    <p>
+                        V9990のパレットは、<strong>RGB各6ビット（計18ビット）</strong>で定義される。
+                        32,768色の中から、モードに応じた色数をパレットとして選択する仕組みだ。
+                    </p>
+
+                    <p>
+                        パレットへのアクセスは、ポート番号を通じたシーケンシャルな書き込みで行う。
+                        R、G、Bの順に3バイトを連続して書き込むことで、1色分のパレットエントリが設定される。
+                        この手続き的なインターフェースは、まさにレトロハードウェアならではの流儀だ。
+                    </p>
+
+                    <h3>コマンドレジスタ</h3>
+
+                    <p>
+                        V9990の真価は、<strong>ハードウェアコマンド</strong>にある。
+                        矩形転送、線描画、矩形塗りつぶし——これらの描画処理をCPUではなく
+                        VDP自身が実行する。
+                    </p>
+
+                    <pre><code># V9990 描画コマンドの概念（擬似コード）
+# 矩形転送（VRAM内コピー）
+SET_CMD_REG SX=0, SY=0     # 転送元座標
+SET_CMD_REG DX=128, DY=64  # 転送先座標
+SET_CMD_REG NX=64, NY=48   # 転送サイズ
+EXECUTE LMMM                # 論理VRAM→VRAMメモリ転送</code></pre>
+
+                    <p>
+                        Z80のような低速CPUにとって、このハードウェアコマンドは強力な味方となる。
+                        ピクセル単位のコピーをCPUが一つずつ実行する必要がなく、
+                        コマンドレジスタに座標とサイズを書き込んで実行指示を出すだけで、
+                        VDPが自律的に高速描画を行う。
+                    </p>
+
+                    <blockquote>
+                        CPUは「何を描くか」を指示し、VDPが「どう描くか」を引き受ける。<br>
+                        この役割分担こそが、8ビットマシンで豊かな映像表現を可能にする鍵だ。
+                    </blockquote>
+
+                    <h2>第3章：動いた——3画面モードと1画面モード</h2>
+
+                    <p>
+                        そして今、実際にVMが動作している画面をお見せできる段階に至った。
+                    </p>
+
+                    <p>
+                        <a href="vol8-multicore-z80.html">Vol.8</a>で設計した
+                        3つのV9990によるマルチ画面構成——その両方のモードが、
+                        VM上で正常に動作していることを確認した。
+                    </p>
+
+                    <h3>3画面モード</h3>
+
+                    <p>
+                        3つのV9990の出力を横に並べた、ダライアスを彷彿とさせるワイド構成。
+                        各V9990が独立した描画領域を持ち、それぞれが異なる背景やスプライトを担当できる。
+                        横スクロールシューティングにおける広大な戦場の表現など、
+                        かつてのアーケードでしか味わえなかった没入感を実現する構成だ。
+                    </p>
+
+                    <!-- スクリーンショット：3画面モードの動作画面 -->
+                    <figure class="article__figure">
+                        <img src="image/dev11_screenshot2.png" alt="XZ80 VM 3画面モード動作画面 — 3つのV9990出力を横に並べた構成">
+                        <figcaption>3つのV9990が独立した画面領域を担当するワイド構成。左から背景・キャラクター・テキスト層が独立して動作している。</figcaption>
+                    </figure>
+
+                    <h3>1画面モード</h3>
+
+                    <p>
+                        3つのV9990の出力を<strong>一つのディスプレイに重ね合わせる</strong>モード。
+                        256色や32768色での多層背景が実現でき、
+                        ビジュアルノベルのような演出重視のコンテンツに適している。
+                        背景レイヤー、キャラクターレイヤー、エフェクトレイヤーを
+                        それぞれ別のV9990が担当し、リッチな画面合成を行う。
+                    </p>
+
+                    <!-- スクリーンショット：1画面モードの動作画面（合成完成形） -->
+                    <figure class="article__figure">
+                        <img src="image/dev11_screenshot1.png" alt="XZ80 VM 1画面モード動作画面 — 背景・キャラクター・テキストが一画面に合成された状態">
+                        <figcaption>3つのV9990出力を一画面に重ね合わせた完成形。背景・キャラクター・テキストボックスがそれぞれ別レイヤーで描画されている。</figcaption>
+                    </figure>
+
+                    <p>
+                        設計書の上では「こう動くはず」だったものが、
+                        画面の中で実際に色を発し、ピクセルを並べ、意図どおりの映像を描き出している。
+                    </p>
+
+                    <h2>第4章：ミドルウェアへ——VMの上に「世界」を載せる</h2>
+
+                    <p>
+                        VMの基本実装が完了した今、次のフェーズは<strong>ミドルウェア層</strong>の構築だ。
+                    </p>
+
+                    <p>
+                        ミドルウェアとは、ハードウェア（VMコア）とアプリケーション（ゲームやビジュアルノベル）の間を繋ぐ、
+                        いわば「土台」のような存在だ。
+                        OS——とまではいかないが、BIOSや基本ライブラリに相当する機能群を、
+                        Z80アセンブラとCで実装していく。
+                    </p>
+
+                    <ul>
+                        <li><strong>BIOS</strong> — 画面モードの初期化、パレット設定、基本I/O</li>
+                        <li><strong>描画ライブラリ</strong> — V9990コマンドをラップした高レベル描画API</li>
+                        <li><strong>フォントドライバ</strong> — 美咲フォントによる日本語テキスト描画</li>
+                        <li><strong>リソースローダー</strong> — バンク切り替えを活用したアセット読み込み</li>
+                    </ul>
+
+                    <p>
+                        このミドルウェアが完成すれば、VNStudioのスクリプトエンジンをその上に載せ、
+                        <a href="vol5-z80-runtime.html">Vol.5</a>で語った「Write Once, Play Anywhere」——
+                        同じスクリプトがUnityでもZ80でも動く——という夢に、いよいよ手が届く。
+                    </p>
+
+                    <blockquote>
+                        VMコアは「心臓」。ミドルウェアは「骨格」。<br>
+                        その上にスクリプトエンジンという「魂」を宿すとき、<br>
+                        夢のマシンは本当の意味で目を覚ます。
+                    </blockquote>
+
+                    <h2>おわりに——夢は、動いてこそ夢になる</h2>
+
+                    <p>
+                        設計書に書かれた仕様は、まだ「約束」でしかない。
+                        コードとして動き、画面にピクセルが灯り、意図した通りの映像が映し出された瞬間に、
+                        はじめてそれは「実現」になる。
+                    </p>
+
+                    <p>
+                        XZ80のVMコアが動いた——それは、
+                        <a href="vol7-dream-machine.html">Vol.7</a>の結びで「もうじっとしていられなくなった」と書いたあの衝動が、
+                        一つの具体的な到達点を得たということだ。
+                    </p>
+
+                    <p>
+                        だが、ここがゴールではない。
+                        ミドルウェアの実装、VNStudioスクリプトエンジンの移植、
+                        そしてその先に待つRS Studioへの発展——。
+                        描くべき道のりは、まだ長い。
+                    </p>
+
+                    <p>
+                        けれど、動いている画面を見つめながら、確信する。
+                    </p>
+
+                    <blockquote>
+                        この道の先に、確かに「あの夢」がある。<br>
+                        一歩ずつ、着実に。
+                    </blockquote>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol10-alpha-release.html">&larr; Vol.10: アルファ版公開</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
