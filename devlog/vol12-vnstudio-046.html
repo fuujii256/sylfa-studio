@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.12: 進捗報告 — VNStudio 0.46β、四つの進化 | しるふぁ工房</title>
+    <meta name="description"
+        content="VNStudio次期バージョン0.46βの進捗報告。X68000版runtimeの試験実装、384×240レトロモード、voiceコマンド、callコマンド拡張による8-puzzleミニゲームなど、四つの新機能を解説。">
+    <meta property="og:title" content="Vol.12: 進捗報告 — VNStudio 0.46β、四つの進化 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.12 — PROGRESS REPORT</span>
+                    <h1 class="article__title">VNStudio 0.46β、四つの進化。<br>——新たなランタイムと、広がる表現力</h1>
+                    <time class="article__date" datetime="2026-05-09">2026.05.09</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——進化し続けるエンジン</h2>
+
+                    <p>
+                        <a href="vol11-xz80-progress.html">前回</a>は、XZ80 VMのコア実装完了という大きな節目を報告した。
+                        あれから間を置かず、開発の重心はUnity側のランタイム——VNStudioそのものの進化へと移っている。
+                    </p>
+
+                    <p>
+                        次期バージョン <strong>VNStudio 0.46β</strong> に向けて、
+                        四つの新機能が並行して形になりつつある。
+                        今回はその進捗を、それぞれの技術的な背景とともにお伝えしたい。
+                    </p>
+
+                    <blockquote>
+                        一つひとつは小さな進化でも、積み重なれば景色が変わる。<br>
+                        ツールの成長は、いつもそうだ。
+                    </blockquote>
+
+                    <h2>第1章：X68000版ランタイム——もう一つの「夢のマシン」へ</h2>
+
+                    <p>
+                        <a href="vol5-z80-runtime.html">Vol.5</a>で掲げた「Write Once, Play Anywhere」——
+                        同じスクリプトがUnityでもレトロPCでも動く、という理念。
+                        その到達先として、XZ80 VMと並ぶもう一つのターゲットを用意した。
+                    </p>
+
+                    <p>
+                        <strong>X68000</strong>——。
+                        シャープが1987年に送り出した、日本のホビーコンピューティング史に燦然と輝く名機。
+                        MC68000 CPUと専用カスタムチップ群が織りなすその表現力は、
+                        当時のアーケードゲームすら凌駕するほどだった。
+                    </p>
+
+                    <p>
+                        このX68000の上で、VNStudioのスクリプトを走らせる——。
+                        その試験実装に、今回着手した。
+                    </p>
+
+                    <p>
+                        実機での動作を視野に入れつつ、まずはエミュレータ上でのランタイム動作を目標とし、
+                        MC68000のアセンブラで記述したスクリプトインタプリタの基盤を構築している。
+                        Z80版とは命令セットも設計思想も異なる16ビットCPUの上で、
+                        同じスクリプトが——同じ物語が——息づくことを確認するための、第一歩だ。
+                    </p>
+
+                    <blockquote>
+                        Z80で描いた夢が、68000の大地にも根を下ろす。<br>
+                        「どこでも動く」は、単なるスローガンではない。実装で証明する。
+                    </blockquote>
+
+                    <!-- スクリーンショット：X68000版ランタイム（2枚横並び） -->
+                    <div class="article__figure-group">
+                        <figure class="article__figure">
+                            <img src="image/dev12_screenshot_x68k_1.png" alt="X68000エミュレータ：屋外シーンでのsayコマンド動作">
+                            <figcaption>屋外の城を背景に、<code>say</code>コマンドによるテキスト表示が動作している場面。</figcaption>
+                        </figure>
+                        <figure class="article__figure">
+                            <img src="image/dev12_screenshot_x68k_2.png" alt="X68000エミュレータ：屋内シーンでの選択肢表示">
+                            <figcaption>宮殿内装を背景に、選択肢メニューが表示されている場面。コマンド解説の終盤にあたる。</figcaption>
+                        </figure>
+                    </div>
+
+                    <h2>第2章：384×240レトロモード——ピクセルに宿る温もり</h2>
+
+                    <p>
+                        Unity版ランタイムにも、進化が。
+                        <strong>384×240ピクセルのレトロモード</strong>を実装した。
+                    </p>
+
+                    <p>
+                        384×240——この解像度には意味がある。
+                        <a href="vol8-multicore-z80.html">Vol.8</a>で設計したXZ80の画面解像度と同一であり、
+                        Unity版でXZ80版の実装を<strong>ほぼ同じ見た目</strong>で動作させるための重要な布石となる。
+                    </p>
+
+                    <p>
+                        実装は、<code>Camera.main.targetTexture</code>に384×240の<code>RenderTexture</code>を割り当て、
+                        それを画面全体に拡大表示する方式を採用した。
+                        UIの<code>referenceResolution</code>も384×240に統一することで、
+                        レイアウトの整合性を保ちながら、<strong>ドット絵らしい表示</strong>を実現している。
+                    </p>
+
+                    <p>
+                        高解像度ディスプレイの中に、レトロなドット絵が息づく。
+                        ノスタルジーではない、<strong>意図的な表現</strong>なのだ。
+                    </p>
+
+                    <!-- スクリーンショット：384×240モード -->
+                    <figure class="article__figure">
+                        <img src="image/dev12_screenshot_retro.png" alt="384×240レトロモードの動作画面">
+                        <figcaption>384×240レトロモードで動作中のUnityランタイム。ドット絵らしい表示が作品に温もりを与えている。</figcaption>
+                    </figure>
+
+                    <h2>第3章：voiceコマンド——声に、専用の居場所を</h2>
+
+                    <p>
+                        ビジュアルノベルにおいて、ボイス（音声）は特別な存在だ。
+                        BGMやSEとは異なり、テキストの一行一行に紐づき、
+                        キャラクターの感情をダイレクトに伝える——
+                        いわば「もう一つのテキスト」である。
+                    </p>
+
+                    <p>
+                        これまでのVNStudioでは、音声再生にもBGMやSEと同じ汎用の<code>play</code>コマンドを使っていた。
+                        機能的には動作するが、スクリプト上での意図が曖昧になりがちだった。
+                    </p>
+
+                    <p>
+                        0.46βでは、音声専用の<strong><code>voice</code>コマンド</strong>を新設した。
+                    </p>
+
+                    <pre><code>voice sylfa_greeting_01
+say しるふぁ "おはようございます！"</code></pre>
+
+                    <p>
+                        <code>voice</code>の直後に<code>say</code>を置く——それだけで、
+                        テキスト表示と同時にボイスが再生され、テキスト送りで自動的に停止する。
+                        スクリプトの可読性が上がり、演出の意図が一目で伝わるようになった。
+                    </p>
+
+                    <p>
+                        さらに重要なのは、将来のボイス管理機能への拡張性だ。
+                        専用コマンドとして独立させたことで、
+                        ボイスの音量調整、再生中のリップシンク連動、
+                        未再生ボイスのギャラリー管理といった機能を、
+                        スクリプト文法を変えることなく後から追加できる。
+                    </p>
+
+                    <blockquote>
+                        小さなコマンドの独立が、未来の機能拡張の土台になる。<br>
+                        設計とは、いま見えているものだけでなく、<br>
+                        まだ見えていないものに備えることなのだ。
+                    </blockquote>
+
+                    <h2>第4章：callコマンド拡張——スクリプトの中に「遊び」を埋め込む</h2>
+
+                    <p>
+                        VNStudioのスクリプトエンジンには、サブルーチン呼び出しのための<code>call</code>コマンドがある。
+                        指定したラベルへジャンプし、<code>return</code>で元の位置に戻る——
+                        プログラミングにおける関数呼び出しと同じ概念である。
+                    </p>
+
+                    <p>
+                        0.46βでは、この<code>call</code>コマンドを<strong>試験的に拡張</strong>し、
+                        スクリプトからミニゲームを呼び出せるようにしている。
+                        その第一弾として実装したのが、<strong>8パズル</strong>（15パズルの3×3版）である。
+                    </p>
+
+                    <pre><code># ビジュアルノベルの途中で、パズルに挑戦させる
+say しるふぁ "じゃあ、ここでちょっとパズルに挑戦してみて！"
+call puzzle8 shuffle=20
+
+# パズル完了後、自動的にここに戻ってくる
+say しるふぁ "お見事！クリアできたね！"</code></pre>
+
+                    <p>
+                        <code>call puzzle8</code>が実行されると、
+                        画面上に8パズルのUIがオーバーレイ表示される。
+                        <code>shuffle</code>パラメータでシャッフル回数を指定でき、
+                        スクリプトで、パズル用の画像の指定・難易度の指定も可能にしている。
+                    </p>
+
+                    <p>
+                        プレイヤーがパズルを解くと、自動的に<code>call</code>元のスクリプトに制御が戻る。
+                        物語の中に自然にインタラクティブな要素を組み込める——
+                        これは、ビジュアルノベルの可能性を大きく広げる試みだ。
+                    </p>
+
+
+                    <!-- スクリーンショット：8パズル -->
+                    <figure class="article__figure">
+                        <img src="image/dev12_screenshot_puzzle.png" alt="callコマンドで呼び出された8パズルの動作画面">
+                        <figcaption>callコマンドから呼び出された8パズル。ビジュアルノベルの画面上にオーバーレイ表示され、クリア後は自動的にスクリプトに復帰する。</figcaption>
+                    </figure>
+
+                    <h2>おわりに——積み重ねが、やがて跳躍になる</h2>
+
+                    <p>
+                        X68000版ランタイム、384×240レトロモード、voiceコマンド、callコマンド拡張——。
+                        四つの進化は、それぞれ独立した機能でありながら、
+                        一つの方向を向いている。
+                    </p>
+
+                    <p>
+                        <strong>「表現の幅を広げ、届く場所を増やす」</strong>ということなのだ。
+                    </p>
+
+                    <p>
+                        X68000版ランタイムは、スクリプトが走る世界をもう一つ増やした。
+                        レトロモードは、視覚表現に新しい選択肢を加えた。
+                        voiceコマンドは、音の演出をより意図的に扱えるようにした。
+                        callコマンド拡張は、物語の中に遊びを埋め込む道を拓いた。
+                    </p>
+
+                    <p>
+                        どれも派手な機能ではないかもしれない。
+                        けれど、クリエイターの手元で「あ、これができるんだ」と感じてもらえる瞬間が、
+                        一つでも増えることを願っている。
+                    </p>
+
+                    <blockquote>
+                        小さな進化の一つひとつが、やがて大きな跳躍の助走になる。<br>
+                        0.46βは、その助走路のまっただ中にある。
+                    </blockquote>
+
+                    <p>
+                        次の進捗報告では、これらの機能がさらに磨き上げられた姿を——
+                        そして、RS Studioの始動という新たな物語を、お届けできるはずだ。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol11-xz80-progress.html">&larr; Vol.11: XZ80 進捗報告</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
