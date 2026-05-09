@@ -185,6 +185,44 @@
     font-size: 1.2rem;
 }
 
+/* ── スクリーンショット figure ── */
+.article__figure {
+    margin: 2rem 0;
+}
+
+.article__figure img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    display: block;
+}
+
+.article__figure figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* 2枚横並びレイアウト — モバイルでは縦積みにフォールバック */
+.article__figure-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.article__figure-group .article__figure {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .article__figure-group {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ── 記事ページ間ナビゲーション ── */
 .article-nav {
     display: flex;
