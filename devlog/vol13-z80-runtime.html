@@ -319,13 +319,13 @@ VNB_VarIdToHL:
     ld h, 0
     add hl, hl          ; HL = varId × 2
     ; ram_var_table のベースアドレスを加算
-    ld a, ram_var_table & 0xFF
+    ld a, ram_var_table &amp; 0xFF
     add a, l
     ld l, a
-    ld a, ram_var_table >> 8
+    ld a, ram_var_table &gt;&gt; 8
     adc a, h
     ld h, a
-    ret                  ; HL = &ram_var_table[varId]</code></pre>
+    ret                  ; HL = &amp;ram_var_table[varId]</code></pre>
 
                     <p>
                         <code>CALL</code>/<code>RETURN</code>命令は、
