@@ -174,7 +174,7 @@ endm</code></pre>
                     <pre><code>; ROM→VRAM転送の核心ループ（擬似コード）
 .xfer_loop:
     ; 残りバイト数が0なら終了
-    check ram_xfer_remain > 0
+    check ram_xfer_remain &gt; 0
 
     ; 今のバンク内で読める量を計算
     chunk = min(0xC000 - rom_ptr, remaining)
@@ -186,7 +186,7 @@ endm</code></pre>
 
     ; ポインタ前進、バンク境界を超えたら次のバンクへ
     rom_ptr += chunk
-    if rom_ptr >= 0xC000:
+    if rom_ptr &gt;= 0xC000:
         rom_ptr -= 0x4000
         ram_xfer_seg += 1
 
