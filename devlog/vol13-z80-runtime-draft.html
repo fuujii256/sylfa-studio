@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.13: Z80マシン語の深淵——バンク切り替えとパーサーが織りなすランタイムの構造 | しるふぁ工房</title>
+    <meta name="description"
+        content="XZ80 VMのZ80ランタイムの内部構造を技術解説。Z80マシン語コードの特徴、バンク切り替えによる4MB空間の活用、VNBバイトコードパーサーの効率化手法を掘り下げる。">
+    <meta property="og:title" content="Vol.13: Z80マシン語の深淵——バンク切り替えとパーサーが織りなすランタイムの構造 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header fade-in">
+                    <span class="article__vol">VOL.13 — DEEP DIVE</span>
+                    <h1 class="article__title">Z80マシン語の深淵。<br>——バンク切り替えとパーサーが織りなすランタイムの構造</h1>
+                    <time class="article__date" datetime="2026-05-12">2026.05.12</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body fade-in fade-in-delay-1">
+
+                    <h2>はじめに——なぜZ80でビジュアルノベルを動かすのか</h2>
+
+                    <p>
+                        XZ80 VMの心臓部には、1976年生まれの8ビットCPU——<strong>Z80</strong>が鼓動している。
+                        16ビットのアドレスバスが見渡せるのは、わずか64KBの空間。
+                        現代の基準で言えば、画像1枚すら収まらないほどの、狭小な世界だ。
+                    </p>
+
+                    <p>
+                        その制約の中で、背景画像を切り替え、キャラクターを表示し、
+                        テキストを描画し、選択肢で分岐する——ビジュアルノベルの全機能を実現する。
+                        今回は、そのランタイムの内部構造を、Z80マシン語コードの特徴とともに解き明かしていく。
+                    </p>
+
+                    <blockquote>
+                        制約こそが、設計を研ぎ澄ます。<br>
+                        64KBの壁は、エンジニアリングの純度を高めるフィルターだ。
+                    </blockquote>
+
+                    <h2>第1章：Z80マシン語の特徴——レジスタと命令セットの美学</h2>
+
+                    <p>
+                        Z80は8ビットCPUでありながら、<strong>16ビットのレジスタペア</strong>を複数持つ。
+                        <code>BC</code>, <code>DE</code>, <code>HL</code>——
+                        これらは8ビットの上位・下位を組み合わせて16ビットとして扱える。
+                        特に<code>HL</code>レジスタは「メモリポインタの王」であり、
+                        <code>(HL)</code>というアドレッシングモードでメモリの読み書きを一命令で行える。
+                    </p>
+
+                    <p>
+                        さらにZ80には、<strong>裏レジスタ</strong>（<code>AF'</code>, <code>BC'</code>,
+                        <code>DE'</code>, <code>HL'</code>）という隠し武器がある。
+                        <code>EXX</code>命令一発でメイン・裏レジスタを丸ごと交換できるこの機構は、
+                        割り込みハンドラでのコンテキスト退避に絶大な威力を発揮する。
+                    </p>
+
+                    <p>
+                        しかし最大の特徴は、<strong>I/Oポートによるデバイス制御</strong>だろう。
+                        <code>IN</code>/<code>OUT</code>命令でメモリ空間とは独立した256ポートのI/O空間にアクセスでき、
+                        VDP（映像）、OPN（音源）、キーボード、メモリマッパー——
+                        すべてのハードウェアを、たった2つの命令で制御する。
+                    </p>
+
+                    <pre><code>; V9990 VDPにレジスタ値を書き込む例
+ld a, 6              ; レジスタ番号 6
+out (0x64), a        ; レジスタ選択ポートへ
+ld a, 0xC0           ; B4モード（384×240直接色）
+out (0x63), a        ; レジスタデータポートへ</code></pre>
+
+                    <p>
+                        たった4行——。CPUの外にある映像プロセッサの動作モードを、これだけで切り替えられる。
+                        この簡潔さが、Z80マシン語の魅力だ。
+                    </p>
+
+                    <h2>第2章：バンク切り替え——64KBの壁を超える</h2>
+
+                    <p>
+                        XZ80 VMの物理メモリは<strong>4MB</strong>（256バンク × 16KB）。
+                        対してZ80が直接見えるのは64KB。この矛盾をどう解決するか？
+                    </p>
+
+                    <p>
+                        答えは、<strong>メモリマッパー</strong>だ。
+                        64KBの論理アドレス空間を4つの「ページ」（各16KB）に分割し、
+                        それぞれに物理バンク番号を割り当てる。
+                        I/Oポート<code>F0h</code>〜<code>F3h</code>に値を書き込むだけで、
+                        各ページが指す物理バンクを瞬時に切り替えられる。
+                    </p>
+
+                    <pre><code>; メモリマップ（初期状態）
+; Page 0: 0x0000-0x3FFF → Bank 0  (コード領域)
+; Page 1: 0x4000-0x7FFF → Bank 1  (未使用)
+; Page 2: 0x8000-0xBFFF → Bank 0  (可変: アセット読み出し窓)
+; Page 3: 0xC000-0xFFFF → Bank 255 (RAM)
+
+; Page 2のバンクを切り替える
+ld a, 16             ; バンク16を選択
+out (0xF2), a        ; Page 2 → 物理バンク16へ
+; → 0x8000-0xBFFF に バンク16の16KBが見える</code></pre>
+
+                    <p>
+                        ランタイムでは<strong>Page 2</strong>（<code>0x8000</code>〜<code>0xBFFF</code>）を
+                        「スライド窓」として使う。
+                        背景画像、フォント、スクリプト——すべてのアセットはROMの異なるバンクに配置され、
+                        必要なときにPage 2へマッピングして読み出す。
+                    </p>
+
+                    <p>
+                        この切り替えをマクロで抽象化したのが<code>BANK2_SET</code>だ。
+                    </p>
+
+                    <pre><code>; BANK2_SET マクロ: Page 2 を指定バンクに切り替え
+macro BANK2_SET
+    out (0xF2), a           ; I/Oポートに物理バンク番号を出力
+    ld (ram_cur_bank2_seg), a ; 現在のバンク番号をRAMに記録
+endm</code></pre>
+
+                    <p>
+                        ポイントは、切り替え後に<strong>現在のバンク番号をRAMに記録</strong>していること。
+                        これにより、関数の入口で現在バンクを退避し、
+                        処理後に元に戻すことが可能になる。ネストされたバンク切り替えを安全に行うための知恵だ。
+                    </p>
+
+                    <h2>第3章：バンク切り替えの具体的な活用——アセット転送</h2>
+
+                    <p>
+                        バンク切り替えが最も活躍するのが、<strong>ROMからVRAMへのアセット転送</strong>だ。
+                        背景画像1枚は約26KBあり、16KBのバンク境界をまたぐ。
+                        転送ルーチン<code>ROM_TransferVRAMEx</code>は、これを自動的に処理する。
+                    </p>
+
+                    <pre><code>; ROM→VRAM転送の核心ループ（擬似コード）
+.xfer_loop:
+    ; 残りバイト数が0なら終了
+    check ram_xfer_remain > 0
+
+    ; 今のバンク内で読める量を計算
+    chunk = min(0xC000 - rom_ptr, remaining)
+
+    ; VRAMアドレス設定 → バンク切替 → ブロック転送
+    set_vram_addr(ram_xfer_vram)
+    BANK2_SET ram_xfer_seg
+    transfer_block(rom_ptr, chunk)
+
+    ; ポインタ前進、バンク境界を超えたら次のバンクへ
+    rom_ptr += chunk
+    if rom_ptr >= 0xC000:
+        rom_ptr -= 0x4000
+        ram_xfer_seg += 1
+
+    goto .xfer_loop</code></pre>
+
+                    <p>
+                        バンク境界（<code>0xC000</code>）を超えた瞬間にバンク番号をインクリメントし、
+                        ポインタを<code>0x4000</code>分だけ巻き戻す——。
+                        この「境界跨ぎ」のパターンは、ランタイム全体で繰り返し登場する。
+                        スクリプト読み出し、フォントデータアクセス、
+                        あらゆる場面でこの同じ原理が息づいている。
+                    </p>
+
+                    <blockquote>
+                        64KBの壁は、越えられないのではない。<br>
+                        越え方を設計するのだ。
+                    </blockquote>
+
+                    <h2>第4章：VNBパーサー——バイトコードで物語を駆動する</h2>
+
+                    <p>
+                        VNStudioのスクリプトは、コンパイラによって<strong>VNBバイトコード</strong>に変換される。
+                        Z80ランタイムの仕事は、このバイトコードを1バイトずつ読み、解釈し、実行すること。
+                        その心臓部が<code>VNB_ExecuteNext</code>だ。
+                    </p>
+
+                    <pre><code>; VNBオペコード一覧（抜粋）
+VNB_OP_SAY       equ 0x01  ; テキスト表示
+VNB_OP_BG        equ 0x03  ; 背景変更
+VNB_OP_JUMP      equ 0x06  ; 無条件ジャンプ
+VNB_OP_CHOICE    equ 0x09  ; 選択肢表示
+VNB_OP_SHOW      equ 0x0B  ; キャラクター表示
+VNB_OP_SET_VAR   equ 0x14  ; 変数代入
+VNB_OP_COND_JUMP equ 0x16  ; 条件分岐
+VNB_OP_SWITCH    equ 0x17  ; switch分岐
+VNB_OP_CALL      equ 0x1A  ; サブルーチン呼出
+VNB_OP_RETURN    equ 0x1B  ; サブルーチン復帰
+VNB_OP_END       equ 0xFF  ; スクリプト終了</code></pre>
+
+                    <p>
+                        パーサーの設計で特筆すべきは、<strong>バーストモード</strong>の存在だ。
+                        メインループの1フレーム（1/60秒）の中で、
+                        描画を伴わない命令（変数操作、ジャンプなど）は最大8個まで連続実行される。
+                    </p>
+
+                    <pre><code>; メインループ内のスクリプト処理
+.state_script:
+    ld a, SCRIPT_BURST_MAX      ; 8命令まで
+.state_script_loop:
+    push af
+    call VNB_ExecuteNext        ; 1命令実行
+    pop bc
+    ld a, (ram_game_state)
+    cp STATE_SCRIPT_PROC
+    jr nz, .state_script_done   ; 状態が変わったら中断
+    ld a, b
+    dec a
+    jr nz, .state_script_loop   ; まだバースト回数が残っていれば続行</code></pre>
+
+                    <p>
+                        <code>say</code>（テキスト表示）や<code>bg</code>（背景変更）が実行されると
+                        ゲームステートが変化し、バーストループを抜ける。
+                        一方、<code>set_var</code>→<code>cond_jump</code>→<code>jump</code>のような
+                        ロジック系命令は一瞬で連鎖実行される。
+                        この仕組みにより、変数操作の応答性とフレームレートの安定性を両立している。
+                    </p>
+
+                    <h2>第5章：スクリプト読み出しとバンク境界の透過処理</h2>
+
+                    <p>
+                        スクリプトのバイトコードもROM上に配置されているため、
+                        読み出し時にバンク境界を意識しなければならない。
+                        <code>VNB_ReadByte</code>がこれを透過的に処理する。
+                    </p>
+
+                    <pre><code>; VNB_ReadByte: スクリプトから1バイト読み出し（バンク跨ぎ対応）
+VNB_ReadByte:
+    ; 現在のPage 2バンクを退避
+    ld a, (ram_cur_bank2_seg)
+    push af
+    ; スクリプトのバンクに切り替え
+    ld a, (ram_script_seg)
+    BANK2_SET
+    ; 1バイト読み出し
+    ld hl, (ram_script_ptr)
+    ld a, (hl)
+    push af
+    inc hl
+    ; ポインタが0xC000を超えたら次のバンクへ
+    ld a, h
+    cp 0xC0
+    jr c, .no_cross
+    sub 0x40              ; ポインタを巻き戻す
+    ld h, a
+    ld a, (ram_script_seg)
+    inc a                 ; 次のバンクへ
+    ld (ram_script_seg), a
+.no_cross:
+    ld (ram_script_ptr), hl
+    ; 元のバンクを復帰して返す
+    pop af → 読み出し値
+    pop af → 元のバンク
+    BANK2_SET
+    ret</code></pre>
+
+                    <p>
+                        パーサーの呼び出し側から見れば、<code>call VNB_ReadByte</code>で
+                        常に正しい1バイトが<code>A</code>レジスタに返る。
+                        バンク境界の存在は完全に隠蔽される。
+                        この抽象化が、パーサー本体のコードをシンプルに保つ要だ。
+                    </p>
+
+                    <h2>第6章：変数とCALL/RETURN——Z80上のミニVM</h2>
+
+                    <p>
+                        VNBランタイムは単なるスクリプトリーダーではない。
+                        <strong>変数テーブル</strong>、<strong>条件分岐</strong>、
+                        <strong>コールスタック</strong>を備えた、Z80上の小さなVM（仮想マシン）だ。
+                    </p>
+
+                    <p>
+                        変数テーブルは、RAM領域に64個の16ビット整数として確保される。
+                        コンパイラが変数名をID（0〜63）に変換済みなので、
+                        ランタイムでは<code>ID × 2</code>のオフセットで直接アクセスする。
+                    </p>
+
+                    <pre><code>; 変数IDからRAMアドレスへの変換
+VNB_VarIdToHL:
+    ld l, a
+    ld h, 0
+    add hl, hl          ; HL = varId × 2
+    ; ram_var_table のベースアドレスを加算
+    ld a, ram_var_table & 0xFF
+    add a, l
+    ld l, a
+    ld a, ram_var_table >> 8
+    adc a, h
+    ld h, a
+    ret                  ; HL = &ram_var_table[varId]</code></pre>
+
+                    <p>
+                        <code>CALL</code>/<code>RETURN</code>命令は、
+                        専用のコールスタック（最大8段 × 3バイト）を使う。
+                        各エントリにはバンク番号とポインタの組が保存され、
+                        <code>RETURN</code>でバンクごと正確に復帰できる。
+                    </p>
+
+                    <pre><code>; CALL: 現在位置を退避してジャンプ
+VNB_DoCall:
+    call VNB_ReadWord       ; HL = ジャンプ先
+    ; 現在のseg + ptrをスタックに保存
+    push ...
+    ; スタック深度をインクリメント
+    ; ジャンプ先へ移動
+
+; RETURN: スタックから復帰
+VNB_DoReturn:
+    ; スタック深度をデクリメント
+    ; seg + ptrを復元
+    ; → 呼び出し元の次の命令から再開</code></pre>
+
+                    <p>
+                        Z80ネイティブの<code>CALL</code>/<code>RET</code>命令ではなく、
+                        VNBレベルの独自スタックを使う理由は明確だ——
+                        <strong>バンク番号の管理</strong>が必要だからだ。
+                        Z80の<code>RET</code>はプログラムカウンタしか復元しないが、
+                        VNBの<code>RETURN</code>はバンク番号も復元する。
+                        64KBを超えた世界でのサブルーチンには、この拡張が不可欠なのだ。
+                    </p>
+
+                    <blockquote>
+                        Z80の上に、もう一つの小さなCPUが生きている。<br>
+                        命令セットは異なれど、変数があり、分岐があり、スタックがある。<br>
+                        それが、VNBパーサーという名のミニVMだ。
+                    </blockquote>
+
+                    <h2>第7章：ステートマシン——60fpsの呼吸</h2>
+
+                    <p>
+                        メインループは<strong>ステートマシン</strong>で構成されている。
+                        毎フレーム、<code>HALT</code>命令でVBlank割り込みを待ち、
+                        現在のゲームステートに応じて処理を分岐する。
+                    </p>
+
+                    <pre><code>; ゲームステート
+STATE_SCRIPT_PROC  equ 1  ; スクリプト実行中
+STATE_TEXT_RENDER  equ 2  ; テキスト描画中（1文字ずつ）
+STATE_WAIT_INPUT   equ 3  ; ボタン待ち
+STATE_WAIT_TIME    equ 4  ; 時間待ち
+STATE_HALT         equ 5  ; スクリプト終了
+STATE_CHOICE       equ 6  ; 選択肢表示中</code></pre>
+
+                    <p>
+                        <code>STATE_TEXT_RENDER</code>ではテキストを1文字ずつ描画し、
+                        ボタンが押されると残りを一括表示する「早送り」も実装されている。
+                        <code>STATE_CHOICE</code>では上下キーで選択肢を移動し、
+                        決定キーで対応するジャンプ先へ遷移する。
+                    </p>
+
+                    <p>
+                        すべての状態遷移は、RAM上の1バイト変数<code>ram_game_state</code>で制御される。
+                        オペコードハンドラがこの値を書き換えるだけで、
+                        次のフレームから異なるステートの処理が走り出す。
+                        シンプルだが、堅牢な設計だ。
+                    </p>
+
+                    <h2>おわりに——制約の中に宿る美しさ</h2>
+
+                    <p>
+                        Z80マシン語で書かれたVNランタイムは、
+                        現代のプログラミングからは想像もつかないほど低レベルな世界だ。
+                        メモリの1バイトを節約し、I/Oポートの1回のアクセスを最適化し、
+                        バンク境界を丁寧にまたぐ——。
+                    </p>
+
+                    <p>
+                        しかし、その制約の中にこそ、設計の本質が宿る。
+                        バンク切り替えは「有限のリソースをどう見せるか」という問いへの答えであり、
+                        VNBパーサーは「最小限の命令セットで最大限の表現力を引き出す」という挑戦だ。
+                    </p>
+
+                    <p>
+                        4MBの物理メモリ、256のバンク、20以上のオペコード、
+                        64個の変数、8段のコールスタック——。
+                        これらの数字の一つひとつが、Z80の64KB空間の中で、
+                        ビジュアルノベルという物語装置を成立させるための、精密な歯車なのだ。
+                    </p>
+
+                    <blockquote>
+                        制約は敵ではない。<br>
+                        制約こそが、設計を純粋にし、コードに美しさを与えるのだ。
+                    </blockquote>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav fade-in">
+                    <a href="vol12-vnstudio-046.html">&larr; Vol.12: VNStudio 0.46β、四つの進化</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // main.js が読み込めない環境（file://プロトコル等）向けのフォールバック。
+        // .fade-in 要素に .visible を付与して確実に表示させる。
+        (function() {
+            function showAll() {
+                document.querySelectorAll('.fade-in').forEach(function(el) {
+                    el.classList.add('visible');
+                });
+            }
+            // DOMが準備でき次第すぐ適用
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', showAll);
+            } else {
+                showAll();
+            }
+            // 念のため 300ms 後にも再実行
+            setTimeout(showAll, 300);
+        })();
+    </script>
+</body>
+
+</html>
