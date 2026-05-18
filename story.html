@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story — Luminus Archive | しるふぁ工房</title>
+    <meta name="description" content="Luminus Archive（ルミナス・アーカイブ）— うしなわれたルミのきおく。ときをこえて、おもいをつなぐものがたり。現在、第6話まで公開中です。">
+    <meta property="og:title" content="Story — Luminus Archive | しるふぁ工房">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/images/nav_icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── ストーリーヒーロー — あたたかく文学的な導入 ── */
+        .story-hero {
+            padding: calc(var(--nav-height) + var(--space-2xl)) 0 var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(240, 217, 167, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .story-hero__label {
+            font-family: var(--font-accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            display: block;
+            margin-bottom: var(--space-md);
+        }
+
+        .story-hero__title {
+            font-family: 'M PLUS Rounded 1c', var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0d9a7, #f0a7c9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-sm);
+        }
+
+        .story-hero__subtitle {
+            font-family: 'M PLUS Rounded 1c', var(--font-heading);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            color: var(--color-text-muted);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-md);
+        }
+
+        .story-hero__desc {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ── エピソード装飾区切り ── */
+        .story-ornament {
+            text-align: center;
+            color: var(--color-gold);
+            opacity: 0.3;
+            font-size: 0.8rem;
+            letter-spacing: 0.8em;
+            margin-bottom: var(--space-xl);
+        }
+
+        /* ── エピソードリスト ── */
+        .episode-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .episode-card {
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-bg-card);
+            border: 1px solid rgba(240, 217, 167, 0.1);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .episode-card:hover {
+            border-color: rgba(240, 217, 167, 0.3);
+            transform: translateX(4px);
+            box-shadow: 0 0 30px rgba(240, 217, 167, 0.08);
+            color: inherit;
+        }
+
+        /* エピソード番号 — 大きな数字で章を強調 */
+        .episode-card__num {
+            font-family: var(--font-accent);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--color-gold);
+            opacity: 0.6;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .episode-card__num small {
+            display: block;
+            font-size: 0.55rem;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            opacity: 0.8;
+            margin-bottom: 0.15rem;
+        }
+
+        .episode-card__body {
+            min-width: 0;
+        }
+
+        .episode-card__title {
+            font-family: 'M PLUS Rounded 1c', var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+
+        .episode-card__excerpt {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+            line-height: 1.5;
+        }
+
+        .episode-card__arrow {
+            color: var(--color-text-dim);
+            font-size: 1.1rem;
+            transition: transform var(--transition-fast), color var(--transition-fast);
+        }
+
+        .episode-card:hover .episode-card__arrow {
+            transform: translateX(4px);
+            color: var(--color-gold);
+        }
+
+        .episode-card--coming-soon {
+            cursor: default;
+            opacity: 0.72;
+        }
+
+        .episode-card--coming-soon:hover {
+            border-color: rgba(240, 217, 167, 0.16);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .episode-card__status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.65rem;
+            border: 1px solid rgba(240, 217, 167, 0.22);
+            border-radius: 999px;
+            color: var(--color-gold);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+        }
+
+        /* ── 作品情報ボックス ── */
+        .story-info {
+            margin-top: var(--space-xl);
+            padding: var(--space-lg);
+            background: var(--color-bg-card);
+            border: 1px solid rgba(240, 217, 167, 0.1);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .story-info__title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .story-info__desc {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            .episode-card {
+                grid-template-columns: 44px 1fr auto;
+                padding: 1rem;
+                gap: 0.75rem;
+            }
+
+            .episode-card__num {
+                font-size: 1.2rem;
+            }
+
+            .episode-card__title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="story.html" class="nav__link">Story</a></li>
+                <li><a href="works.html" class="nav__link">Works</a></li>
+                <li><a href="tools.html" class="nav__link">Tools</a></li>
+                <li><a href="about.html" class="nav__link">About</a></li>
+                <li><a href="links.html" class="nav__link">Links</a></li>
+                <li><a href="contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ストーリーヒーロー -->
+    <header class="story-hero">
+        <div class="container">
+            <span class="story-hero__label">Story</span>
+            <h1 class="story-hero__title">Luminus Archive</h1>
+            <p class="story-hero__subtitle">うしなわれたルミのきおく ― ときをこえて、おもいをつなぐものがたり</p>
+            <p class="story-hero__desc">
+                光と記憶をテーマにした物語。<br>
+                少女しるふぁが光の小鳥ピコとともに歩む、<br>
+                やさしくて、すこしせつない物語。現在、第6話まで公開中です。
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section--sm">
+            <div class="container" style="max-width:760px;">
+
+                <div class="story-ornament fade-in">✦ ✦ ✦</div>
+
+                <div class="episode-list">
+
+                    <a href="story/ep01.html" class="episode-card fade-in fade-in-delay-1">
+                        <div class="episode-card__num"><small>EP</small>01</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">光を運ぶ小鳥と、私の小さな一歩</h2>
+                            <p class="episode-card__excerpt">お母さんの形見のペンダントが光り、光の小鳥ピコが現れる。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <a href="story/ep02.html" class="episode-card fade-in fade-in-delay-1">
+                        <div class="episode-card__num"><small>EP</small>02</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">はじめてのお友達</h2>
+                            <p class="episode-card__excerpt">セント・ルミナス学園に到着。明るいティナとの出会い。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <a href="story/ep03.html" class="episode-card fade-in fade-in-delay-2">
+                        <div class="episode-card__num"><small>EP</small>03</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">つめたい剣と、あたたかい気持ち</h2>
+                            <p class="episode-card__excerpt">剣術の授業でリヴィアと出会う。冷たい態度の裏にある想い。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <a href="story/ep04.html" class="episode-card fade-in fade-in-delay-2">
+                        <div class="episode-card__num"><small>EP</small>04</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">古いものに、のこるもの</h2>
+                            <p class="episode-card__excerpt">古い資料館で、学園に眠る記憶と忘れられた真実に触れる。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <a href="story/ep05.html" class="episode-card fade-in fade-in-delay-3">
+                        <div class="episode-card__num"><small>EP</small>05</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">おかあさんへの、とどかない手紙</h2>
+                            <p class="episode-card__excerpt">届かないとわかっていても、お母さんへの手紙を書きはじめる。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <a href="story/ep06.html" class="episode-card fade-in fade-in-delay-3">
+                        <div class="episode-card__num"><small>EP</small>06</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">わたしの、ゆめ</h2>
+                            <p class="episode-card__excerpt">学園の研究棟で、しるふぁは自分だけの夢と向き合う。</p>
+                        </div>
+                        <span class="episode-card__arrow" aria-hidden="true">→</span>
+                    </a>
+
+                    <div class="episode-card episode-card--coming-soon fade-in">
+                        <div class="episode-card__num"><small>EP</small>07</div>
+                        <div class="episode-card__body">
+                            <h2 class="episode-card__title">きょうかいを、こえた、ほほえみ</h2>
+                            <p class="episode-card__excerpt">第7話は近日公開予定です。</p>
+                        </div>
+                        <span class="episode-card__status">近日公開予定</span>
+                    </div>
+                </div>
+
+                <!-- 作品情報 -->
+                <div class="story-info fade-in mt-xl">
+                    <p class="story-info__title">📖 Luminus Archive について</p>
+                    <p class="story-info__desc">
+                        光と記憶をテーマにしたビジュアルノベル作品の原作テキストです。<br>
+                        独自エンジン「VN Studio」で制作中。完成をお楽しみに。
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="devlog.html">Devlog</a></li>
+                        <li><a href="story.html">Story</a></li>
+                        <li><a href="works.html">Works</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
