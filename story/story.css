@@ -1,0 +1,205 @@
+/* ============================================================
+ * story.css — LuminusArchive エピソードページ共通スタイル
+ *
+ * 物語の読書体験に最適化された、あたたかく落ち着いたデザイン。
+ * devlog/article.css をベースに、文学的な読み心地を重視。
+ * アクセントカラーをゴールド系に変え、やさしい空気感を演出する。
+ * フォントには丸ゴシック（M PLUS Rounded 1c）を採用し、
+ * ひらがな主体のやさしい文体に合う、まるみのある書体で表示する。
+ * ============================================================ */
+
+/* ── 丸ゴシックフォント読み込み ── */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap');
+
+/* ── ストーリー用フォント変数 ── */
+:root {
+    --font-story: 'M PLUS Rounded 1c', 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+}
+
+/* ── 物語コンテナ ── */
+.story {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    font-family: var(--font-story);
+}
+
+/* ── エピソードヘッダー ── */
+.story__header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(240, 217, 167, 0.2);
+    text-align: center;
+}
+
+/* エピソード番号バッジ — ゴールドの温かみ */
+.story__episode {
+    display: inline-block;
+    font-family: var(--font-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--color-gold);
+    background: rgba(240, 217, 167, 0.1);
+    padding: 0.3rem 1rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(240, 217, 167, 0.2);
+}
+
+.story__title {
+    font-family: var(--font-story);
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.story__series {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.1em;
+}
+
+/* ── 物語本文 — 読書体験に最適化 ── */
+.story__body {
+    font-size: 1.1rem;
+    line-height: 2.1;
+    color: var(--color-text-muted);
+}
+
+/* 地の文 — ゆったりとした段落間隔 */
+.story__body p {
+    margin-bottom: 1.5rem;
+    text-indent: 1em;
+}
+
+/* 会話文 — 字下げなし、ゴールドの左ボーダーでやさしく強調 */
+.story__body .dialogue {
+    text-indent: 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid rgba(240, 217, 167, 0.3);
+    color: var(--color-text);
+    margin: 0.75rem 0;
+    line-height: 2;
+}
+
+/* 場面転換 — 装飾的な区切り線 */
+.story__scene-break {
+    text-align: center;
+    margin: 3rem 0;
+    color: var(--color-gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.6em;
+    opacity: 0.4;
+    user-select: none;
+}
+
+/* 演出ト書き — 場面の空気感を伝える控えめなノート */
+.story__atmosphere {
+    font-size: 0.9rem;
+    color: var(--color-text-dim);
+    padding: 0.75rem 1rem;
+    background: rgba(240, 217, 167, 0.04);
+    border-radius: var(--radius-sm);
+    margin: 1.5rem 0;
+    line-height: 1.9;
+    border-left: 2px solid rgba(240, 217, 167, 0.12);
+    font-style: italic;
+}
+
+/* ト書き内のラベル（背景、BGM、SE等）— やさしく強調 */
+.story__atmosphere strong {
+    color: var(--color-gold);
+    font-weight: 500;
+    font-style: normal;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+/* ナレーション内の思考・回想（——で始まる行） */
+.story__body .thought {
+    text-indent: 0;
+    color: var(--color-text);
+    opacity: 0.8;
+    font-style: italic;
+    margin: 0.5rem 0;
+}
+
+/* エピソード終了マーカー */
+.story__ending {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(240, 217, 167, 0.15);
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.15em;
+}
+
+/* ── エピソード間ナビゲーション ── */
+.story-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(240, 217, 167, 0.15);
+}
+
+.story-nav a {
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.story-nav a:hover {
+    opacity: 0.7;
+}
+
+.story-nav__center {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+}
+
+/* ── CSSアニメーション（JS不要） ── */
+@keyframes storyFadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.story__header {
+    animation: storyFadeIn 0.7s ease both;
+}
+
+.story__body {
+    animation: storyFadeIn 0.7s ease 0.15s both;
+}
+
+.story-nav {
+    animation: storyFadeIn 0.7s ease 0.3s both;
+}
+
+/* ── レスポンシブ ── */
+@media (max-width: 600px) {
+    .story {
+        padding: 0 1rem;
+    }
+
+    .story__body {
+        font-size: 1.05rem;
+        line-height: 2;
+    }
+
+    .story__body .dialogue {
+        padding-left: 1rem;
+    }
+}
