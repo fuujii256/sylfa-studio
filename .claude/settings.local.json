@@ -67,7 +67,8 @@
       "Bash(sed -n '17,19p' story/ep09.html)",
       "Bash(sed -n '332,336p' story/ep09.html)",
       "Bash(echo \"=== exit $? \\(1 = no matches\\) ===\")",
-      "Bash(sed -n '323,327p' story/ep08.html)"
+      "Bash(sed -n '323,327p' story/ep08.html)",
+      "Bash(git fetch *)"
     ]
   }
 }
