@@ -70,7 +70,9 @@
       "Bash(sed -n '323,327p' story/ep08.html)",
       "Bash(git fetch *)",
       "Read(//c/c/project/BuildStudioSylfaHP/**)",
-      "Read(//c/c/project/BuildStudioSylfaHP/story/**)"
+      "Read(//c/c/project/BuildStudioSylfaHP/story/**)",
+      "Bash(git -C /c/project/BuildStudioSylfaHP log --oneline -5 -- story/)",
+      "Bash(git -C /c/project/BuildStudioSylfaHP show --stat d1b919c)"
     ]
   }
 }
