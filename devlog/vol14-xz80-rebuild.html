@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.14: 進捗報告 — XZ80ランタイム、生まれ変わる。 | しるふぁ工房</title>
+    <meta name="description"
+        content="XZ80ランタイムのゼロベース再実装、V9990三画面合成の自己診断、CPU1のサウンド専用CPU化とアクセスランプ、起動2.9倍・行送り31倍の高速化、OPNA FM音源ドライバとMXDRV互換MMLまで——二ヶ月分の進捗を報告。">
+    <meta property="og:title" content="Vol.14: 進捗報告 — XZ80ランタイム、生まれ変わる。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.14 — PROGRESS REPORT</span>
+                    <h1 class="article__title">XZ80ランタイム、生まれ変わる。<br>——XZ80ランタイムのゼロベース再実装と自己診断の二ヶ月</h1>
+                    <time class="article__date" datetime="2026-07-17">2026.07.17</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+                    <h2>はじめに——作り直す決心</h2>
+
+                    <p>
+                        <a href="vol13-z80-runtime.html">前回</a>は、XZ80 VMのZ80ランタイム内部の、
+                        バンク切り替えとVNBパーサーの構造を解説した。
+                        実は、実装を進めていく中で、ある決断をしていた。
+                    </p>
+
+                    <p>
+                        <strong>あのVNStudioのXZ80ランタイムを、根本から作り直す</strong>——。
+                    </p>
+
+                    <p>
+                        その後、XZ80ランタイムの開発は、困難に直面していた。
+                        今回はその歩みを、六つのトピックとしてお伝えしたい。
+                    </p>
+
+                    <h2>第1章：ゼロベース再実装——「堆積物」を、設計へ還す</h2>
+
+                    <p>
+                        これまでのXZ80ランタイムは、正直に言えば「堆積物」だった。
+                        機能ごとの後付け、暫定のno-op化、引数の読み飛ばしが混在。
+                        新機能を足すたびに、なんらかの不具合が発生するようになり、足場が軋んでいた。
+                    </p>
+
+                    <p>
+                        そこで、取り決めたVNStudioの基本機能を、
+                        <strong>最初からすべて新たに実装する前提でアーキテクチャを組み直す</strong>計画を立てた。
+                        旧実装は削除せず丸ごと退避し、これまでに蓄積したノウハウである、
+                        「Z80固有の罠」「V9990の癖」という貴重な経験を生かし、
+                        新実装には設計原則として最初から織り込むことにした。
+                    </p>
+
+                    <p>
+                        また、計画上は「ゼロベース」だが、実装を進めるにあたって、
+                        <strong>「常に動く形を確認しながら、段階的に移行」</strong>とした。
+                        各フェーズでビルドと起動selftestを回帰ゲートにし、
+                        出荷中のランタイムを一度も壊さないまま、目標アーキテクチャへと作り替えていく。
+                    </p>
+
+                    <p>
+                        再実装は基盤のクリーン化から始まった。
+                        <code>cp</code>/<code>jr</code>の比較連鎖だったステートマシンは
+                        <code>jp (hl)</code>による<strong>ディスパッチテーブル方式</strong>へ。
+                        入力処理は独立モジュールに、バンク分割を前提としてコード配置インフラも整備。
+                        その土台の上に、<code>fade</code>/<code>white</code>/<code>shake</code>/<code>move</code>の演出系、
+                        PCM/DMAによる音声系、そして<code>config</code>系コマンド群——
+                        テキスト速度、オートモードを実装していく。
+                    </p>
+
+                    <!-- 動画：再実装後のランタイム（mp4） -->
+                    <figure class="article__figure">
+                        <video src="image/dev14_screenshot_runtime.mp4" controls muted autoplay loop playsinline
+                            preload="metadata" aria-label="ゼロベース再実装後のXZ80ランタイム動作映像"></video>
+                        <figcaption>ゼロベース再実装後のXZ80ランタイム。演出・音声・config系まで、基本機能が正式実装で揃った。</figcaption>
+                    </figure>
+
+                    <blockquote>
+                        増築を重ねた家を、住んだまま建て替える。<br>
+                        回帰テストという足場を用意することで、この困難を乗り切ることができた。
+                    </blockquote>
+
+                    <h2>第2章：自己診断という方法論——「謎の不具合」の構造と戦う</h2>
+
+                    <p>
+                        XZ80 VMの画面は、V9990を三枚重ねた<strong>三画面合成</strong>で成り立っている。
+                        panel0が背景、panel1が立ち絵、panel2がテキストUI——。
+                        この合成系には、ある厄介な性質があった。
+                        <strong>新機能を実装するたびに、どこかで「謎の不具合」が発生する</strong>のだ。
+                    </p>
+
+                    <p>
+                        背景の黒つぶれ、フェードインのフラッシュ、初回テキストの不可視、立ち絵連打の残像——。
+                        個々のバグはそのつど修正してきた。しかし「叩くたびに別の場所から出る」という
+                        <strong>構造そのもの</strong>が問題だった。
+                    </p>
+
+                    <p>
+                        そこで発想を変えた。バグを追うのではなく、
+                        ホスト側の合成実装（C++）とランタイム側（Z80アセンブラ）の間の
+                        <strong>「使用契約」を不変条件として明文化</strong>し、
+                        ホストが本当にその契約を守っているかを、selftest群で全数検証する——
+                        いわば、VM自身による<strong>自己診断</strong>である。
+                    </p>
+
+                    <p>
+                        結果、9項目の契約に対して32種のselftestを追加し、
+                        7件の潜在問題（S1〜S7）を洗い出した。
+                        VBlank割り込みの取り逃し、モード変更がフレームバッファへ1フレーム遅れて反映される問題——
+                        いずれも「たまにしか出ない謎の不具合」の正体たちだ。
+                        修正すべきものはすべて修正し、既存回帰テストは37種<strong>全PASS</strong>。
+                        既知バグゼロの状態で、この診断計画はクローズした。
+                    </p>
+
+                    <blockquote>
+                        バグを一匹ずつ叩くのではなく、<br>
+                        バグが生まれる構造そのものを診断する。<br>
+                        遠回りに見えて、これが最短の道だった。
+                    </blockquote>
+
+                    <h2>第3章：CPU1、目覚める——サウンド専用CPUと、灯るアクセスランプ</h2>
+
+                    <p>
+                        XZ80 VMは<a href="vol8-multicore-z80.html">Vol.8</a>で語ったとおりマルチコア構想を持つが、
+                        これまでは眠り続けていた<strong>二つ目のZ80</strong>が、ついに目を覚ます。                    
+                    </p>
+
+                    <p>
+                        役割は<strong>サウンド専用CPU兼I/O監視CPU</strong>。
+                        2基のOPN音源のタイマ割り込みをCPU1へ配線し、
+                        開発中のFM音源ドライバをメインCPUの負荷ゼロで走らせるための土台を作った。
+                        ゲームロジックと音楽演奏を別のCPUが受け持つ——
+                        かつてのアーケード基板と同じ、正統派の設計である。
+                    </p>
+
+                    <p>
+                        もう一つの仕事が、<strong>アクセスランプ</strong>だ。
+                        ROMバンク切り替えによるアセット読み出しをホストが計数し、
+                        CPU1がそれをポーリングして、画面右上に小さなLEDを灯す。
+                        ファイルアクセスのたびにチカチカと明滅するランプ——
+                        かつてのPCがフロッピーを読むときの、あの「チカチカ」の再現である。
+                    </p>
+
+                    <p>
+                        実装にあたっては、第2章の自己診断の方法論をそのまま横展開した。
+                        「CPU1はサウンド専用CPUとして成立するか」を診断ペイロード7本とselftest 9種で先に実証し、
+                        14/14 PASSを確認してから本番実装へ進む。
+                        診断で骨格を証明し、本番はその骨格をなぞる——この順序が、手戻りをゼロにした。
+                    </p>
+
+                    <!-- スクリーンショット：アクセスランプ -->
+                    <figure class="article__figure">
+                        <img src="image/dev14_screenshot_accesslamp.png" alt="画面右上に点灯するアクセスランプUI">
+                        <figcaption>アセット読み出しに反応して点灯するアクセスランプ。CPU1がI/Oを監視し、ホストが画面右上にLEDを合成する。</figcaption>
+                    </figure>
+
+                    <p>
+                        音声まわりでは、もう一つ大きな進展があった。
+                        <strong>MSM5205 ADPCMデコーダ</strong>の実装である。
+                        これまでの生8bit PCM音声はシンプルな実装ではあったが、非圧縮であるためROM容量を圧迫し、
+                        VMとの連携の影響かバグも多く発生していた。
+                        そこで4bit/サンプルのADPCM（2:1圧縮）をデコードコアごと移植し、
+                        既存のPCM/DMAチャンネルに<strong>モードビット1本を追加するだけ</strong>という改修で、
+                        再実装を完了した。
+                    </p>
+
+                    <h2>第4章：速度は体験である——計測が暴いた二つのボトルネック</h2>
+
+                    <p>
+                        機能が揃ってくると、次に気になるのは「体感」だ。
+                        この二ヶ月では、ユーザー体験に直結する二つの速度問題を、
+                        <strong>徹底した計測</strong>で解決した。
+                    </p>
+
+                    <p>
+                        一つ目は<strong>起動時間</strong>。
+                        電源投入からタイトル画面まで640フレーム（10.7秒）かかっていたものを、
+                        <strong>218フレーム（3.6秒）——約2.9倍</strong>まで短縮した。
+                        さらに、LZSS圧縮背景のデコーダが1バイト読むごとにRAM往復とマッパー再設定を繰り返していた問題も、
+                        裏レジスタ（<code>EXX</code>）に読み取り状態を常駐させる方式へ書き直し、約2.6倍に高速化した。
+                    </p>
+
+                    <p>
+                        二つ目は<strong><code>say</code>の行送り</strong>。
+                        キーを押してから次のテキストが表示され始めるまで、
+                        実測<strong>62フレーム（約1.03秒）</strong>——テンポの良い読書体験とは言い難い数字だった。
+                        フレームごとの画素計測、Z80のフェーズトレース、PCサンプリングの3点で
+                        この62フレームの内訳を完全に分解したところ、
+                        「高速化したはず」のパネルクリアが、実際の描画経路（バックバッファ）では
+                        旧来のCPUフィルに落ちていたこと（36フレーム）、
+                        そしてテキストウィンドウ画像26KBを毎回ROMから再転送していたこと（24フレーム）が判明した。
+                    </p>
+
+                    <pre><code>; 従来: 全面クリア(36F) + 26KB画像の再転送(24F) ≒ 毎回60フレーム
+; 新設計: 「無垢のテキストウィンドウページ」をオフスクリーンVRAMに
+;         一度だけ退避(stash)し、以後はVRAM間ブロック転送1発で復元
+call TXT_RestoreTextUiPageFromStash   ; HMMM一発 → 2フレームに短縮</code></pre>
+
+                    <p>
+                        対策は、クリアと再転送を「両方やめる」こと。
+                        クリア済み＋画像描画済みの無垢のページをオフスクリーンVRAMに一度だけ保存しておき、
+                        以後の行送りではV9990のVRAM間ブロック転送（HMMM）一発で復元する。
+                        結果、<strong>62フレームは2フレームへ——約31倍</strong>の高速化となった。
+                    </p>
+
+                    <blockquote>
+                        さまざまな事象を「計測できるようにする」ことで、様々な問題を解決できるのだ。
+                    </blockquote>
+
+                    <h2>第5章：FM音源ドライバの実装に向けて</h2>
+
+                    <p>
+                        <a href="vol9-salvage-sound.html">Vol.9</a>で語った
+                        「失われたゲーム音楽文化のサルベージ」
+                        ——その構想を実現すべく、今も開発を進めている。
+                    </p>
+
+                    <p>
+                        まず、<strong>OPNA（YM2608）のソフトウェアエミュレーション</strong>による
+                        FM音源ドライバをunity側に仮実装した。FM 6ch＋SSG 3chのステレオ構成を、
+                        レジスタシャドウとTick駆動シーケンサ、ストリーミングAudioClipで駆動する。
+                        MMLが描かれたテキストファイルをフォルダに置くだけで、
+                        スクリプトから「fmplay bgm」の1行でＦＭ音源を鳴らすことができる。
+                    </p>
+
+                    <p>
+                        そして、これらの２系統のFM音源を統合した、オリジナルのモノにしたいと考えている。
+                    </p>
+
+                    <p>
+                    <strong>OPNA(YM2608)ドライバ</strong> — PC8801のサウンドボード2、X68000を想定
+                    </p>
+                    <p>
+                    <strong>OPLL(YM2413)ドライバ</strong> — MSX2のFMPACを想定
+                    </p>    
+                    <p>
+                        30年以上前の「FM音源による音楽」を、
+                        当時のままのニュアンスで鳴り響かせる—。
+                        単なるエミュレーションではない、当時の「音楽性の再現」を目指してすすめていく。                        
+                    </p>
+
+                    <p>
+                        なお、XZ80側でもCPU1のサウンド専用化（第3章）によって受け皿は整った。
+                        Z80アセンブラによるFM音源ドライバの実装は、次の大きな実装の山場となるだろう。
+                    </p>
+
+                    <h2>第6章：ユーザーインターフェイスの改善</h2>
+
+                    <p>
+                        選択肢まわりでは、<strong>choicewindow専用の背景画像</strong>に対応した。
+                        しかも幅は固定ではない——<strong>選択肢の文字数に応じて画像が可変幅で伸縮</strong>し、
+                        選択中の項目は白文字、非選択は暗色と、視認性も一新した。
+                        テキストウィンドウの行間を4px詰め、画像の位置ずれを2px単位で追い込む——
+                        地味だが、画面の「品」はこういう場所に宿る。
+                    </p>
+
+                    <p>
+                        画質面では、<strong>K-means法によるパレット生成</strong>を立ち絵にも実装した。
+                        カラーパレット256個という制約の中で、32000色の中から最良の色割り当てを行う。
+                        立ち絵の輪郭に出ていたアルファフリンジ（縁の色にじみ）も改善し、
+                        Unity版と見比べてもあまり遜色のない絵が、Z80の画面に並ぶようになった。
+                    </p>
+
+                    <!-- スクリーンショット：可変幅選択肢 -->
+                    <figure class="article__figure">
+                        <img src="image/dev14_screenshot_choicewindow.png" alt="文字数に応じて可変幅表示される選択肢ウィンドウ">
+                        <figcaption>文字数に応じて伸縮する選択肢の背景画像。選択中は白文字、非選択は暗色で表示される。</figcaption>
+                    </figure>
+
+                    <h2>おわりに——次の実装へ向けて</h2>
+
+                    <p>
+                        こうして振り返ると、今回は「作り直す」「診断する」「計測する」「磨く」——。
+                        新機能の実装は少なく、都合の良い表現をすれば、次に向けて足場を固める時期になった。
+                    </p>
+
+                    <p>
+                        だが、それでいいのだと思いたい。
+
+                        堆積物だったランタイムは、より良い設計で作り直され、
+                        謎の不具合は構造ごと診断されるようになり、
+                        体感速度は数字で証明されて、より具体的に改善されるようになった。
+                        
+                        そして、ようやく二つ目のZ80の駆動に着手することができた。
+                        XZ80 VMは、決して俊足ではないが確実に歩みを進めている。
+                    </p>
+
+                    <p>
+                        次回は、二つ目のZ80 CPUで、FM音源ドライバが鳴り始める話を——
+                        お届けしたい。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav">
+                    <a href="vol13-z80-runtime.html">&larr; Vol.13: Z80マシン語の深淵</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
