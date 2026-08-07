@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.16: 進捗報告 — 手ざわりを、設計する。 | しるふぁ工房</title>
+    <meta name="description"
+        content="キーボードだけで読み進められるUnityランタイム、6項目の統合設定画面と独立した音声5系統、CGギャラリーの達成率と獲得通知、1コマンドの背景スクロール、そしてWPFエディタの検索・状態復元まで——「遊びやすさ」と「作りやすさ」の進捗を報告。">
+    <meta property="og:title" content="Vol.16: 進捗報告 — 手ざわりを、設計する。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="icon" href="../../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="../article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13〜Vol.15と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../../index.html" class="nav__logo">
+                <img src="../../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../../index.html" class="nav__link">Home</a></li>
+                <li><a href="../../works.html" class="nav__link">Works</a></li>
+                <li><a href="../../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../../story.html" class="nav__link">Story</a></li>
+                <li><a href="../../about.html" class="nav__link">About</a></li>
+                <li><a href="../../links.html" class="nav__link">Links</a></li>
+                <li><a href="../../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <!-- ※日付は公開時に更新すること -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.16 — PROGRESS REPORT</span>
+                    <h1 class="article__title">手ざわりを、設計する。<br>——遊ぶ側と、作る側。二つのVNStudioを磨いた記録</h1>
+                    <time class="article__date" datetime="2026-08-05">2026.08.05</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+                    <h2>はじめに——機能表には載らないもの</h2>
+
+                    <p>
+                        <a href="vol15-fm-driver-player-draft.html">前回</a>は、
+                        FM音源ドライバと専用プレイヤーの話だけで一本を費やした。
+                        今回はその裏側で進んでいた、もう一つの流れを報告したい。
+                        <strong>VNStudio本体——遊ぶ側と、作る側の「手ざわり」</strong>である。
+                    </p>
+
+                    <p>
+                        キーボードで読み進められる。設定が一画面にまとまっている。
+                        検索がある。ウィンドウが前回の位置に戻る。
+                        どれも機能表に書けば一行で終わる話で、
+                        新しい何かができるようになったわけでもない。
+                    </p>
+
+                    <p>
+                        だが、ノベルゲームは<strong>何時間も同じ操作を繰り返す</strong>ジャンルだ。
+                        そして制作は、それよりもっと長い時間、同じ画面と向き合う作業である。
+                        一回あたり0.5秒の引っかかりは、
+                        数千回繰り返された時点で、作品の印象そのものになる。
+                    </p>
+
+                    <blockquote>
+                        機能は「できるかどうか」を決める。<br>
+                        手ざわりは「続けられるかどうか」を決める。
+                    </blockquote>
+
+                    <h2>第1章：マウスを、置く——キーボードだけで読み進める</h2>
+
+                    <p>
+                        Unityランタイムには、これまで一つ大きな欠落があった。
+                        <strong>キーボードだけでは物語を読み進められなかった</strong>のである。
+                    </p>
+
+                    <p>
+                        テキストを送るにも、選択肢を選ぶにも、マウスが要る。
+                        だがノベルゲームを腰を据えて読むとき、
+                        手はキーボードの上に置いたままにしておきたいものだ。
+                    </p>
+
+                    <p>
+                        そこで、次の操作系を実装した。
+                    </p>
+
+                    <ul>
+                        <li>選択肢は<strong>↑↓←→</strong>で移動、<strong>Return／テンキーEnter／Space</strong>で決定</li>
+                        <li>先頭から前へ、末尾から次へ——<strong>循環</strong>する</li>
+                        <li>選択中の項目には白いアウトラインを表示</li>
+                        <li><code>say</code>の文字表示中は同じキーで<strong>全文表示</strong>、表示後は<strong>次のコマンドへ</strong></li>
+                    </ul>
+
+                    <p>
+                        通常の<code>choice</code>だけでなく、
+                        絶対座標配置を含む<code>ui_choice</code>も同じ操作対象になる。
+                        決定時は内部的にボタンのクリック経路を通すので、
+                        既存の選択音も押下アニメーションも、そのまま動く。
+                    </p>
+
+                    <p>
+                        実装で一番気を遣ったのは、じつは<strong>1フレーム</strong>の話だった。
+                    </p>
+
+                    <p>
+                        <code>say</code>をReturnで送った次の瞬間に選択肢が出ると、
+                        <strong>その同じキー入力が、先頭の選択肢を決定してしまう</strong>。
+                        押した覚えのない選択が、勝手に確定する——
+                        物語の分岐でこれが起きたら、目も当てられない。
+                        そこで、選択肢が表示されたフレームだけはキー決定を受け付けず、
+                        次のフレームから有効にした。
+                        たった1フレームの猶予が、事故を防いでいる。
+                    </p>
+
+                    <h2>第2章：設定は、一枚の画面に——音声5系統の独立</h2>
+
+                    <p>
+                        次に手を入れたのは<strong>設定画面</strong>である。
+                        オートモード、テキスト表示速度、そして音量——
+                        これまで散らばっていた項目を、一枚の画面へまとめた。
+                    </p>
+
+                    <ul>
+                        <li>オートモード（ON／OFF）</li>
+                        <li>テキスト速度（10段階）</li>
+                        <li>BGM</li>
+                        <li>SE</li>
+                        <li>Voice</li>
+                        <li>システム音</li>
+                    </ul>
+
+                    <p>
+                        音声は内部的にも<strong>系統ごとに独立</strong>させた。
+                        中でも効いたのが、最後の<strong>「システム音」</strong>の分離である。
+                    </p>
+
+                    <p>
+                        選択肢の表示音、決定音、テキストの送り音・スキップ音——
+                        これらのUI操作音は、これまで作中の効果音（SE）と同じ音量に縛られていた。
+                        だが、この二つは求められる音量が違う。
+                        「作中の効果音は控えめにしたいが、操作のクリック音は聞こえていてほしい」——
+                        そういう調整が、ようやくできるようになった。
+                        既存ユーザーには、初回だけ保存済みのSE音量を引き継がせている。
+                    </p>
+
+                    <p>
+                        レベルメーターは、クリックした位置へ即座に飛び、
+                        押したまま左右へドラッグすれば連続して変えられる。
+                        ＋／－ボタンももちろん残してある。
+                        設定値は次回起動時に復元され、スクリプトからも指定できる。
+                    </p>
+
+                    <pre><code>config volume bgm 80
+config volume se 70
+config volume voice 100
+config volume system 70</code></pre>
+
+                    <!-- ※画像未配置：スクリーンショットを devlog/image/ へ置いたら、以下のコメントを解除する
+                    <figure class="article__figure">
+                        <img src="../image/dev16_screenshot_settings.png" alt="オートモード・テキスト速度・各音量を一画面で設定できる統合設定画面">
+                        <figcaption>統合設定画面。既存メニューのウィンドウ画像・フォント・文字色をそのまま継承し、メーターは直接ドラッグできる。</figcaption>
+                    </figure>
+                    -->
+
+                    <p>
+                        デザイン面では、この設定画面を<strong>独自にデザインしなかった</strong>ことが要点だ。
+                        フォント、文字サイズ、文字色、選択肢の背景画像、その透明度——
+                        すべてを既存のメニュー設定から取得している。
+                        つまり、作者が<code>config menuwindow</code>で自分の作品用の
+                        ウィンドウ画像を指定していれば、
+                        <strong>設定画面もその作品の顔になる</strong>。
+                        save/load画面とCGモード画面も、固定色をやめて同じ方式へ揃えた。
+                        エンジンの都合で、作品の世界観に穴が空かないように。
+                    </p>
+
+                    <h2>第3章：CGギャラリー——「集めている」という手ごたえ</h2>
+
+                    <p>
+                        イベントCGまわりも作り込んだ。
+                        まず、CGに<strong>表示名を登録できる書式</strong>を追加した。
+                    </p>
+
+                    <pre><code>cg0 "一緒に朝ごはん" breakfast_kyouka</code></pre>
+
+                    <p>
+                        この名前が、二つの場所で効いてくる。
+                    </p>
+
+                    <p>
+                        一つは<strong>CGギャラリー</strong>。
+                        解放済みのCGには画像下部の帯に名前が入り、
+                        画面右上には<strong>達成率</strong>が大きく表示される。
+                        未解放のCGは、これまでどおりマスクと「？」だけ——
+                        <strong>名前も伏せたまま</strong>だ。
+                        何が残っているかは、埋めてからのお楽しみである。
+                    </p>
+
+                    <!-- ※画像未配置：スクリーンショットを devlog/image/ へ置いたら、以下のコメントを解除する
+                    <figure class="article__figure">
+                        <img src="../image/dev16_screenshot_cggallery.png" alt="解放済みCGの名前と達成率を表示するCGギャラリー画面">
+                        <figcaption>CGギャラリー。解放済みCGには登録名を、右上には達成率を表示する。未解放CGは名前も伏せる。</figcaption>
+                    </figure>
+                    -->
+
+                    <p>
+                        もう一つが<strong>獲得通知</strong>だ。
+                        新しいCGを解放した瞬間、画面上部にこう流れる。
+                    </p>
+
+                    <pre><code>〈登録したテキスト〉を手に入れました！</code></pre>
+
+                    <p>
+                        画面右外から<strong>0.65秒</strong>かけてEase Out Cubicで滑り込み、
+                        中央で<strong>1.4秒</strong>留まり、
+                        また<strong>0.65秒</strong>かけて右へ抜けていく。
+                        CG名だけは本文より10ポイント大きい。
+                        複数まとめて解放された場合はキューに積み、順番に流す。
+                        そして——<strong>セーブロードや状態復元では表示しない</strong>。
+                        ロードのたびに「手に入れました！」と言われては、
+                        せっかくの手ごたえが安っぽくなってしまうからだ。
+                    </p>
+
+                    <p>
+                        あわせて、メニューの初期表示も直した。
+                        最初にメニューを開いたときは、
+                        <strong>選択肢の文字量に合うコンパクトなウィンドウ</strong>に。
+                        設定・save/load・CG・15パズルといった情報量の多い画面では、
+                        背景を画面全体へ広げる。
+                        同じメニューでも、中身に応じて器の大きさを変える。
+                    </p>
+
+                    <h2>第4章：背景が、動く——1コマンドの演出</h2>
+
+                    <p>
+                        演出面での新機能は<strong>背景スクロール</strong>だ。
+                        静止画の背景を指定倍率で表示し、
+                        上下左右のいずれかへ、ゲーム進行と並行してゆっくり動かす。
+                    </p>
+
+                    <pre><code>bg_scroll bg0 tower_long 1.8 up 30
+say "塔を見上げながら進んでいく。"</code></pre>
+
+                    <p>
+                        画像名・拡大倍率・方向・所要時間を、あえて<strong>一行に統合</strong>してある。
+                        普通の<code>bg</code>で表示してから拡大する二段構えにすると、
+                        <strong>拡大前の通常サイズが一瞬見えてしまう</strong>可能性があるためだ。
+                        「見えてはいけないもの」を構造的に排除するには、
+                        コマンドを分けないのがいちばん確実だった。
+                    </p>
+
+                    <p>
+                        実行してもスクリプトは止まらない。
+                        <code>say</code>の裏でも、<code>choice</code>の裏でも、背景は動き続ける。
+                        指定時間で末端に到達し、そこで静止する。
+                        位置・倍率・方向・経過時間はセーブデータにも保存されるので、
+                        途中でセーブしても、続きから同じ絵で再開できる。
+                    </p>
+
+                    <p>
+                        背景素材の探索範囲も広げた。
+                        <code>Resources/Backgrounds</code>に無い画像は<code>Resources</code>配下を再帰検索し、
+                        <strong>一意に見つかればそのままの名前で読み込める</strong>。
+                        同名画像が複数あるときだけ、
+                        <code>event/breakfast_kyouka</code>のような相対パスを要求する。
+                        素材をフォルダで整理しても、スクリプトを書き換えなくてよい。
+                    </p>
+
+                    <p>
+                        そして、画像が最終的に見つからなかった場合は
+                        <strong>画面上に赤いエラーを出す</strong>ようにした（<code>F12</code>で表示）。
+                        背景、立ち絵、各種ウィンドウ、CG、パズルまで対象を統一してある。
+                        「なぜか絵が出ない」を、ログを漁らずその場で潰せるようになった。
+                    </p>
+
+                    <h2>第5章：作る側の道具——エディタを研ぐ</h2>
+
+                    <p>
+                        ここからは<strong>作る側</strong>の話である。
+                    </p>
+
+                    <p>
+                        WPF版のVNStudioエディタに、まず<strong>検索バー</strong>を入れた。
+                        <code>Ctrl+F</code>で開き、入力した時点で最初の一致へ飛ぶ。
+                        <code>Enter</code>／<code>F3</code>で次、<code>Shift+Enter</code>／<code>Shift+F3</code>で前、
+                        <code>Esc</code>で閉じる。
+                        大文字・小文字の区別、一致件数と現在位置の表示、末尾を越えたときの折り返し——
+                        そして、1行内で選択していた文字列は検索語として引き継ぐ。
+                        長いシナリオを扱うようになった今、これが無いのは正直つらかった。
+                    </p>
+
+                    <p>
+                        次に<strong>ウィンドウ状態の復元</strong>。
+                        終了時の位置・サイズ・最大化状態、そして左右ペインの分割幅を保存し、
+                        次回起動時に復元する。
+                        保存は一時ファイルへ書いてから置換するので、書き込み途中の破損が残らない。
+                    </p>
+
+                    <p>
+                        この手の機能は、正常系より<strong>異常系</strong>のほうが本体である。
+                    </p>
+
+                    <ul>
+                        <li>設定ファイルが欠損・破損していれば既定値で起動する</li>
+                        <li>NaN、Infinity、極端に小さいサイズは拒否する</li>
+                        <li>ディスプレイ構成が変わって保存位置が画面外になったら既定表示へ戻す</li>
+                        <li>一部だけ画面内なら、仮想デスクトップ内へ補正する</li>
+                        <li>最小化したまま終了しても、次回は最小化せずに開く</li>
+                    </ul>
+
+                    <p>
+                        タイトルバーの<code>↺</code>を押せば、
+                        確認のうえで保存状態を破棄し、既定の状態へ戻せる。
+                        「復元してくれるのはいいが、変な位置で固まった」——
+                        その出口も、同時に用意しておく。
+                    </p>
+
+                    <p>
+                        ほかに、スクリプト編集の<strong>スムーススクロール</strong>と、
+                        <code>Ctrl</code>＋<code>+</code>／<code>-</code>による<strong>文字サイズ変更</strong>も入った。
+                        どちらも地味だが、こういうものが一日の作業時間を静かに削ってくれる。
+                    </p>
+
+                    <h2>第6章：次の課題——立ち絵の輪郭</h2>
+
+                    <p>
+                        最後に、XZ80 VM側で見つかっている課題を一つ書いておきたい。
+                        <strong>立ち絵の輪郭のギザギザ</strong>である。
+                    </p>
+
+                    <p>
+                        <a href="../vol14-xz80-rebuild.html">Vol.14</a>で書いたK-meansパレット化により、
+                        縁の色にじみ（アルファフリンジ）は解消済みだった。
+                        それでも残る「粗さ」の原因を切り分けたところ、二段構えになっていた。
+                    </p>
+
+                    <p>
+                        一つは<strong>1bit透過</strong>。
+                        V9990はカラーキー合成（インデックス0が透明）なので、
+                        アセット変換の時点でアルファを2値化するしかない。
+                        実行時に背景が変わる以上、Unity版のような滑らかな縁は、
+                        アセット側では原理的に作れない。
+                    </p>
+
+                    <p>
+                        もう一つが、じつは見え方の主因だった。
+                        <strong>最近傍補間による3倍拡大</strong>である。
+                        384×240の画面を約3倍に引き伸ばす際、
+                        輪郭の1段の階段が、そのまま3×3ピクセルのブロックとして肉眼に晒されていた。
+                    </p>
+
+                    <p>
+                        対策として、<strong>xBRZ系のエッジ認識アップスケーラ</strong>を
+                        ホスト側の描画直前へ挟む方針を決めた。
+                        合成済みの384×240フレームをホストでアップスケールしてからテクスチャへ送る——
+                        <strong>ROMもZ80側も一切変更しない</strong>のが、この案の良いところだ。
+                        こちらは次の実装課題である。
+                    </p>
+
+                    <h2>おわりに——「気づかれない」という完成度</h2>
+
+                    <p>
+                        今回並べたものは、どれも派手さのない改善だった。
+                        キーが効く。設定が揃っている。名前が出る。エラーが見える。
+                        ウィンドウが元の場所に戻る。
+                    </p>
+
+                    <p>
+                        こうした改善のいちばんの成果は、
+                        <strong>誰にも気づかれないこと</strong>だと思っている。
+                        物語を読んでいる人が操作方法を意識しないこと。
+                        作っている人がツールの挙動に気を取られないこと。
+                        道具が透明になって、その向こうにある作品だけが見えている状態——
+                        しるふぁ工房が目指しているのは、たぶんそこだ。
+                    </p>
+
+                    <blockquote>
+                        よくできた道具は、使っていることを忘れさせる。<br>
+                        忘れられることが、道具にとっての完成である。
+                    </blockquote>
+
+                    <p>
+                        次回は——<a href="vol15-fm-driver-player-draft.html">前回</a>作った作曲環境で
+                        実際に書いた曲の話か、あるいは立ち絵の輪郭に決着をつけた話か。<br>
+                        どちらにせよ、また進んだところからお届けしたい。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <!-- ※Vol.15公開後、リンク先を ../vol15-<公開ファイル名>.html へ差し替えること -->
+                <nav class="article-nav">
+                    <a href="vol15-fm-driver-player-draft.html">&larr; Vol.15: 二つの音源が、同時に鳴る。</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../works.html">Works</a></li>
+                        <li><a href="../../tools.html">Tools</a></li>
+                        <li><a href="../../devlog.html">Devlog</a></li>
+                        <li><a href="../../story.html">Story</a></li>
+                        <li><a href="../../about.html">About</a></li>
+                        <li><a href="../../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../../contact.html">Contact</a></li>
+                        <li><a href="../../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../../contact.html">Contact</a>
+                    <a href="../../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>
