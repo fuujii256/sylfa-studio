@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.15: 進捗報告 — 複数のFM音源が、同時に鳴る。 | しるふぁ工房</title>
+    <meta name="description"
+        content="Z80実装より先にPC上の作曲環境を——計画変更の理由。OPNA＋OPLL＋OPM＋ADPCM同時演奏FM音源ドライバの刷新、専用MMLエディタ「RetroFM-Music Editor」の開発——音源まわりの進捗を報告。">
+    <meta property="og:title" content="Vol.15: 進捗報告 — 複数のFM音源が、同時に鳴る。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13・Vol.14と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.15 — PROGRESS REPORT</span>
+                    <h1 class="article__title">複数の音源が、同時に鳴る。<br>——FM音源ドライバの刷新と、専用プレイヤーの誕生</h1>
+                    <time class="article__date" datetime="2026-08-05">2026.08.05</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+                    <h2>はじめに——音を、正面から作る</h2>
+
+                    <p>
+                        <a href="vol14-xz80-rebuild.html">前回</a>の最後に、私はこう書いた。
+                        「次回は、二つ目のZ80 CPUで、FM音源ドライバが鳴り始める話を——お届けしたい」と。
+                    </p>
+
+                    <p>
+                        だが、計画を詰めていく中で、<strong>優先順位を入れ替える判断をした</strong>。
+                    </p>
+                    <p>
+                        Z80への実装より先に、<strong>まずWindows上で作曲環境を作り、</strong>
+                        実際にその環境で作曲・編曲作業を進めながら、
+                        MMLの書式を決めよう。
+                    </p>
+
+                    <p>
+                        理由は単純だが、過去の教訓もある。
+                    </p>
+                    <p>
+                        Z80アセンブラで書いたドライバは、一度組み上げてしまうと書式の変更が非常に高くつく。
+                    </p>
+                    <p>
+                        メモリも速度も限られた環境で、
+                    </p>
+                    <p>
+                        「やっぱりこの表記が要る」「この命令は不要だった」を後から反映するのは、
+                    </p>
+                    <p>
+                        ほとんど作り直しに等しくなる恐れがある。そのための検証作業にも時間がかかる。
+                    </p>
+                    <p>
+                        書式が固まっていない段階でZ80へ降ろすべきではない。
+                    </p>
+                    <p>
+                        <strong>そう思いなおし、実際にMMLを記述しながら、より使いやすいものに仕上げることを優先することにした。</strong>
+                    </p>
+
+                    <p>
+                        というわけで、この期間の作業は二つになった。
+                    </p>
+                    <p>
+                        VNStudioに載せるFM音源ドライバそのものの刷新——
+                    </p>
+                    <p>
+                        <strong>OPNAとOPLL、そしてADPCM。複数のFM音源チップとPCMを同時に鳴らせるようにする。</strong>
+                    </p>
+                    <p>
+                        そして、その音づくりのための<strong>専用のMMLエディタ／プレイヤー</strong>を、
+                    </p>
+                    <p>
+                        新しく一本立ち上げたことである。
+                    </p>
+
+                    <p>
+                        今回は、この二つのトピック——<strong>音源</strong>の話だけで一本お届けする。
+                    </p>
+
+                    <h2>第1章：OPNAとOPLL——「どちらか」ではなく「すべて同時再生へ」へ</h2>
+
+                    <p>
+                        <a href="vol9-salvage-sound.html">Vol.9</a>で語った
+                    </p>
+                    <p>
+                        「失われたゲーム音楽文化のサルベージ」。
+                    </p>
+                    <p>
+                        その具体的な手法として、
+                    </p>
+                    <p>
+                        <strong>OPNA（YM2608）</strong>と<strong>OPLL（YM2413）</strong>の
+                    </p>
+                    <p>
+                        エミュレーションコアを搭載することとしていた。
+                    </p>
+                    <p>
+                        前者はPC-8801mkIIFAなどのサウンドボードIIの系譜、後者はMSX2のFMPACの系譜である。
+                    </p>
+                    <p>
+                        今回、更に、X68000の系統であるOPM（YM2151）とADPCM（MSM6258）も搭載することとし、
+                    </p>
+                    <p>
+                        <strong>同時再生を可能</strong>とした。
+                    </p>
+                    <p>
+                        OPMとOPNAのあの特別な高音の響きのメロディーとPCMとの躍動感あるリズムのハーモニー。
+                    </p>
+                    <p>
+                        OPLLの愛らしく太い音色。それらの「楽器」を同時に演奏できるのだ。
+                    </p>
+
+                    <p>
+                        なお、FM音源ドライバの構成は、従来のレトロゲームなどの音源ドライバを複数分析することで知見を高め、
+                    </p>
+                    <p>
+                        このドライバでは、ソフトウェアエンベロープやポルタメントなどの音のエフェクトのロジックを、音階発声（ノートオン・オフ）の上位で動かすことにより、
+                    </p>
+                    <p>
+                        まるで、<strong>「FM音源がシンセサイザーになったかのようなサウンドを奏でる」こと</strong>を目指した。
+                    </p>
+
+                    <h2>第2章：オリジナルFM音源プレイヤー——「RetroFM-Music Editor」</h2>
+
+                    <p>
+                        MMLをWindowsのテキストエディタなどで書いて、コマンドで再生して、また書き直す——
+                        それでも作れないことはない。だが、
+                        VNStudioの「まるでiPadで絵を描くように」という、基本思想を、ここでも実現しようと考えた。
+                    </p>
+
+                    <p>
+                        そこで、FM音源ドライバ専用のMMLエディタを新規で開発することにした。
+                    </p>
+                    <p>
+                        名前は<strong>RetroFM-Music Editor</strong>。
+                    </p>
+                    <p>
+                        VNStudioと同様、WPF上で動作する、Windows向けの単体アプリケーションである。
+                    </p>
+
+                    <!-- スクリーンショット：RetroFM-Music Editor 3ペイン構成 -->
+                    <figure class="article__figure">
+                        <img src="image/dev15_screenshot_fmeditor.png"
+                            alt="RetroFM-Music Editorの画面。左からファイルツリー、MMLエディタ、プレイヤー／チャンネルモニタ">
+                        <figcaption>RetroFM-Music Editor。左からファイルツリー、MMLエディタ、プレイヤー／チャンネルモニタの3ペイン構成。再生中のコマンドがMML上でハイライトされ、右のモニタではOPLLとOPMの各チャンネルが同時に発音しているのがわかる。</figcaption>
+                    </figure>
+
+                    <p>
+                        画面は<strong>3ペイン構成</strong>だ。
+                    </p>
+                    <p>
+                        左にファイルツリー、中央にMMLエディタ、右にプレイヤーとチャンネルモニタ。
+                    </p>
+                    <p>
+                        それぞれ独立して表示・非表示を切り替えられ、
+                    </p>
+                    <p>
+                        隠したペインの領域は残りのペインが完全に埋める。
+                    </p>
+                    <p>
+                        この組み合わせも、ペイン幅も、次回起動時に復元される。
+                    </p>
+
+                    <p>
+                        主な機能を挙げておく。
+                    </p>
+
+                    <ul>
+                        <li><strong>MMLシンタックスハイライト</strong>——制御コマンド・ディレクティブ・チャンネル宣言は青、音符と休符は濃色、コメントは緑がかった灰色</li>
+                        <li><strong>再生中コマンドのハイライト</strong>——いま鳴っている音が、MMLのどの文字から来ているかを原文位置で追跡して光らせる</li>
+                        <li><strong>チャンネルモニタ</strong>——チップのプリミックス出力から求めた実測RMS（-60〜0 dB）のレベル／ピーク表示、ミニ鍵盤、リズム楽器（BD/SD/HH/CY/TM/RI）の個別発音表示</li>
+                        <li><strong>Mute / 複数選択Solo</strong>——同一チップの内部リズム3chは<code>RHY</code>という1本のストリップへ統合</li>
+                        <li><strong>シーク</strong>——無音レンダリングで音源の内部状態を再構築してから移動する。前方シークは差分だけを進め、後方シークは先頭から作り直す</li>
+                        <li><strong>ライブ編集ホットスワップ</strong>——MMLを書き換えると、再生位置を保ったまま演奏内容が差し替わる</li>
+                        <li><strong>CLI</strong>——48kHzステレオのWAVを書き出し、ピーク値・tick数・PCMのSHA-256を報告する</li>
+                    </ul>
+
+                    <p>
+                        実際に演奏している様子を、動画で置いておく。
+                    </p>
+                    <p>
+                        <strong>※この動画には音声が含まれます。再生の前に音量にご注意ください。</strong>
+                    </p>
+
+                    <!-- 動画：RetroFM-Music Editorでの演奏（mp4／音声あり・自動再生なし） -->
+                    <figure class="article__figure">
+                        <video src="image/dev15_screenshot_player.mp4" controls preload="metadata" playsinline
+                            aria-label="RetroFM-Music EditorでMMLを再生している様子（音声あり）"></video>
+                        <figcaption>RetroFM-Music Editorでの演奏（<strong>音声が再生されます</strong>）。再生中のMMLコマンドが原文位置でハイライトされ、右のチャンネルモニタでOPLLとOPMが同時に鳴っているのが確認できる。</figcaption>
+                    </figure>
+
+                    <p>
+                        なお、UIの配色・フォント・角丸ボタン・スリムなスクロールバーは、
+                    </p>
+                    <p>
+                        VNStudioのエディタと意図的に揃えてある。
+                    </p>
+                    <p>
+                        <strong>同じ工房から出た道具に見えること</strong>——それも基本だが大切な概念だ。
+                    </p>
+
+                    <blockquote>
+                        音を作る道具を、音を鳴らす仕組みと同じ手で作る。<br>
+                        理想を実現するためには、一見遠回りに見えても、これがいちばん速いはずだ。
+                    </blockquote>
+
+                    <h2>第3章：そして、次のステージへ——</h2>
+
+                    <p>
+                        ここまではすべて、<strong>Windows側</strong>の実装の話である。
+                    </p>
+                    <p>
+                        このVNStudio上で作った作品は、
+                    </p>
+                    <p>
+                        <code>fmplay bgm</code>の1行でこのFM音源セットを鳴らせる状態となり、Windows版は、ほぼ完成形が見えてきた。
+                    </p>
+
+                    <p>
+                        そして次の挑戦は、<strong>VNStudioのX68000、FMTowns、PC9821などへのレトロコンピュータへの移植と、
+                        XZ80へのFM音源ドライバの実装</strong>だ。
+                    </p>
+
+                    <p>
+                        ここまで育てたVNStudioゲームエンジンと、ドライバの設計を
+                    </p>
+                    <p>
+                        <strong>Z80やMC68000のアセンブラで書き直して、実際のマシンで動かすこと</strong>だ。
+                    </p>
+                    <p>
+                        C#で作った実装が正しく動いているぶん、
+                    </p>
+                    <p>
+                        「何を作ればいいか」の作業の輪郭は、もう見えてきている。
+                    </p>
+                    <p>
+                        <strong>「当時憧れた『夢のパソコン』で、実際に動くゲームを『自分』でつくる」</strong>
+                    </p>
+                    <p>
+                        これを、このプロジェクトの本懐としたい。
+                    </p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav">
+                    <a href="vol14-xz80-rebuild.html">&larr; Vol.14: XZ80ランタイム、生まれ変わる。</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / Shilfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
