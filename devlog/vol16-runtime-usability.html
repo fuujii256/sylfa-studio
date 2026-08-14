@@ -295,6 +295,13 @@ say "塔を見上げながら進んでいく。"</code></pre>
                         途中でセーブしても、続きから同じ絵で再開できる。
                     </p>
 
+                    <!-- 動画：背景スクロールとCG獲得通知（mp4／音声なし） -->
+                    <figure class="article__figure">
+                        <video src="image/dev16_screenshot_bgscroll_notify.mp4" controls muted autoplay loop playsinline
+                            preload="metadata" aria-label="背景スクロールとCG獲得通知の動作映像（音声なし）"></video>
+                        <figcaption>背景スクロールとCG獲得通知の実際の動き。<code>say</code>の裏で背景が動き続け、CGを解放した瞬間には画面上部を通知が滑っていく（音声なし）。</figcaption>
+                    </figure>
+
                     <p>
                         背景素材の探索範囲も広げた。
                         <code>Resources/Backgrounds</code>に無い画像は<code>Resources</code>配下を再帰検索し、
