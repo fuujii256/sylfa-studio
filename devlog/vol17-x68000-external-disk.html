@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.17: 進捗報告 — 二つの制約を越える。 | しるふぁ工房</title>
+    <meta name="description"
+        content="X68000実機環境へのワンクリックプレビュー構築、立ち絵描画の不具合調査、ROM 4MBの制約を解決する仮想外部ディスクXDSK、VOICEコマンドの復活と音声の安定化、Z80版CGギャラリー——前回以降の約三週間の進捗を報告。">
+    <meta property="og:title" content="Vol.17: 進捗報告 — 二つの制約を越える。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13〜Vol.16と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.17 — PROGRESS REPORT</span>
+                    <h1 class="article__title">二つの制約を越える。<br>——X68000プレビューの構築と、仮想外部ディスクXDSK</h1>
+                    <time class="article__date" datetime="2026-08-30">2026.08.30</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+                    <h2>はじめに</h2>
+
+                    <p>
+                        <a href="vol16-runtime-usability.html">前回</a>は、
+                        キーボード操作や設定画面といった操作性の改善を報告した。
+                        今回はその後の約三週間の進捗である。
+                        中心となるのは二つ——<strong>X68000で動くプレビュー環境の構築</strong>と、
+                        XZ80ランタイムのROM容量制約を解決する<strong>仮想外部ディスクの導入</strong>だ。
+                    </p>
+
+                    <p>
+                        どちらも、性質の違う「制約」との付き合い方の話である。
+                        前者は、実機仕様という動かせない制約の中で原因を一つずつ特定していく作業。
+                        後者は、自分で決めた制約を、設計を変えることで越える作業だった。
+                    </p>
+
+                    <h2>第1章：X68000プレビュー環境の構築</h2>
+
+                    <p>
+                        VNStudioのエディタには、ボタン一つでMSX2相当の実機環境が立ち上がる
+                        「XZ80プレビュー」がある。そのX68000版を作った。
+                        目的は単純で、<strong>編集から実機環境での確認までの反復を1操作にする</strong>ことである。
+                    </p>
+
+                    <p>
+                        ボタンを押すと、スクリプト保存、全スクリプトの結合とコンパイル、
+                        背景・立ち絵・テキスト窓の差分変換、必要なときだけのランタイム再ビルド、
+                        検証、プレビュー専用HDFへの注入、エミュレータの起動、
+                        Human68k上での自動実行までが一続きに走る。
+                    </p>
+
+                    <p>
+                        エミュレータには<strong>RetroArch + PX68k</strong>コアを採用した。
+                        理由は三つ。ソースが公開されておりライセンスを確認できること、
+                        コマンドラインからコアとディスクイメージを明示指定して起動できること、
+                        利用者が常用しているエミュレータ環境に手を加えないこと。
+                        なお、IPL ROMやHuman68kといった実機由来のファイルは
+                        リポジトリに一切含めない方針である。
+                    </p>
+
+                    <p>
+                        最初の起動は「ディスクから起動できません」で止まった。
+                        調べていくと、原因は一つではなく<strong>四つ重なっていた</strong>。
+                    </p>
+
+                    <ul>
+                        <li>IPL ROMのファイル名は正しいが、中身が別のROMだった</li>
+                        <li>テンプレートHDFが、拡張子だけ<code>.hdf</code>のSCSI形式だった</li>
+                        <li>パーティション名は<code>Human68k</code>の8バイト完全一致が必須で、<code>Human&nbsp;&nbsp;&nbsp;</code>では認識されない</li>
+                        <li>SRAM上のSASIハードディスク台数が0台で、HDD自体が検出されていなかった</li>
+                    </ul>
+
+                    <p>
+                        どれか一つを直しても起動せず、四つすべてを直して初めて
+                        Human68kが立ち上がる。原因が複数あるときは、
+                        一つ直して変化がないことが「その修正が間違いだった」ことを意味しない——
+                        当たり前だが、実際にやると忘れがちな点だった。
+                    </p>
+
+                    <p>
+                        もう一段、ファイルシステムの問題もあった。
+                        Human68kのSASIパーティションは、ビッグエンディアンのFAT16と
+                        リトルエンディアンのディレクトリエントリが同居する独特の構造で、
+                        既存ツールが作るDOS形式とは互換がない。
+                        このため、正しい形式でフォーマットする道具を自前で書いた。
+                        起動が通ったあと、CPUクロックを25MHz相当に設定し、
+                        起動からタイトル表示までは約35秒から約22秒になった。
+                    </p>
+
+                    <!-- ※画像未配置：スクリーンショットを devlog/image/ へ置いたら、以下のコメントを解除する
+                    <figure class="article__figure">
+                        <img src="image/dev17_screenshot_x68000boot.png" alt="X68000プレビューでHuman68kからVNランタイムが自動起動した画面">
+                        <figcaption>X68000プレビュー。エディタのボタン一つでHDFが組み上がり、Human68k上でランタイムが自動実行される。</figcaption>
+                    </figure>
+                    -->
+
+                    <h2>第2章：立ち絵描画の不具合調査</h2>
+
+                    <p>
+                        起動の次は描画である。背景とテキストは表示されるが、
+                        <strong>キャラクターの立ち絵だけがノイズ状に白く化ける</strong>症状が出た。
+                    </p>
+
+                    <p>
+                        当初の仮説は「SASIディスクからの読み込みでデータが壊れる」だった。
+                        変換後のデータはPC側で検証済み、HDF内のバイナリもハッシュ一致。
+                        消去法で、読み込み以降を疑ったわけである。
+                        パレット割り当ての変更、描画ページの分離、エミュレータのソース調査——
+                        いずれも症状は変わらなかった。
+                    </p>
+
+                    <p>
+                        実際の原因は<strong>ファイル名の衝突</strong>だった。
+                        Human68kのファイル名は8.3形式、つまり本体8文字である。
+                        <code>KYOUKASLEEP</code>と<code>KYOUKASLEEPY</code>は
+                        どちらも先頭8文字が<code>KYOUKASL</code>で、短縮名が同じになる。
+                        データが壊れていたのではなく、<strong>別のファイルを正常に読んでいた</strong>のだ。
+                        決め手は、「壊れたデータ」として記録していたチェックサムが、
+                        隣のファイルのものと完全に一致したこと。
+                        修正は、8文字を超える名前をハッシュ由来の8桁16進名に置き換えることで、
+                        症状は解消した。
+                    </p>
+
+                    <p>
+                        X68000側の仕様確認も必要だった。
+                        65536色モードでも、GVRAMの値は直接画面に出ず、
+                        パレットRAM内の変換テーブルを一度通る。
+                        このテーブルを恒等値で明示的に初期化して、色が正しくなった。
+                        また、立ち絵の中心座標だけ縮小率の適用が漏れており、
+                        キャラクターがテキスト窓に隠れていた。
+                        座標を修正し、基準倍率を設計値に合わせた結果、
+                        窓の上に見える立ち絵の高さは48pxから184pxになった。
+                        あわせて、パレットのRGB555事前変換、固定小数点による拡大、
+                        差分矩形の再合成、文字送りの1文字描画化といった描画高速化も行っている。
+                    </p>
+
+                    <!-- ※画像未配置：スクリーンショットを devlog/image/ へ置いたら、以下のコメントを解除する
+                    <figure class="article__figure">
+                        <img src="image/dev17_screenshot_x68000chara.png" alt="X68000プレビューで立ち絵が正常表示された画面">
+                        <figcaption>修正後のX68000プレビュー。立ち絵が正しい色・位置・大きさで表示される。</figcaption>
+                    </figure>
+                    -->
+
+                    <h2>第3章：仮想外部ディスク「XDSK」</h2>
+
+                    <p>
+                        ここからはXZ80ランタイムの話である。
+                    </p>
+
+                    <p>
+                        XZ80コアの物理メモリは16KB×256バンクで、
+                        ワークRAMを除くとROMとして使えるのは約4MBが上限になる。
+                        これまで画像・音声・スクリプトのすべてをこのROMに収めてきたが、
+                        立ち絵41枚を含めた時点で<strong>上限を704KB超過</strong>し、ビルドできなくなった。
+                    </p>
+
+                    <p>
+                        アセットを削って収めることもできたが、それは先送りにしかならない。
+                        構造の側を変えることにした。
+                        ROMの外に、読み取り専用の<strong>仮想外部ディスク</strong>を追加する。
+                        実機で言えば、本体ROMを増やすのではなく外付けディスクを繋ぐ構成である。
+                    </p>
+
+                    <p>
+                        ホスト側にアセットを束ねたファイル<code>vn_assets.xdsk</code>を置き、
+                        XZ80コアからは新設のI/Oポート（B0h〜BFh）越しにアクセスする。
+                        Z80側はアセットIDと転送先アドレスを書き込んでREADコマンドを発行し、
+                        ステータスポートで完了を待つ。
+                        ROMから追い出されて空いたバンク群は、
+                        読み込んだアセットを保持するRAMキャッシュに転用し、
+                        参照数とLRUで管理する。
+                    </p>
+
+                    <p>
+                        結果、ROMに残るのはコード・フォント・スクリプト・索引だけの約400KB。
+                        アセットはすべてディスク側へ移り、総量は<strong>約22.4MB・352アセット</strong>になった。
+                        容量の制約は、当面なくなったと言っていい。
+                    </p>
+
+                    <p>
+                        一つ、設計上の判断を書き添えておく。
+                        XZ80の画面にはディスクアクセスを示すACCESSランプがあるが、
+                        ホストのSSDが速すぎて、実I/O時間ではランプが1フレームも点灯しない。
+                        そこで仮想ディスクに転送速度8MB/s相当の応答時間を持たせ、
+                        ランプは最低80ms点灯させるようにした。
+                        ランプの役割は「装置が働いていることが見える」ことであって、
+                        実測時間の表示ではない、という判断である。
+                    </p>
+
+                    <h2>第4章：VOICEの復活と、音声の安定化</h2>
+
+                    <p>
+                        外部ディスクの導入で最初に恩恵を受けたのは音声だった。
+                        XZ80の<code>voice</code>コマンドはROM容量を確保するために無効化され、
+                        オペランドを読み捨てるだけの状態が続いていた。
+                        容量の問題が解決したので、これを正式に実装し直した。
+                    </p>
+
+                    <p>
+                        実装上の課題は転送長で、PCM転送は16bit長、
+                        つまり一度に運べるのは65,535バイトまでだった。
+                        32bitの残量管理と継続転送を実装し、
+                        100,356バイトの音声を65,535＋34,821バイトの2回に分けて
+                        最後まで再生できることを自己診断で確認している。
+                    </p>
+
+                    <p>
+                        調査の過程で、より影響の大きい不具合も見つかった。
+                        音声ファイルの短縮名生成に衝突があり、
+                        <strong>222個の音声参照が150個のファイルに潰れていた</strong>。
+                        72件は別の音声に上書きされ、違う台詞が鳴る状態だったことになる。
+                        第2章の立ち絵と同じ構図で、名前の衝突はエラーを出さず、
+                        「正常に」間違ったデータを返すため、破損よりも発見が難しい。
+                        ハッシュ由来の8桁16進名に切り替え、
+                        さらに変換前に全出力名の衝突を検査してビルドを止める仕組みを入れた。
+                        同種の問題を、次は人手ではなく機械に見つけさせるためである。
+                    </p>
+
+                    <p>
+                        周期的な音切れも解決した。
+                        XZ80の映像1フレームは119,210 T-statesだが、
+                        音声側は別の計算式で1フレームを119,318 T-statesとして扱っていた。
+                        差は108 T-states。これが毎秒25サンプル強の不足として蓄積し、
+                        約128秒ごとにバッファが尽きて音が途切れる。
+                        64bit位相で端数を繰り越す方式に改め、
+                        100万フレーム（約4.6時間）の連続再生でアンダーフロー0を確認した。
+                        選択決定音が時折鳴らす破裂音も、
+                        チャンネル停止時にリサンプラーの位相を初期化していなかったことが原因で、
+                        あわせて修正している。
+                    </p>
+
+                    <h2>第5章：Z80版CGギャラリー</h2>
+
+                    <p>
+                        <a href="vol16-runtime-usability.html">前回</a>紹介した
+                        UnityランタイムのCGギャラリーと同じ書式が、
+                        XZ80ランタイムでも動くようになった。
+                    </p>
+
+                    <pre><code>cg0 "一緒に朝ごはん" breakfast_kyouka
+cggrid 4 3
+call cgmode</code></pre>
+
+                    <p>
+                        コンパイラに専用の命令を追加し、
+                        解放状態は256スロット分を32バイトのビットセットで、
+                        表示名は1,024バイトのUTF-8ヒープで保持する。
+                        実装後のRAM使用量は、安全上限まで残り400バイト余りだった。
+                    </p>
+
+                    <p>
+                        ギャラリー画面は、Unity版のサムネイル一覧ではなく
+                        原寸表示のカルーセル方式にした。
+                        画像の縮小はZ80には処理負荷が大きすぎるためで、
+                        左右キーでCGを一枚ずつ切り替え、未解放のCGは黒画面に<code>LOCKED</code>と表示する。
+                        形は変わっても、「集めて、見返す」という体験の中身は同じものを目指している。
+                        なお、セーブ機能が未実装のため、
+                        解放状態は現セッション限りである。これが現在地だ。
+                    </p>
+
+                    <h2>第6章：Unityランタイムの改修</h2>
+
+                    <p>
+                        並行して、Unityランタイムにも修正を入れた。要点だけ報告する。
+                    </p>
+
+                    <p>
+                        ウィンドウのリサイズは方針を変えた。
+                        従来は手動リサイズを検知して強制的に16:9へ戻していたが、
+                        この自動補正がOSのウィンドウ再計算を誘発し、
+                        位置とサイズが意図せず変わる原因になっていた。
+                        補正をやめ、任意の形のウィンドウの内側に
+                        16:9の表示領域をレターボックスで配置する方式にした。
+                        OSの挙動を上書きするのではなく、その内側で完結させる設計である。
+                    </p>
+
+                    <p>
+                        <code>bg</code>命令の直後の<code>white in</code>で背景が一瞬見える問題も修正した。
+                        Unityのコルーチンは開始フレームで最初の補間まで進むため、
+                        白幕を張ったつもりのフレームで既にわずかに透けている。
+                        背景命令の時点で数命令先の<code>white in</code>を先読みし、
+                        背景を設定する前に白幕を不透明で張っておくようにした。
+                    </p>
+
+                    <p>
+                        ほかに、スクリプトエラー発生時はF12コンソールが自動で開くようにした。
+                        エディタ側では、実行行ハイライトが実際のテキスト選択と
+                        フォーカス移動で実装されていたため、
+                        Unityを操作しているつもりのキー入力がスクリプト本文を
+                        書き換えうる状態だったことが分かり、描画専用のハイライトに作り替えた。
+                        画像が読み込めない原因が、拡張子の直前に紛れ込んだ
+                        半角スペースだったという事例もあった。
+                        ファイル名の確認は、目視ではなく文字列比較で行うべきである。
+                    </p>
+
+                    <h2>おわりに</h2>
+
+                    <p>
+                        今回の三週間は、新機能の実装よりも、
+                        仮説を立てて検証し、間違っていれば捨てる作業に多くの時間を使った。
+                        「SASIがデータを壊す」は誤りだった。
+                        「壊れたデータ」は壊れておらず、別のファイルだった。
+                        音切れの原因は音声処理ではなく、フレームの数え方だった。
+                    </p>
+
+                    <p>
+                        いずれも、決め手になったのは推測ではなく照合である。
+                        チェックサムの一致、ハッシュの比較、100万フレームの計測。
+                        証拠が揃うまで結論を保留したことが、結果的に一番の近道だった。
+                    </p>
+
+                    <p>
+                        X68000では物語が動き、XZ80は容量の制約から解放され、音声が戻った。
+                        次は、この土台の上を安心して歩けるようにする——
+                        セーブをはじめ、まだ埋まっていない部分を埋めていく番である。
+                    </p>
+
+                    <blockquote>
+                        推測で直さず、証拠で直す。<br>
+                        今回いちばん効いたのは、結局この一つだった。
+                    </blockquote>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav">
+                    <a href="vol16-runtime-usability.html">&larr; Vol.16: 進捗報告 — 手ざわりを、設計する。</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
