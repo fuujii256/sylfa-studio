@@ -1,6 +1,6 @@
 site:
   name: しるふぁ工房
-  name_en: Shilfa Studio
+  name_en: sylfa Studio
   type: indie_game_developer_portal
   concept: >
     個人制作によるゲーム・ツール開発スタジオの公式ポータル。
@@ -9,7 +9,7 @@ site:
 branding:
   tagline:
     - 光を記録し、物語を紡ぐ。
-    - Indie Games & Creative Tools by Shilfa Studio
+    - Indie Games & Creative Tools by sylfa Studio
   tone:
     - calm
     - creative
