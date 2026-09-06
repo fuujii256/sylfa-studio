@@ -46,6 +46,8 @@
         .runtime-table th, .runtime-table td { padding: 0.8rem; border: 1px solid var(--color-border); text-align: left; overflow-wrap: anywhere; }
         .runtime-table th { color: var(--color-text); background: rgba(201, 167, 240, 0.06); }
         .runtime-table tbody th { white-space: nowrap; }
+        .article__figure img { height: auto; }
+        .article__figure--controls { max-width: 360px; margin-left: auto; margin-right: auto; }
         @media (max-width: 600px) {
             .article-nav { flex-direction: column; align-items: flex-start; }
             .runtime-table th, .runtime-table td { padding: 0.6rem; }
@@ -112,6 +114,13 @@
 
 <p>開発中の確認にはPPSSPPを使う。エディタから素材の変換、パッケージの検証、プレビューの起動までをつなぎ、普段使っているPPSSPPの設定やセーブとは分けて扱うようにした。</p>
 
+<figure class="article__figure" id="psp-overview">
+    <a href="image/dev18_vnstudio_psp_overview.png" target="_blank" rel="noopener" aria-label="VN Studioの開発画面を原寸で開く">
+        <img src="image/dev18_vnstudio_psp_overview.png" alt="左にPSPを選択したVN Studioのスクリプトエディタ、右にキャラクターの会話画面と音量などの設定画面" width="1918" height="1078" loading="lazy" decoding="async">
+    </a>
+    <figcaption>PSPを選択した制作画面と、PC上のゲーム画面・設定画面。スクリプトを編集しながら、表示や操作を確認する。画像をクリックすると原寸で表示。</figcaption>
+</figure>
+
 <p>最初は、背景を出す、立ち絵を出す、台詞を表示する、入力を待つ、という基本の流れから始めた。そこから選択肢、音声、演出、ゲーム内メニュー、設定、セーブ・ロードへと進めている。</p>
 
 <p>タイトルの動画背景にも対応した。元の動画をPSP向けの形式へ変換し、480×272の画面で再生する。その上にタイトル画像を重ねて動かすところまで、既存の演出を持っていけるようになった。</p>
@@ -151,6 +160,11 @@
 
 <p>これに合わせて、起動操作を整理し、UIを統合した。左右のボタンで <code>Unity → XZ80 → PSP → X68000</code> と切り替え、中央に表示された機種のアイコンと名前を押すと、そのランタイムが起動する。独立していたRun／Stopや、X68000専用のExport／Settingsボタンは廃止し、実行先を選ぶところからプレビューまでを同じ場所へまとめた。</p>
 
+<figure class="article__figure article__figure--controls" id="runtime-controls">
+    <img src="image/dev18_runtime_controls.png" alt="Unityを選択した共通起動パネル。左右の切り替えボタン、中央のUnity起動ボタン、パブリックフォルダを開くボタン、Unity Runtimeの接続状態を表示" width="360" height="445" loading="lazy" decoding="async">
+    <figcaption>共通のランタイム起動パネル。Unity(windows)を選択し、Unity Runtimeとの接続が確認できている状態。</figcaption>
+</figure>
+
 <p>内部では、それぞれの機種に必要な処理が動いている。</p>
 
 <div class="runtime-table-wrap"><table class="runtime-table">
@@ -169,7 +183,6 @@
 
 <p>対応機種が増えても、作る人の手元では「選んで、確かめる」という流れを保ちたい。道具の内側で引き受ける仕事を、ここでも整理している。</p>
 
-<!-- Media insertion: shared runtime launcher, after selection. -->
 <h2 id="target-assets">第5章：共通の素材と、機種に合わせた素材</h2>
 
 <p>構成の見直しは、ボタンだけではない。素材の置き場所にも手を入れている。</p>
