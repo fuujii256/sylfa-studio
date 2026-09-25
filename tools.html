@@ -14,7 +14,7 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools — しるふぁ工房</title>
-    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VN Studio」アルファ版を無償配布中。">
+    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VN Studio」ベータ版を無償配布中。Windowsに加え、MSX(V9990)・PSP・X68000でも同じスクリプトが動きます。">
     <meta property="og:title" content="Tools — しるふぁ工房">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
@@ -173,12 +173,18 @@
                 <div class="card fade-in" style="max-width:860px; margin:0 auto;">
                     <div class="card__thumb" style="position:relative; overflow:hidden;">
                         <div class="vns-gallery" style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; gap:0;">
-                            <img src="assets/images/VN_Screenshot2.png" alt="VN Studio Script Editor Preview" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
-                            <img src="assets/images/VN_Screenshot.webp" alt="VN Studio Editor Preview" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns_beta_unity.webp" alt="VN Studio エディタと Windows(Unity) のプレビュー" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns_beta_msx.webp" alt="VN Studio の作品を MSX(V9990) 実機環境で実行" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns_beta_psp.webp" alt="VN Studio の作品を PSP で実行" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns_beta_settings.webp" alt="スクリプトで定義できる設定メニュー" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns_beta_load.webp" alt="カスタマイズ可能なセーブ／ロード画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
                         </div>
                         <div style="position:absolute; bottom:0.6rem; left:50%; transform:translateX(-50%); display:flex; gap:0.4rem;" class="vns-dots">
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.9);cursor:pointer;" data-idx="0"></span>
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="1"></span>
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="2"></span>
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="3"></span>
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="4"></span>
                         </div>
                     </div>
                     <script>
@@ -201,7 +207,8 @@
                         <div class="card__tags">
                             <span class="tag">Next-Gen Visual Novel Engine</span>
                             <span class="tag tag--blue">Unity6 + WPF</span>
-                            <span class="tag tag--green">Alpha Release</span>
+                            <span class="tag tag--green">Beta Release</span>
+                            <span class="tag">Windows / MSX / PSP / X68000</span>
                         </div>
                         <h2 class="card__title" style="font-size:1.8rem;">VN Studio</h2>
                         <p class="card__desc" style="font-size:1rem; margin-top:0.5rem; line-height:1.8;">
@@ -214,17 +221,22 @@
                         <!-- ダウンロード -->
                         <div class="download-box fade-in fade-in-delay-1" style="margin-top: 2rem;">
                             <div class="download-box__actions">
-                                <a href="https://studio-sylfa.booth.pm/items/8206501" target="_blank" rel="noopener noreferrer" class="btn" style="font-size:1.1rem; padding:0.75rem 2rem;">💾 Download — Alpha v0.65</a>
+                                <a href="https://studio-sylfa.booth.pm/items/8898090" target="_blank" rel="noopener noreferrer" class="btn" style="font-size:1.1rem; padding:0.75rem 2rem;">💾 Download — Beta v0.92.5</a>
                             </div>
                             <p class="download-box__desc" style="margin-top:1rem; margin-bottom:0;">
-                                Booth にて無償配布中。解説コンテンツ・サンプルリソース付き。Windows 10 以降対応。
+                                Booth にて無償配布中。解説コンテンツ・サンプルリソース付き。Windows 10 / 11（64ビット）対応。作った作品は、商用・非商用を問わず配布・販売できます（クレジット表記は任意）。
                             </p>
                             <p class="download-box__roadmap">
-                                📌 v1.0 では Z80-V9990 ハイブリッドPC「XZ80」対応を追加予定
+                                🎮 Windows(Unity) に加え、MSX(V9990)・PSP・X68000 でも同じスクリプトが動きます（レトロ実機向けのランタイムは α 版で、一部の機能は未実装。XZ80 は準備中です）。
+                            </p>
+                            <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
+                                📖 ドキュメント・コマンドリファレンスは
+                                <a href="https://fuujii256.github.io/VNStudio/" target="_blank" rel="noopener noreferrer"
+                                    style="color:#48bb78; text-decoration:underline;">こちら</a>
                             </p>
                             <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
                                 💬 ご感想・不具合報告は
-                                <a href="https://forms.gle/T8NaYoN61tEZe2o59" target="_blank" rel="noopener noreferrer"
+                                <a href="https://forms.gle/uf26VeMtmiDfuZee9" target="_blank" rel="noopener noreferrer"
                                     style="color:#48bb78; text-decoration:underline;">フィードバックフォーム</a>
                                 からどうぞ
                             </p>
@@ -284,10 +296,10 @@
                                     </div>
                                 </div>
                                 <div class="feature-item">
-                                    <span class="feature-item__icon">🚀</span>
+                                    <span class="feature-item__icon">🎮</span>
                                     <div>
-                                        <p class="feature-item__title">マルチプラットフォーム計画</p>
-                                        <p class="feature-item__desc">PC（Windows/Web/Mobile）に加え、Z80搭載レトロPCへの展開も視野に入れた設計。
+                                        <p class="feature-item__title">マルチランタイム</p>
+                                        <p class="feature-item__desc">同じスクリプトが Windows(Unity) のほか、MSX(V9990)・PSP・X68000 でも動作（レトロ実機向けは α 版）。
                                         </p>
                                     </div>
                                 </div>
@@ -309,9 +321,9 @@
                     </div>
                     <div class="card__footer">
                         <div>
-                            <p style="font-size:0.75rem; color:var(--color-text-dim);">Alpha v0.65 — 2026.04</p>
+                            <p style="font-size:0.75rem; color:var(--color-text-dim);">Beta v0.92.5 — 2026.09</p>
                         </div>
-                        <a href="https://studio-sylfa.booth.pm/items/8206501" target="_blank" rel="noopener noreferrer" class="btn btn--sm">💾 Download</a>
+                        <a href="https://studio-sylfa.booth.pm/items/8898090" target="_blank" rel="noopener noreferrer" class="btn btn--sm">💾 Download</a>
                     </div>
                 </div>
 
