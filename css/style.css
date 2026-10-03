@@ -11,15 +11,15 @@
 /* ── デザイントークン ── */
 :root {
   /* カラーパレット */
-  --color-bg: #0d0d18;
-  --color-bg-2: #12121f;
+  --color-bg: #0a1220;
+  --color-bg-2: #0f1a2b;
   --color-bg-card: rgba(255, 255, 255, 0.04);
-  --color-border: rgba(201, 167, 240, 0.15);
-  --color-border-hover: rgba(201, 167, 240, 0.4);
+  --color-border: rgba(143, 211, 244, 0.15);
+  --color-border-hover: rgba(143, 211, 244, 0.4);
 
   /* アクセントカラー */
-  --color-primary: #c9a7f0;
-  /* ラベンダー */
+  --color-primary: #8fd3f4;
+  /* ライトブルー */
   --color-secondary: #f0a7c9;
   /* ピンク */
   --color-tertiary: #a7c9f0;
@@ -28,9 +28,9 @@
   /* ゴールド */
 
   /* グラデーション */
-  --grad-primary: linear-gradient(135deg, #c9a7f0, #f0a7c9);
-  --grad-secondary: linear-gradient(135deg, #a7c9f0, #c9a7f0);
-  --grad-hero: linear-gradient(180deg, rgba(13, 13, 24, 0) 0%, rgba(13, 13, 24, 0.8) 60%, #0d0d18 100%);
+  --grad-primary: linear-gradient(135deg, #8fd3f4, #f0a7c9);
+  --grad-secondary: linear-gradient(135deg, #a7c9f0, #8fd3f4);
+  --grad-hero: linear-gradient(180deg, rgba(10, 18, 32, 0) 0%, rgba(10, 18, 32, 0.8) 60%, #0a1220 100%);
 
   /* テキスト — 青みを加えたクールトーン */
   --color-text: #dce8f8;
@@ -62,8 +62,8 @@
 
   /* シャドウ */
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
-  --shadow-glow: 0 0 40px rgba(201, 167, 240, 0.15);
-  --shadow-glow-strong: 0 0 60px rgba(201, 167, 240, 0.3);
+  --shadow-glow: 0 0 40px rgba(143, 211, 244, 0.15);
+  --shadow-glow-strong: 0 0 60px rgba(143, 211, 244, 0.3);
 
   /* トランジション */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,7 +96,7 @@ body {
   line-height: 1.7;
   overflow-x: hidden;
   /* 背景に微細なノイズテクスチャ感を演出 */
-  background-image: radial-gradient(ellipse at 20% 50%, rgba(201, 167, 240, 0.04) 0%, transparent 60%),
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(143, 211, 244, 0.04) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, rgba(167, 201, 240, 0.04) 0%, transparent 60%);
 }
 
@@ -214,7 +214,7 @@ ol {
 }
 
 .nav.scrolled {
-  background: rgba(13, 13, 24, 0.85);
+  background: rgba(10, 18, 32, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--color-border);
@@ -473,14 +473,14 @@ ol {
 
 .btn--primary {
   background: var(--grad-primary);
-  color: #0d0d18;
-  box-shadow: 0 4px 20px rgba(201, 167, 240, 0.3);
+  color: #0a1220;
+  box-shadow: 0 4px 20px rgba(143, 211, 244, 0.3);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(201, 167, 240, 0.5);
-  color: #0d0d18;
+  box-shadow: 0 8px 30px rgba(143, 211, 244, 0.5);
+  color: #0a1220;
 }
 
 .btn--outline {
@@ -490,7 +490,7 @@ ol {
 }
 
 .btn--outline:hover {
-  background: rgba(201, 167, 240, 0.1);
+  background: rgba(143, 211, 244, 0.1);
   border-color: var(--color-primary);
   transform: translateY(-2px);
   color: var(--color-primary);
@@ -524,7 +524,7 @@ ol {
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
-  background: linear-gradient(135deg, rgba(201, 167, 240, 0.1), rgba(167, 201, 240, 0.1));
+  background: linear-gradient(135deg, rgba(143, 211, 244, 0.1), rgba(167, 201, 240, 0.1));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -556,9 +556,9 @@ ol {
   letter-spacing: 0.08em;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-full);
-  background: rgba(201, 167, 240, 0.12);
+  background: rgba(143, 211, 244, 0.12);
   color: var(--color-primary);
-  border: 1px solid rgba(201, 167, 240, 0.2);
+  border: 1px solid rgba(143, 211, 244, 0.2);
 }
 
 .tag--pink {
@@ -653,7 +653,7 @@ ol {
 }
 
 .news-item__badge--new {
-  background: rgba(201, 167, 240, 0.2);
+  background: rgba(143, 211, 244, 0.2);
   color: var(--color-primary);
 }
 
@@ -786,7 +786,7 @@ ol {
   transform: translateX(-50%);
   width: 600px;
   height: 300px;
-  background: radial-gradient(ellipse, rgba(201, 167, 240, 0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(143, 211, 244, 0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -845,7 +845,7 @@ ol {
 .skill-badge:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background: rgba(201, 167, 240, 0.08);
+  background: rgba(143, 211, 244, 0.08);
 }
 
 /* ============================================================
@@ -880,7 +880,7 @@ ol {
   height: 9px;
   border-radius: 50%;
   background: var(--color-primary);
-  box-shadow: 0 0 12px rgba(201, 167, 240, 0.5);
+  box-shadow: 0 0 12px rgba(143, 211, 244, 0.5);
 }
 
 .timeline-item__year {
@@ -937,7 +937,7 @@ ol {
   justify-content: center;
   font-size: 1.5rem;
   flex-shrink: 0;
-  background: rgba(201, 167, 240, 0.1);
+  background: rgba(143, 211, 244, 0.1);
 }
 
 .link-card__body {
@@ -990,7 +990,7 @@ ol {
   transform: translateX(-50%);
   width: 400px;
   height: 400px;
-  background: radial-gradient(ellipse, rgba(201, 167, 240, 0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(143, 211, 244, 0.06) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -1096,11 +1096,11 @@ ol {
 
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(201, 167, 240, 0.2);
+    box-shadow: 0 0 20px rgba(143, 211, 244, 0.2);
   }
 
   50% {
-    box-shadow: 0 0 40px rgba(201, 167, 240, 0.5);
+    box-shadow: 0 0 40px rgba(143, 211, 244, 0.5);
   }
 }
 
@@ -1167,7 +1167,7 @@ ol {
     top: var(--nav-height);
     left: 0;
     right: 0;
-    background: rgba(13, 13, 24, 0.97);
+    background: rgba(10, 18, 32, 0.97);
     backdrop-filter: blur(20px);
     flex-direction: column;
     padding: var(--space-xl) var(--space-lg);
