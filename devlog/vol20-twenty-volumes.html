@@ -13,11 +13,11 @@
         gtag('config', 'G-9V3EP5FGPM');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vol.20: 物語を動かす土台から、物語に命を吹き込む道具へ。 — 20巻の節目に振り返る | しるふぁ工房</title>
-    <meta name="description" content="VN Studio devlog 20巻の節目。スクリプトからZ80・XZ80・PSP・X68000・MSXまで積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具——Voice Editor・RetroFM-Music Editor・Luminus Character Maker——を予告します。">
+    <title>Vol.20: 物語を動かす土台から、物語に命を吹き込む道具へ。 — 20回目の節目に振り返る | しるふぁ工房</title>
+    <meta name="description" content="VN Studio devlog 20回目の節目。スクリプトからZ80・XZ80・PSP・X68000・MSXまで積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具——Voice Editor・RetroFM-Music Editor・Luminus Character Maker——を予告します。">
     <meta property="og:title" content="Vol.20: 物語を動かす土台から、物語に命を吹き込む道具へ。 | しるふぁ工房">
     <meta property="og:type" content="article">
-    <meta property="og:description" content="VN Studio devlog 20巻の節目。積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具を予告します。">
+    <meta property="og:description" content="VN Studio devlog 20回目の節目。積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具を予告します。">
     <meta property="og:url" content="https://fuujii256.github.io/sylfa-studio/devlog/vol20-twenty-volumes.html">
     <link rel="canonical" href="https://fuujii256.github.io/sylfa-studio/devlog/vol20-twenty-volumes.html">
     <link rel="stylesheet" href="../css/style.css">
@@ -78,7 +78,7 @@
                 <!-- 記事ヘッダー -->
                 <header class="article__header">
                     <span class="article__vol">VOL.20 — MILESTONE</span>
-                    <h1 class="article__title">物語を動かす土台から、物語に命を吹き込む道具へ。<br>——20巻の節目に振り返る、ここまでと、これから</h1>
+                    <h1 class="article__title">物語を動かす土台から、物語に命を吹き込む道具へ。<br>——節目に振り返る、ここまでとこれから</h1>
                     <time class="article__date" datetime="2026-10-14">2026.10.14</time>
                 </header>
 
@@ -89,11 +89,11 @@
 
 <p>このdevlogも、Vol.20という節目を迎えた。</p>
 
-<p>Vol.10でVN Studioのアルファ公開を報告してから、さらに10巻ぶんを書き重ねたことになる。区切りのいい番号なので、今回は一度立ち止まって、ここまで何を作ってきたのかを振り返りたい。そして、これから何を書いていくのかを、先にお伝えしておきたい。</p>
+<p>Vol.10でVN Studioのα版の公開から、さらに10回書き重ねてきた。区切りのいい所であるので、ここで一旦立ち止まり、ここまで何を作ってきたのかを振り返りたい。そして、これから何を書いていくのかを、先にお伝えしておきたい。</p>
 
-<p>結論から書くと、これまでの20巻は、その多くが「物語を動かすための土台」の話だった。スクリプトをどう解釈するか、絵をどう重ねるか、どの機械で動かすか。土台は、この20巻でずいぶん形になった。</p>
+<p>これまでの20回は、その多くが「物語を動かすための土台」の話だった。スクリプトをどう解釈するか、絵をどう重ねるか、どの機械で動かすか。土台は、この20回でずいぶん形になった。</p>
 
-<p>だが、土台だけでは、作品は立ち上がらない。実際に物語に命を吹き込むのは、「声」であり、「音」であり、「絵」だ。次回からは、その「命を吹き込む側」の道具たちを、一つずつ紹介していきたい。</p>
+<p>しかし、土台だけでは作品は立ち上がらない。実際に物語に命を吹き込むのは、「声」であり、「音」であり、「絵」だ。次回からは、その「命を吹き込む側」の道具たちを、一つずつ紹介していきたい。</p>
 
 <p>今回はその橋渡しの回である。</p>
 
@@ -111,6 +111,13 @@
 
 <p>その結果、今は一つの物語を、Unity・XZ80・PSP・X68000・MSXという五つの実行先で動かせるところまで来た。同じ物語を、違う場所あるいは当時夢見た場所で、その機械らしく立ち上げる。Vol.19で「共通の魂と、固有のボディ」と書いたとおりの形に、土台の側は近づいてきた。</p>
 
+<figure class="article__figure" id="foundation-psp-hardware">
+    <a href="image/dev18_psp_hardware_demo_poster.jpg" target="_blank" rel="noopener" aria-label="実機のPSPを原寸で開く">
+        <img src="image/dev18_psp_hardware_demo_poster.jpg" alt="VN Studioの作品を動かすために用意した、実機のPSP（プレイステーション・ポータブル）" width="1280" height="720" loading="lazy" decoding="async">
+    </a>
+    <figcaption>自作の物語を動かすために用意した、実機のPSP（<a href="vol18-psp-runtime-architecture.html">Vol.18</a>）。土台は、PCのUnityから始まり、XZ80・PSP・X68000・MSXといった実機や「夢の機械」へと、動かせる場所を広げてきた。画像をクリックすると原寸で表示。</figcaption>
+</figure>
+
 <h2 id="not-enough">第2章：土台だけでは、作品にならない</h2>
 
 <p>だが、具体的に作品づくりをしながら開発を進めていく中で、気づいた事があった。</p>
@@ -118,6 +125,13 @@
 <p>物語を動かせることと、実際に作品が立ち上がり完成までもっていくこととは、別だということ。VNStudioだけでは、まだ「創作に集中できる、理想の制作環境」とはいえないことに。</p>
 
 <p>台詞が表示され、絵が切り替わり、選択肢で分岐する。そこまでは土台の仕事だ。だがプレイヤーの心を動かすのは、絵や文章だけではない。それはキャラクターの声でもあり、場面に流れる音楽でもあり、登場人物の多様な表情やしぐさでもある。土台がどれだけ整っても、声も音も絵もなければ、物語はまだ骨組みのままだ。</p>
+
+<figure class="article__figure" id="foundation-at-work">
+    <a href="image/dev14_screenshot_choicewindow.png" target="_blank" rel="noopener" aria-label="XZ80で動くVN Studioの選択肢画面を原寸で開く">
+        <img src="image/dev14_screenshot_choicewindow.png" alt="XZ80で動くVN Studioの一場面。背景と立ち絵の上に台詞が表示され、二つの選択肢が並ぶ" width="1042" height="697" loading="lazy" decoding="async">
+    </a>
+    <figcaption>XZ80で動くVN Studioの一場面（<a href="vol14-xz80-rebuild.html">Vol.14</a>）。台詞を表示し、背景を切り替え、選択肢で物語を分ける——ここまでは「土台」の仕事だ。だが、声も音も表情も、この土台だけからは生まれない。画像をクリックすると原寸で表示。</figcaption>
+</figure>
 
 <p>私は、ツールの企画・UIの設計・プログラム・スクリプト・絵・音楽など多岐にわたって、できるかぎり自分の表現で自らの手でやりたいと考え、ここまで進めてきた。これは、すべて自前でやることに執着しているわけでも、現在のAIなどの最新技術を遠ざけているのでもない。むしろ逆であり、私が理想とするような直感で操作できるシンプルで使いやすい道具を生み出し、一人の作り手が、思いついたことを声や音や絵の形にするまで、思考を途中で止めずに集中して進められるようにしたい。そのための手段として、新しい技術はむしろ積極的に使っていきたい、と考えている。</p>
 
