@@ -129,9 +129,30 @@
 
 <p><strong>声――Voice Editor。</strong> スクリプトの中の台詞を集め、声をつける道具である。VNStudioのスクリプトに書かれているセリフを自動認識し、キャラクターごとの音声をワンボタンで一括生成することができる。音声コマンドの実装も同時に自動で行う。個別に音声の再生成も可能。音声の生成作業はすべて別の管理領域で行われ、制作の最後の段階で上書きするため、ゲームスクリプトの破損などのトラブルも防いでいる。</p>
 
+<figure class="article__figure" id="voice-editor-shot">
+    <a href="image/dev20_voice_editor.png" target="_blank" rel="noopener" aria-label="Voice Editorの画面を原寸で開く">
+        <img src="image/dev20_voice_editor.png" alt="Voice Editorの画面。左にシナリオ一覧、中央に台詞一覧（ファイル・行・話者・台詞・状態）が並ぶ" width="1455" height="1078" loading="lazy" decoding="async">
+    </a>
+    <figcaption>Voice Editor。VNStudioのスクリプトから台詞を自動で集め、ファイル・行・話者ごとに一覧化する。ここから台詞を選んで声をつけていく。画像をクリックすると原寸で表示。</figcaption>
+</figure>
+
 <p><strong>音――RetroFM-Music Editor。</strong> 往年の名機、FM音源のために、MMLという記譜でBGMを書き、編集しながらその場で鳴らす道具である。制作したMMLファイルは、そのままVNStudioで鳴らすことができる。<a href="vol9-salvage-sound.html">Vol.9</a>で問い、<a href="vol14-xz80-rebuild.html">Vol.14</a>・<a href="vol15-fm-driver-player.html">Vol.15</a>で扱った、あのFM音源の系譜に連なる。OPLLやOPNA、OPM、またSCCといった多彩な音源を、一つの曲データの中で扱える。音の話は、この道具の回で改めて掘り下げたい。</p>
 
+<figure class="article__figure" id="retrofm-editor-shot">
+    <a href="image/dev20_retrofm_music_editor.png" target="_blank" rel="noopener" aria-label="RetroFM-Music Editorの画面を原寸で開く">
+        <img src="image/dev20_retrofm_music_editor.png" alt="RetroFM-Music Editorの画面。左にMMLエディタ、中央にMMLファイル一覧、右にOPLL・OPM・OPNA・PCM・SCCのチャンネル表示" width="1918" height="1078" loading="lazy" decoding="async">
+    </a>
+    <figcaption>RetroFM-Music Editor。MMLでBGMを書き、編集しながらその場で鳴らせる。右のチャンネル欄で、OPLL・OPM・OPNA・PCM・SCCといった音源を一つの曲の中で扱う。画像をクリックすると原寸で表示。</figcaption>
+</figure>
+
 <p><strong>絵――Luminus Character Maker（仮）。</strong> 立ち絵を作るための道具である。VNStudioの立ち絵データを読み込んで、キャラクターごとに違ったバリエーションをつくることができる。パーツを重ねて姿を組み立てるほか、参考にする絵から衣装の差分を起こしたり、さまざまな表情やアクションをつくることが可能になる予定で、開発を進めている。このツールで制作した立ち絵のバリエーションは、そのままVNStudioで使えるようにする。</p>
+
+<figure class="article__figure" id="luminus-maker-shot">
+    <a href="image/dev20_luminus_character_maker.png" target="_blank" rel="noopener" aria-label="Luminus Character Makerの画面を原寸で開く">
+        <img src="image/dev20_luminus_character_maker.png" alt="Luminus Character Makerの画面。左に立ち絵のプレビュー、中央にキャラクター情報と出力内容、右にベース選択やパーツ追加などの操作" width="1918" height="1078" loading="lazy" decoding="async">
+    </a>
+    <figcaption>Luminus Character Maker（仮）。VNStudioの立ち絵データを読み込み、パーツやバリエーションを組み立てて、新しい立ち絵としてVNStudioへ出力する。画像をクリックすると原寸で表示。</figcaption>
+</figure>
 
 <p>この三つのツールも含め、VNStudioシリーズに共通してこだわっていることがある。</p>
 
