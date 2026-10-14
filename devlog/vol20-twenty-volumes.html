@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.20: 物語を動かす土台から、物語に命を吹き込む道具へ。 — 20巻の節目に振り返る | しるふぁ工房</title>
+    <meta name="description" content="VN Studio devlog 20巻の節目。スクリプトからZ80・XZ80・PSP・X68000・MSXまで積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具——Voice Editor・RetroFM-Music Editor・Luminus Character Maker——を予告します。">
+    <meta property="og:title" content="Vol.20: 物語を動かす土台から、物語に命を吹き込む道具へ。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="VN Studio devlog 20巻の節目。積み上げた『物語を動かす土台』を振り返り、次に紹介する声・音・絵の道具を予告します。">
+    <meta property="og:url" content="https://fuujii256.github.io/sylfa-studio/devlog/vol20-twenty-volumes.html">
+    <link rel="canonical" href="https://fuujii256.github.io/sylfa-studio/devlog/vol20-twenty-volumes.html">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13〜Vol.19と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+
+        .article__figure img { height: auto; }
+        @media (max-width: 600px) {
+            .article-nav { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.20 — MILESTONE</span>
+                    <h1 class="article__title">物語を動かす土台から、物語に命を吹き込む道具へ。<br>——20巻の節目に振り返る、ここまでと、これから</h1>
+                    <time class="article__date" datetime="2026-10-14">2026.10.14</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+<h2 id="introduction">はじめに</h2>
+
+<p>このdevlogも、Vol.20という節目を迎えた。</p>
+
+<p>Vol.10でVN Studioのアルファ公開を報告してから、さらに10巻ぶんを書き重ねたことになる。区切りのいい番号なので、今回は一度立ち止まって、ここまで何を作ってきたのかを振り返りたい。そして、これから何を書いていくのかを、先にお伝えしておきたい。</p>
+
+<p>結論から書くと、これまでの20巻は、その多くが「物語を動かすための土台」の話だった。スクリプトをどう解釈するか、絵をどう重ねるか、どの機械で動かすか。土台は、この20巻でずいぶん形になった。</p>
+
+<p>だが、土台だけでは、作品は立ち上がらない。実際に物語に命を吹き込むのは、「声」であり、「音」であり、「絵」だ。次回からは、その「命を吹き込む側」の道具たちを、一つずつ紹介していきたい。</p>
+
+<p>今回はその橋渡しの回である。</p>
+
+<h2 id="foundation">第1章：土台を積み上げた、20巻</h2>
+
+<p>まず、ここまでの歩みを振り返っておこう。</p>
+
+<p>はじまりは、技術の話ではなかった。<a href="vol0-philosophy.html">Vol.0</a>で制作の思想を書き、<a href="vol6-transparent-tool.html">Vol.6</a>で「道具は消えるべきである」という考え方を置いた。作る人が複雑さに煩わされず、表現に集中できること。そこが出発点だった。</p>
+
+<p>そこから、作品を動かす仕組みを一つずつ作っていった。スクリプトエンジン、レイヤー表示、アセットの読み込み(<a href="vol2-script-engine.html">Vol.2</a>〜<a href="vol4-asset-loader.html">Vol.4</a>)。Z80マシン語のランタイム、その複数コア化、バンク切り替え(<a href="vol5-z80-runtime.html">Vol.5</a>・<a href="vol8-multicore-z80.html">Vol.8</a>・<a href="vol13-z80-runtime.html">Vol.13</a>)。</p>
+
+<p>一時期からは、'80年代のPC（パソコン）をテーマにしてきた。<a href="vol7-dream-machine.html">Vol.7</a>で、幻のVDPであるV9990にZ80というCPUと架空のボディを与えた、オリジナルの「夢の8bitマシン」XZ80を構想した。<a href="vol11-xz80-progress.html">Vol.11</a>でそれが実際に動き、<a href="vol14-xz80-rebuild.html">Vol.14</a>ではランタイムを一から作り直した。<a href="vol9-salvage-sound.html">Vol.9</a>では、わずかなFM音源とPSGでなぜあれほど鳴るのかを問い、<a href="vol15-fm-driver-player.html">Vol.15</a>で複数の音源を同時に鳴らすところまで進めた。</p>
+
+<p>さらに、作る人の使い勝手(<a href="vol16-runtime-usability.html">Vol.16</a>)、X68000の外部ディスク(<a href="vol17-x68000-external-disk.html">Vol.17</a>)、PSP対応(<a href="vol18-psp-runtime-architecture.html">Vol.18</a>)、MSXの実機系譜(<a href="vol19-msx-runtime.html">Vol.19</a>)へと、届けられる場所を広げてきた。</p>
+
+<p>その結果、今は一つの物語を、Unity・XZ80・PSP・X68000・MSXという五つの実行先で動かせるところまで来た。同じ物語を、違う場所あるいは当時夢見た場所で、その機械らしく立ち上げる。Vol.19で「共通の魂と、固有のボディ」と書いたとおりの形に、土台の側は近づいてきた。</p>
+
+<h2 id="not-enough">第2章：土台だけでは、作品にならない</h2>
+
+<p>だが、具体的に作品づくりをしながら開発を進めていく中で、気づいた事があった。</p>
+
+<p>物語を動かせることと、実際に作品が立ち上がり完成までもっていくこととは、別だということ。VNStudioだけでは、まだ「創作に集中できる、理想の制作環境」とはいえないことに。</p>
+
+<p>台詞が表示され、絵が切り替わり、選択肢で分岐する。そこまでは土台の仕事だ。だがプレイヤーの心を動かすのは、絵や文章だけではない。それはキャラクターの声でもあり、場面に流れる音楽でもあり、登場人物の多様な表情やしぐさでもある。土台がどれだけ整っても、声も音も絵もなければ、物語はまだ骨組みのままだ。</p>
+
+<p>私は、ツールの企画・UIの設計・プログラム・スクリプト・絵・音楽など多岐にわたって、できるかぎり自分の表現で自らの手でやりたいと考え、ここまで進めてきた。これは、すべて自前でやることに執着しているわけでも、現在のAIなどの最新技術を遠ざけているのでもない。むしろ逆であり、私が理想とするような直感で操作できるシンプルで使いやすい道具を生み出し、一人の作り手が、思いついたことを声や音や絵の形にするまで、思考を途中で止めずに集中して進められるようにしたい。そのための手段として、新しい技術はむしろ積極的に使っていきたい、と考えている。</p>
+
+<p>だから、VN Studioという一つのツールの外側に、声のための道具、音のための道具、絵のための道具を、ここ最近つくってきた。</p>
+
+<h2 id="three-tools">第3章：理想の道具は、一つだけではない</h2>
+
+<p>次回から紹介したいのは、VN Studioの制作を支える、三つの道具である。それぞれ、声・音・絵という、作品に命を吹き込む要素に対応している。</p>
+
+<p><strong>声――Voice Editor。</strong> スクリプトの中の台詞を集め、声をつける道具である。VNStudioのスクリプトに書かれているセリフを自動認識し、キャラクターごとの音声をワンボタンで一括生成することができる。音声コマンドの実装も同時に自動で行う。個別に音声の再生成も可能。音声の生成作業はすべて別の管理領域で行われ、制作の最後の段階で上書きするため、ゲームスクリプトの破損などのトラブルも防いでいる。</p>
+
+<p><strong>音――RetroFM-Music Editor。</strong> 往年の名機、FM音源のために、MMLという記譜でBGMを書き、編集しながらその場で鳴らす道具である。制作したMMLファイルは、そのままVNStudioで鳴らすことができる。<a href="vol9-salvage-sound.html">Vol.9</a>で問い、<a href="vol14-xz80-rebuild.html">Vol.14</a>・<a href="vol15-fm-driver-player.html">Vol.15</a>で扱った、あのFM音源の系譜に連なる。OPLLやOPNA、OPM、またSCCといった多彩な音源を、一つの曲データの中で扱える。音の話は、この道具の回で改めて掘り下げたい。</p>
+
+<p><strong>絵――Luminus Character Maker（仮）。</strong> 立ち絵を作るための道具である。VNStudioの立ち絵データを読み込んで、キャラクターごとに違ったバリエーションをつくることができる。パーツを重ねて姿を組み立てるほか、参考にする絵から衣装の差分を起こしたり、さまざまな表情やアクションをつくることが可能になる予定で、開発を進めている。このツールで制作した立ち絵のバリエーションは、そのままVNStudioで使えるようにする。</p>
+
+<p>この三つのツールも含め、VNStudioシリーズに共通してこだわっていることがある。</p>
+
+<p>それは、作る人が、自分のやりたいことを見失わないようにすることだ。機械の都合に振り回されず、自分のやりたいことをダイレクトに行えるツールであること。そのために、UIも含め、シンプルで直感的にわかりやすい設計にする、極限まで自動化できることは自動化し、ユーザーの作業を減らす。そこにこだわって開発を進めてきた。</p>
+
+<p>声も、音も、絵も、一人の作り手が自分の思いを形にするための手段のひとつだ。その手段を、さらに本体の外側にも揃えて充実させていく。</p>
+
+<h2 id="closing">おわりに：今後に向けて</h2>
+
+<p>これまでの20巻を振り返ってみると、土台を作る話が多かったのは、たぶん順番として自然だったのだと思う。まず物語が動く場所を用意し、それが五つの機械に広がり、そのうえで、その物語へ声や音や絵を与える道具へと、関心が移ってきた。</p>
+
+<p>次の巻からは、その声・音・絵の道具を、紹介していきたい。Voice Editorで台詞に声をつける話、RetroFM-Music EditorでFM音源を鳴らす話、Luminus Character Makerで立ち絵と表情を作る話。どれも、作品に命を吹き込むための道具の話になる。</p>
+
+<p>物語を作ることと、それを形にする道具を作ること。その両方を続けながら、一人ひとりが自分の思いや感性を大切にし、自分の物語として表現できるような、小さなきっかけを届けていきたい。この願いは、当初から変わっていない。</p>
+
+<p>土台は固まりつつある。ここからは、その上で、「あなたの物語」に命を吹き込めるよう、新しい道具を生み出していきたい。</p>
+
+                </div>
+
+
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav" aria-label="記事ナビゲーション">
+                    <a href="vol19-msx-runtime.html">&larr; Vol.19: VNStudioをMSXで。</a>
+                    <a href="../devlog.html">Devlog一覧へ</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
