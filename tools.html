@@ -130,6 +130,48 @@
             color: #666;
             line-height: 1.7;
         }
+
+        /* ── 制作支援ツール（Devlog Vol.20 で紹介） ── */
+        .support-tools {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .support-tools .card__body {
+            padding: 1.25rem;
+        }
+
+        .support-tools .card__title {
+            margin-bottom: 0.5rem;
+        }
+
+        .support-tools .card__desc {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        .tag--wip {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--color-text-muted);
+            border-color: var(--color-border);
+        }
+
+        .support-tools__link {
+            display: inline-block;
+            margin-top: 0.9rem;
+            font-size: 0.82rem;
+            color: #48bb78;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .support-tools {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -355,6 +397,89 @@
                         <span class="text-muted" style="font-size:0.8rem;">無料デモ / Windows 10・11 (64bit)</span>
                         <a href="https://github.com/fuujii256/sylfa-studio/releases/download/natsu-no-hane-demo/kaze_no_hane_GamePackage.zip"
                             class="btn btn--sm btn--primary">💾 デモをダウンロード</a>
+                    </div>
+                </div>
+
+                <!-- VN Studio 制作支援ツール（Devlog Vol.20 で紹介） -->
+                <div class="fade-in" style="max-width:860px; margin:2.5rem auto 0;">
+                    <h3
+                        style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; border-left:4px solid var(--color-primary); padding-left:1rem; margin-bottom:0.5rem;">
+                        物語に命を吹き込む、制作の道具</h3>
+                    <p style="font-size:0.9rem; color:var(--color-text-muted); line-height:1.8;">
+                        VN Studio で動く物語に、声・音・絵を添えるための制作ツールです。いずれも VN Studio と連携し、作った素材をそのまま作品へ取り込めるように開発を進めています。<a
+                            href="devlog/vol20-twenty-volumes.html#three-tools"
+                            style="color:#48bb78; text-decoration:underline;">Devlog Vol.20</a>
+                        で最初に紹介し、次の巻から一つずつ掘り下げていきます。まだ配布は行っていません。
+                    </p>
+
+                    <div class="support-tools">
+                        <!-- Voice Editor -->
+                        <div class="card">
+                            <a href="devlog/vol20-twenty-volumes.html#three-tools" class="card__thumb"
+                                aria-label="Voice Editor の紹介（Devlog Vol.20）">
+                                <img src="devlog/image/dev20_voice_editor.png"
+                                    alt="Voice Editorの画面。左にシナリオ一覧、中央に台詞一覧（ファイル・行・話者・台詞・状態）が並ぶ"
+                                    width="1455" height="1078" loading="lazy" decoding="async">
+                            </a>
+                            <div class="card__body">
+                                <div class="card__tags">
+                                    <span class="tag tag--pink">🎙 声</span>
+                                    <span class="tag tag--wip">未配布</span>
+                                </div>
+                                <h4 class="card__title" style="font-size:1.05rem;">Voice Editor</h4>
+                                <p class="card__desc">
+                                    スクリプトの中の台詞を自動で集め、キャラクターごとの声をワンボタンで一括生成する道具です。音声コマンドの記述まで自動で行い、台詞ごとの録り直しにも対応します。生成はスクリプト本体とは別の領域で進めるため、制作中のデータを壊しません。
+                                </p>
+                                <a href="devlog/vol20-twenty-volumes.html#three-tools" class="support-tools__link">📖
+                                    Devlog Vol.20 で読む →</a>
+                            </div>
+                        </div>
+
+                        <!-- RetroFM-Music Editor -->
+                        <div class="card">
+                            <a href="devlog/vol20-twenty-volumes.html#three-tools" class="card__thumb"
+                                aria-label="RetroFM-Music Editor の紹介（Devlog Vol.20）">
+                                <img src="devlog/image/dev20_retrofm_music_editor.png"
+                                    alt="RetroFM-Music Editorの画面。左にMMLエディタ、中央にMMLファイル一覧、右にOPLL・OPM・OPNA・PCM・SCCのチャンネル表示"
+                                    width="1918" height="1078" loading="lazy" decoding="async">
+                            </a>
+                            <div class="card__body">
+                                <div class="card__tags">
+                                    <span class="tag tag--blue">🎵 音</span>
+                                    <span class="tag tag--wip">未配布</span>
+                                </div>
+                                <h4 class="card__title" style="font-size:1.05rem;">RetroFM-Music Editor</h4>
+                                <p class="card__desc">
+                                    FM音源のために、MML という記譜で BGM を書き、編集しながらその場で鳴らせる作曲ツールです。OPLL・OPM・OPNA・PCM・SCC
+                                    といった音源を、一つの曲の中で扱えます。書いた MML は、そのまま VN Studio で鳴らせます。
+                                </p>
+                                <a href="devlog/vol20-twenty-volumes.html#three-tools" class="support-tools__link">📖
+                                    Devlog Vol.20 で読む →</a>
+                            </div>
+                        </div>
+
+                        <!-- Luminus Character Maker（仮） -->
+                        <div class="card">
+                            <a href="devlog/vol20-twenty-volumes.html#three-tools" class="card__thumb"
+                                aria-label="Luminus Character Maker の紹介（Devlog Vol.20）">
+                                <img src="devlog/image/dev20_luminus_character_maker.png"
+                                    alt="Luminus Character Makerの画面。左に立ち絵のプレビュー、中央にキャラクター情報と出力内容、右にベース選択やパーツ追加などの操作"
+                                    width="1918" height="1078" loading="lazy" decoding="async">
+                            </a>
+                            <div class="card__body">
+                                <div class="card__tags">
+                                    <span class="tag tag--gold">🎨 絵</span>
+                                    <span class="tag tag--wip">開発中</span>
+                                </div>
+                                <h4 class="card__title" style="font-size:1.05rem;">Luminus Character Maker（仮）</h4>
+                                <p class="card__desc">
+                                    VN Studio の立ち絵データを読み込み、パーツを重ねて立ち絵を組み立て、そのまま VN Studio
+                                    へ出力できる、開発中のツールです。参考にする絵から衣装の差分を起こしたり、さまざまな表情やアクションをつくれるようにすることを目指し、開発を進めています。
+                                </p>
+                                <a href="devlog/vol20-twenty-volumes.html#three-tools" class="support-tools__link">📖
+                                    Devlog Vol.20 で読む →</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
