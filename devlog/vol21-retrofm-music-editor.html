@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.21: あの音を、自分の手で鳴らすために。 — RetroFM-Music Editor を公開 | しるふぁ工房</title>
+    <meta name="description" content="Vol.9で問うた『失われたゲーム音楽文化のサルベージ』が、ひとつの道具になった。FM音源（OPLL／OPNA／OPM／SCC）のためのMMLエディタ RetroFM-Music Editor を無償公開。過去の名曲を生んだFM音源を、これからの創作につなぐ。">
+    <meta property="og:title" content="Vol.21: あの音を、自分の手で鳴らすために。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="Vol.9で問うた『失われたゲーム音楽文化のサルベージ』が、ひとつの道具になった。FM音源のためのMMLエディタ RetroFM-Music Editor を無償公開しました。">
+    <meta property="og:url" content="https://fuujii256.github.io/sylfa-studio/devlog/vol21-retrofm-music-editor.html">
+    <link rel="canonical" href="https://fuujii256.github.io/sylfa-studio/devlog/vol21-retrofm-music-editor.html">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13〜Vol.20と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+
+        .article__figure img { height: auto; }
+        .article__figure video {
+            width: 100%;
+            display: block;
+            background: #000;
+            border-radius: var(--radius-md);
+        }
+        @media (max-width: 600px) {
+            .article-nav { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.21 — RETROFM MUSIC EDITOR</span>
+                    <h1 class="article__title">あの音を、自分の手で鳴らすために。<br>——RetroFM-Music Editor を公開しました</h1>
+                    <time class="article__date" datetime="2026-10-28">2026.10.28</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+<h2 id="introduction">はじめに——想いが、ひとつの道具になった</h2>
+
+<p><a href="vol9-salvage-sound.html">Vol.9</a>で、私はひとつの問いを書いた。かつてのPCゲームやアーケードゲームの音楽——FM音源が奏でたあの響きは、なぜ今も色あせないのか。そして、それを現代の技術で蘇らせることはできるのか、と。</p>
+
+<p>あのとき私は、それを「失われたゲーム音楽文化のサルベージ」と呼び、二つの柱が必要だと書いた。ひとつは、専用ドライバとMMLで音源を直接鳴らすという「器」。もうひとつは、あの時代の楽曲が宿していた和声の語彙、すなわち「魂」。この両輪が揃ってはじめて、サルベージは完成するのだと。</p>
+
+<p>あれから、工房はその「器」を、少しずつ形にしてきた。<a href="vol14-xz80-rebuild.html">Vol.14</a>・<a href="vol15-fm-driver-player.html">Vol.15</a>でFM音源ドライバとプレイヤーを組み上げ、<a href="vol20-twenty-volumes.html">Vol.20</a>では、それがVN Studioの作品に音を添える道具のひとつになる、と予告した。</p>
+
+<p>今回、その道具を正式に公開した。名前は <strong>RetroFM-Music Editor</strong>。Vol.9で語った想いと哲学が、ようやく誰でも手に取れる、ひとつの形になった。今回はその報告と、この道具の魅力を伝えたい。</p>
+
+<h2 id="legacy">第1章：FM音源という、過去の偉業</h2>
+
+<p>本題に入る前に、この道具が向き合っている相手について書いておきたい。それは、FM音源というハードウェアと、そこから生まれた無数の名曲たちである。</p>
+
+<p>わずかなオペレータとわずかなチャンネル。今の基準でいえば、信じがたいほど小さな器だ。にもかかわらず、あの時代のクリエイターたちは、その制約の中で一台のオリジナルシンセサイザーのような独自の響きを作り上げた。Vol.9でも触れたように、MSX2の「Xak」や「Fray」、MSX1の「グラディウス２」などの楽曲が、たった2オペレータのFM音源やPSGで鳴っているとは、今聴いても信じがたい。また、PC-8801版「イースII」のオープニングのために、その1曲だけチューンナップしたサウンドドライバを用意したという逸話もある。</p>
+
+<p>それは、ハードウェアの性能ではなく、限られた器を使い切る執念と工夫が生んだ表現だった。私はそれを、立派に「過去の偉業」と呼びたい。YM2413（OPLL）、YM2608（OPNA）、YM2151（OPM）、そしてSCCの波形メモリ音源——これらのチップと、それを鳴らすために磨かれたMMLという記譜は、ただ懐かしいから残したいのではない。そこには、今の創作にも受け継ぐ価値のある、作り手の手触りと仕組みがある。</p>
+
+<p>RetroFM-Music Editorは、その偉業を、博物館のガラスケースにしまうためではなく、これからも自分の手で鳴らし、書き足していくために作った道具である。</p>
+
+<h2 id="what-it-does">第2章：RetroFM-Music Editor でできること</h2>
+
+<p>では、この道具が実際に何をするのかを紹介したい。</p>
+
+<p>RetroFM-Music Editorは、FM音源の曲をMML（Music Macro Language）——音楽をテキストで書く記譜——で書き、編集しながらその場で鳴らせるWindows用のエディタである。工房の独自方言のMMLに加えて、X68000のMXDRV方言のMMLも読み込んで鳴らすことができる。</p>
+
+<p>いちばんの手応えは、<strong>書いたそばから音になる</strong>ことだ。MMLを打ち替えると、再生位置を保ったまま音が差し替わる。コードを書いて、クリックで直したいところから即座に鳴らし直す——その感覚のまま、曲を書ける。チャンネルごとに発音やレベルメーターが表示され、音源ごとに色分けされる（OPLLは橙、OPMは緑、OPNAは青、PCMは桃）。演奏中のチャンネルをクリックすれば、今鳴っているMMLの位置へジャンプする。Soloで一本だけを聴き、Muteで一本だけを黙らせることもできる。</p>
+
+<figure class="article__figure" id="demo-starbreaker">
+    <video controls playsinline preload="none" poster="../assets/images/retrofm_demo_starbreaker_poster.jpg" aria-label="RetroFM-Music Editorでの作曲デモ。MMLを編集しながら、OPLLとOPNAを重ねた自作曲をその場で再生する様子">
+        <source src="../assets/video/retrofm_demo_starbreaker.mp4" type="video/mp4">
+        お使いのブラウザでは動画を再生できません。<a href="../assets/video/retrofm_demo_starbreaker.mp4">動画を開く</a>ことができます。
+    </video>
+    <figcaption>RetroFM-Music Editorで自作曲を鳴らしているところ。左のMMLを編集しながら、右のチャンネル欄で、OPLLとOPNAを重ねた各パートが鳴っていく様子を確認できる。音が出ます。</figcaption>
+</figure>
+
+<p>そして、Vol.9で「器」と呼んだものの核心がここにある。<strong>OPLL・OPM・OPNAを、ひとつの曲の中で同時に鳴らせる。</strong> 当時は一台の機械に積まれた音源でしか鳴らせなかったものを、今は、同じ譜面の中で混ぜて鳴らせる。曲ごとに各音源の音量バランスも指定できる。これは当時のハードウェア単体ではできなかったことだ。過去の器を受け継ぎながら、その先へ一歩を踏み出している。</p>
+
+<p>書いたMMLは、そのままVN Studioの作品で鳴らせる。工房の制作では、ここで書いた曲が、物語の場面に流れるBGMになる。道具が単体で完結せず、作品づくりの流れの中にきちんと収まっている——そこにこだわった。</p>
+
+<p>更新も手間取らせない。新しい版が出ると起動時に知らせ、ボタンひとつで、署名とハッシュを検証してから適用する。</p>
+
+<h2 id="drums">第3章：受け継ぐ。けれど、借りてはこない——RetroFM Drums v1</h2>
+
+<p>公開にあたって、ひとつ、手間をかけて向き合ったことがある。ドラムなどのPCM（打楽器の音）をどうするか、という問題だ。</p>
+
+<p>当時の名曲を鳴らそうとすると、どうしても、どこかで作られた既存のドラム音を使いたくなる。だが、過去の偉業を受け継ぐことと、誰かの録った音をそのまま配ってしまうことは、分けて考えなければならない。音には、それを録った人の権利がある。短い一打でも、それは変わらない。</p>
+
+<p>そこで、録音素材を一切使わず、数式とノイズから自分で合成した打楽器キット <strong>RetroFM Drums v1</strong>（12音）を作った。これはCC0——商用利用も、加工も、再配布も自由で、クレジット表記もいらない——として、アプリ本体とは別に配布している。この道具で曲を書く人が、音源まわりの権利を気にせず、安心して作品を公開・配布できるようにするためだ。</p>
+
+<figure class="article__figure" id="demo-shadow-reactor">
+    <video controls playsinline preload="none" poster="../assets/images/retrofm_demo_shadow_reactor_poster.jpg" aria-label="RetroFM Drums v1とSCC波形で鳴らす自作曲のデモ">
+        <source src="../assets/video/retrofm_demo_shadow_reactor.mp4" type="video/mp4">
+        お使いのブラウザでは動画を再生できません。<a href="../assets/video/retrofm_demo_shadow_reactor.mp4">動画を開く</a>ことができます。
+    </video>
+    <figcaption>自作合成の打楽器キット RetroFM Drums v1 と、数式で作ったSCC波形で鳴らす自作曲。音も素材も、すべて自分の手の内にある。音が出ます。</figcaption>
+</figure>
+
+<p>手触りや仕組みは先人から受け継ぐ。けれど、鳴らす音は自分の手で用意する。「自分で扱える環境を作る」という工房の姿勢を、ここでも形にしたつもりだ。</p>
+
+<h2 id="bridge">第4章：過去を、未来へつなぐ</h2>
+
+<p>ここまで読んでいただければ、この道具が、単なるレトロ音源の再現エミュレータではないことが伝わると思う。</p>
+
+<p>Vol.9で、サルベージには「器」と「魂」の両輪が要ると書いた。この道具が用意できたのは、まだ「器」のほうだ。しかも、OPLL・OPM・OPNAを一曲に混ぜるように、当時の器が一歩先へ進んだ「器」である。もう一方の「魂」——あの時代の楽曲が宿していた和声の語彙を学び直し、新しい曲に吹き込んでいく仕事は、器を手にした作り手が、これから続けていくものだ。だから、サルベージが完成したとは、まだ言わない。</p>
+
+<p>それでいい。過去の偉業は、完成品として眺めるためにあるのではなく、これからの誰かが、その続きを書くためにある。古い器を今の技術で鳴らせるようにし、誰でも手に取れる形で配ること。それが、過去を未来へつなぐということだと思う。工房のタグライン、「想いを記録にかえて、未来を紡ぐ」の、音における一歩である。</p>
+
+<h2 id="closing">おわりに：これからも、拡張し、進化させていく</h2>
+
+<p>RetroFM-Music Editor は、GitHub でベータ版を無償公開している。ドキュメントとコマンドリファレンス、CC0 のドラムキットも用意した。FM音源でひとつ曲を書いてみたい方は、ぜひ手に取ってみてほしい。</p>
+
+<ul>
+    <li>ダウンロード・リリース情報：<a href="https://github.com/fuujii256/RetroFMMusicEditor/releases/tag/v0.13.17" target="_blank" rel="noopener noreferrer">github.com/fuujii256/RetroFMMusicEditor</a></li>
+    <li>ドキュメント・コマンドリファレンス：<a href="https://fuujii256.github.io/RetroFMMusicEditor/" target="_blank" rel="noopener noreferrer">fuujii256.github.io/RetroFMMusicEditor</a></li>
+</ul>
+
+<p>そして、この道具はここで止まるものではない。扱える音源を増やし、書き味を磨き、作品づくりの流れにさらになじませていく。過去のFM音源が積み上げた偉業に、これからも学びながら、拡張と進化を続けていきたい。</p>
+
+<p>あの音は、決して「古い」のではない。まだ、鳴らし続けられていないだけだ。その続きを、この道具とともに書いていきたい。</p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav" aria-label="記事ナビゲーション">
+                    <a href="vol20-twenty-volumes.html">&larr; Vol.20: 物語に命を吹き込む道具へ。</a>
+                    <a href="../devlog.html">Devlog一覧へ</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
