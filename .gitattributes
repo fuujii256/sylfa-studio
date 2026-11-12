@@ -1,0 +1,24 @@
+# Binary assets must never get EOL (CRLF/LF) conversion.
+# core.autocrlf=true was corrupting the working copy of images/video;
+# marking them 'binary' keeps raw bytes intact on commit and checkout.
+*.webp binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.bmp  binary
+*.mp4  binary
+*.webm binary
+*.mov  binary
+*.mp3  binary
+*.wav  binary
+*.ogg  binary
+*.m4a  binary
+*.woff  binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.eot  binary
+*.pdf  binary
+*.zip  binary
