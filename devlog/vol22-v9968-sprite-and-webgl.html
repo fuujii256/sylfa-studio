@@ -121,6 +121,14 @@
 
 <p>幸いなことに、V9968ではスプライト機能が大きく拡張されており、先に述べた弱点が大きく緩和されている。そこでV9968版では、立ち絵を<strong>あらかじめ画面の外側（VRAM）で組み立てておき、必要な時に組み上がったものを表示する「VRAMキャッシュ」</strong>方式にした。画面に映らない作業領域で絵（スプライト）を用意し、完成した瞬間にVDPコマンドでスプライトを表示するのだ。描いている最中は原理上見えないため、ちらつきは一切出ない。</p>
 
+<figure class="article__figure" id="demo-v9968-cache">
+    <video controls playsinline preload="none" poster="../assets/images/dev22_v9968_vram_cache_poster.jpg" aria-label="MSX turboR＋V9968（V9968対応openMSX上）で、立ち絵をスプライトとして組み、VRAMキャッシュから一度に表示してフェードインさせるデモ">
+        <source src="../assets/video/dev22_v9968_vram_cache.mp4" type="video/mp4">
+        お使いのブラウザでは動画を再生できません。<a href="../assets/video/dev22_v9968_vram_cache.mp4">動画を開く</a>ことができます。
+    </video>
+    <figcaption>MSX turboR＋V9968（SCREEN 8）で、立ち絵をスプライトとして組み、VRAMキャッシュから一度に表示している様子。描画途中のちらつきなく立ち絵が現れ、フェードインもかかる。開発中のV9968に対応したopenMSX上の画面。音が出ます。</figcaption>
+</figure>
+
 <p>この効果が非常に高かったので、先に公開しているV9990版の立ち絵も、色数制約などからスプライトの実装は断念したものの、同様のVRAMキャッシュで画像を表示させるようにした。</p>
 
 <h2 id="colors">第2章：限られた色を、絞り出す</h2>
@@ -148,6 +156,11 @@
 <p>また、スマホ・タブレット用に、<strong>タッチ操作</strong>への対応もした。画面を<strong>タップすれば会話が進み</strong>、<strong>少し長押しすればメニューが開く</strong>。指先だけで物語を読み進められるようになった。</p>
 
 <p>さらに、<strong>GitHub Pagesへのワンクリック公開</strong>を追加した。制作者は、作品を公開したい場所のアドレスを入れてボタンを押すだけで、自分のページに作品が上がる。これまで、ブラウザ版を世に出すには、ファイルを書き出し、指定される場所に書式を合わせて、いずれかにアップロードする、という手間がいくつもあった。その段取りを、ボタンひとつにまとめることができた。作る人が、機械の都合に振り回されない——公開の手続きで立ち止まらずに済むように——という、VNStudioがずっとこだわってきた考え方を、ここでも広げたつもりだ。</p>
+
+<figure class="article__figure" id="webgl-publish-menu">
+    <img src="../assets/images/dev22_webgl_publish_menu.png" alt="VN StudioエディタのWebGL公開パネル。公開先をGitHub Pages／itch.io／unityroomから1つ選び、GitHubへの自動公開（git不要・1クリック）では公開先リポジトリのURLを入れて「GitHubに自動公開」ボタンを押す。下部に「WebGL公開物フォルダを開く」ボタンがある。" style="width:360px; max-width:100%; margin-left:auto; margin-right:auto;">
+    <figcaption>VN StudioのWebGL公開パネル。公開先を選び、リポジトリのURLを入れて「GitHubに自動公開」を押すだけで、作品がGitHub Pagesに上がる。</figcaption>
+</figure>
 
 <p>なお、この新機能を使って、工房の「<a href="../works.html">キョウカちゃんの新婚さんいらっしゃい！</a>」の体験版を、このブラウザ版として公開してみた。これからはパソコンだけでなく、iPhoneやiPadのブラウザでも、インストールなしでそのまま遊べる。</p>
 
