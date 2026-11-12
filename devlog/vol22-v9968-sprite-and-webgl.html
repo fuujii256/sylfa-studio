@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V3EP5FGPM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9V3EP5FGPM');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vol.22: 夢のVDPの奥へ、世界のブラウザへ。 — V9968のスプライトで立ち絵を、VN StudioをWebGLで | しるふぁ工房</title>
+    <meta name="description" content="開発中の新型VDP「V9968」で、スプライトを使って立ち絵を組み上げる技。そして、VN StudioがWebGLに対応し、作品をブラウザで——PCでもスマホでも、インストール不要で——遊べるように。より深く、より広く、同じ物語を届ける開発記録 Vol.22。">
+    <meta property="og:title" content="Vol.22: 夢のVDPの奥へ、世界のブラウザへ。 | しるふぁ工房">
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="開発中の新型VDP「V9968」で、スプライトを使って立ち絵を組み上げる技。そして、VN StudioのWebGL対応で、作品をブラウザ（PC・スマホ）でインストール不要で遊べるように。">
+    <meta property="og:url" content="https://fuujii256.github.io/sylfa-studio/devlog/vol22-v9968-sprite-and-webgl.html">
+    <link rel="canonical" href="https://fuujii256.github.io/sylfa-studio/devlog/vol22-v9968-sprite-and-webgl.html">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/images/nav_icon.png" type="image/png">
+    <link rel="stylesheet" href="article.css">
+    <style>
+        /* 長い記事本文はIntersectionObserver(threshold:0.1)が発火しないため、
+           Vol.13〜Vol.21と同じくJS非依存のCSSアニメーションでフェードインさせる */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .article__header {
+            animation: fadeSlideIn 0.6s ease both;
+        }
+        .article__body {
+            animation: fadeSlideIn 0.6s ease 0.15s both;
+        }
+        .article-nav {
+            animation: fadeSlideIn 0.6s ease 0.25s both;
+        }
+
+        .article__figure img { height: auto; }
+        .article__figure video {
+            width: 100%;
+            display: block;
+            background: #000;
+            border-radius: var(--radius-md);
+        }
+        @media (max-width: 600px) {
+            .article-nav { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <div class="nav__inner">
+            <a href="../index.html" class="nav__logo">
+                <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                <span>しるふぁ工房</span>
+            </a>
+            <ul class="nav__menu" role="list">
+                <li><a href="../index.html" class="nav__link">Home</a></li>
+                <li><a href="../works.html" class="nav__link">Works</a></li>
+                <li><a href="../tools.html" class="nav__link">Tools</a></li>
+                <li><a href="../devlog.html" class="nav__link">Devlog</a></li>
+                <li><a href="../story.html" class="nav__link">Story</a></li>
+                <li><a href="../about.html" class="nav__link">About</a></li>
+                <li><a href="../links.html" class="nav__link">Links</a></li>
+                <li><a href="../contact.html" class="nav__link">Contact</a></li>
+            </ul>
+            <button class="nav__hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section section--sm">
+            <article class="article">
+
+                <!-- 記事ヘッダー -->
+                <header class="article__header">
+                    <span class="article__vol">VOL.22 — V9968 SPRITE &amp; WEBGL</span>
+                    <h1 class="article__title">夢のVDPの奥へ、世界のブラウザへ。<br>——V9968のスプライトで立ち絵を組み、VN StudioをWebGLでブラウザへ</h1>
+                    <time class="article__date" datetime="2026-11-12">2026.11.12</time>
+                </header>
+
+                <!-- 記事本文 -->
+                <div class="article__body">
+
+<h2 id="introduction">はじめに</h2>
+
+<p><a href="vol19-msx-runtime.html">Vol.19</a>で、ひとつの物語を、Windows・XZ80・PSP・X68000・MSXという違う機械で、その機械らしく動かす話を書いた。今回は、その「届ける」を、ベクトルの異なる二つの方向へすすめたい。</p>
+
+<p>ひとつは、<strong>より深い場所へ</strong>。今から40年前に販売されていたMSX向けに、「いま」新規開発を進められている新型VDP「V9968」で、立ち絵をスプライトで組み上げる技の話をしたい。</p>
+
+<p>もうひとつは、<strong>より広い場所へ</strong>。ゲームエンジン「VN Studio」を<strong>WebGL</strong>に対応させたことで、制作した作品を普通のブラウザのみで——パソコンでもスマートフォンでも、インストールなしで——すぐ遊べるようになった。</p>
+
+<p>より深く潜ることと、より広く開くこと。今回は、その両方の報告である。</p>
+
+<h2 id="why-sprite">第1章：なぜ、立ち絵を「スプライト」で組むのか</h2>
+
+<p><a href="vol19-msx-runtime.html">Vol.19</a>で紹介したV9968は、既存の製品ではなく、レトロPCであるMSX向けに、いま現在開発が進められている「新型のVDP」——画面の表示を担うモジュールだ。当時我々が渇望したMSXを今実現するプロジェクトである。あれから、本工房ではその版のVNStudioの開発を少しずつ進めてきた。今回はその経過報告になる。</p>
+
+<p>本題の前に、「スプライト」について少し説明したい。</p>
+
+<p>8bitパソコンの時代、画面に絵を描く処理はとても遅かった。背景を一枚書き換えるだけでも秒～１０秒単位で時間がかかる。だから、キャラクターがすばやく動くアクション性の高いゲームを、絵をそのつど描き直すやり方だけで作るのは難しかった。</p>
+
+<p>そこで使われたのが、<strong>スプライト</strong>という専用のハードウェアだ。あらかじめ用意した小さな絵を、背景とは別に、好きな位置へ瞬時に表示できる。背景を描き直さなくても、その小さな絵——スプライト——だけを動かせば、キャラクターがなめらかに動く。当時のアクションゲームの多くは、この仕組みに支えられていた。</p>
+
+<p>ただし、スプライトには大きな制約があった。構造上ひとつのスプライトで同時に使える色数は少なく、画面に同時に出せる枚数にも限りがある。小さなキャラクターを軽やかに動かすためのものだから、大きくて色数の多い絵を映すことは、もともと想定されておらず困難なのだ。</p>
+
+<p>その、本来は小さなキャラクター用のスプライトを、私は立ち絵という大きな一枚絵の表示に使うことにした。少し変わった使い方だ。なぜ、わざわざそうしたのか。</p>
+
+<p>理由は、<strong>描画をどうにか改善して、物語への没入感を大切にしたかった</strong>からだ。</p>
+
+<p>立ち絵を画面に直接描いていくと、描いている途中の様子が、そのまま画面に見えてしまう。現在のモダンなPCやスマホでは一瞬で終わる処理なので全く問題にならないが、MSXなどのレトロPCでは、上から順にじわじわと絵が現れ、描き終わるまでに秒単位で時間がかかる。ゲームエンジンにおいて、これらの描画のしくみは、プレイヤーがゲームの「物語」を体験する質に直接影響するものであるため、私はどうしてもそれが気になった。</p>
+
+<p>幸いなことに、V9968ではスプライト機能が大きく拡張されており、先に述べた弱点が大きく緩和されている。そこでV9968版では、立ち絵を<strong>あらかじめ画面の外側（VRAM）で組み立てておき、必要な時に組み上がったものを表示する「VRAMキャッシュ」</strong>方式にした。画面に映らない作業領域で絵（スプライト）を用意し、完成した瞬間にVDPコマンドでスプライトを表示するのだ。描いている最中は原理上見えないため、ちらつきは一切出ない。</p>
+
+<p>この効果が非常に高かったので、先に公開しているV9990版の立ち絵も、色数制約などからスプライトの実装は断念したものの、同様のVRAMキャッシュで画像を表示させるようにした。</p>
+
+<h2 id="colors">第2章：限られた色を、絞り出す</h2>
+
+<p>スプライトで立ち絵を組むと決めたとき、正面から向き合うことになったのが、<strong>色数の制約</strong>だった。</p>
+
+<p>V9968のスプライトは、使える色をいくつかの「組」に分けて持っている。ひとつの組で同時に出せる色数は16色に限られていて、立ち絵全体をひとつの組だけでまかなうことはできない。そこで、こういうやり方をとった。</p>
+
+<p>立ち絵を縦の細い短冊に切り分け、<strong>短冊ごとに、いちばん色の合う組を選ぶ</strong>。髪のあたりはこの組、肌のあたりはあの組、というように、場所ごとに最適な色の組を割り当てる。それでも色が足りない、特に厳しい短冊だけは、二枚を重ねてさらに色を足す。こうして、乏しいパレットの中に、一枚の立ち絵ぶんの色を、場所ごとにやりくりして収めていく。</p>
+
+<p>小さなキャラクターを動かすためのスプライトを、大きな一枚絵の表現へと転用し、その限られた色数を、短冊単位の工夫で使い切る。性能が足りないから諦めるのではなく、足りない器を、どう使い切るか。そこに、この時代の機械を触る面白さがある。</p>
+
+<h2 id="v9968-sprite">第3章：V9968のスプライトだからできたこと</h2>
+
+<p>V9968には、スプライトの表示の透明度を個別に４段階に設定する機能がある。このおかげで、立ち絵をフェードインでゆっくり浮かび上がるように表示させることが可能だ。これは現在のビジュアルノベルなどでよく使われる表現だが、MSXでもV9968という新VDPのスプライト機能を活用すれば不可能ではなく、実現可能であることを証明できた。</p>
+
+<p>なお、これは開発中のV9968に対応したエミュレータ（openMSX）の上で行っている。以前にXZ80という私のオリジナルマシンの夢<a href="vol7-dream-machine.html">Vol.7</a>で夢のマシンを語ったとき、その先にFPGAによる実機化という未来を置いた。今回のMSX+V9968というモデルは私のそのビジョンにとても近い。今後もV9968の開発を見守りながら、私もXZ80という夢のマシンを形にする道を、一歩一歩歩み続けていきたいと考えている。</p>
+
+<h2 id="webgl">第4章：そして、いちばん広い場所——ブラウザへ</h2>
+
+<p>ここからは、いちばん広い場所の話に移りたい。</p>
+
+<p>VN Studioが、<strong>WebGL</strong>に対応した。作品を、ブラウザで遊べる形に書き出せるようになった（公開版 0.93.1-beta）。プレイヤーは、Unityのような特別なソフトを入れる必要はない。もはやWindowsもインストールも不要だ。手持ちのスマホやタブレットで、ブラウザでそのページを開けば、すぐに物語が始まる。</p>
+
+<p>また、スマホ・タブレット用に、<strong>タッチ操作</strong>への対応もした。画面を<strong>タップすれば会話が進み</strong>、<strong>少し長押しすればメニューが開く</strong>。指先だけで物語を読み進められるようになった。</p>
+
+<p>さらに、<strong>GitHub Pagesへのワンクリック公開</strong>を追加した。制作者は、作品を公開したい場所のアドレスを入れてボタンを押すだけで、自分のページに作品が上がる。これまで、ブラウザ版を世に出すには、ファイルを書き出し、指定される場所に書式を合わせて、いずれかにアップロードする、という手間がいくつもあった。その段取りを、ボタンひとつにまとめることができた。作る人が、機械の都合に振り回されない——公開の手続きで立ち止まらずに済むように——という、VNStudioがずっとこだわってきた考え方を、ここでも広げたつもりだ。</p>
+
+<p>なお、この新機能を使って、工房の「<a href="../works.html">キョウカちゃんの新婚さんいらっしゃい！</a>」の体験版を、このブラウザ版として公開してみた。これからはパソコンだけでなく、iPhoneやiPadのブラウザでも、インストールなしでそのまま遊べる。</p>
+
+<p>まだ現在はできないこともある。ブラウザ上でのセーブ・ロードや、動画（webm）を使った背景は表示されない。そういった課題もあることはお伝えしておきたい。</p>
+
+<h2 id="closing">おわりに：奥へも、広くへも</h2>
+
+<p>同じひとつの作品を、開発中の夢のVDPという<strong>より奥の機械</strong>にも届けたい、スマホやタブレットでも開けるという<strong>より広い場所</strong>にも届けたい。深く潜ることと、広く開くこと。そのどちらも、<a href="vol19-msx-runtime.html">Vol.19</a>で書いた「共通の魂と、固有のボディ」——物語を変えずに、その場所らしい姿で立ち上げる——は一貫している。</p>
+
+<p>機械の都合でもなく、技術の新しさを誇るためでもなく、まず届けたい体験があって、仕組みはそのあとにある。スプライトで立ち絵を組むのも、ブラウザで遊べるようにするのも、「あなたの物語」を、できるだけ多くの場所で、できるだけその場所らしく立ち上げるための、手段のひとつだ。</p>
+
+<p>奥へも、広くへも。その両方を、これからも少しずつ進めていきたい。</p>
+
+                </div>
+
+                <!-- 記事ナビゲーション -->
+                <nav class="article-nav" aria-label="記事ナビゲーション">
+                    <a href="vol21-retrofm-music-editor.html">&larr; Vol.21: あの音を、自分の手で鳴らすために。</a>
+                    <a href="../devlog.html">Devlog一覧へ</a>
+                </nav>
+
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <img src="../assets/images/nav_icon.png" alt="" class="nav__logo-img" aria-hidden="true">
+                        しるふぁ工房
+                    </div>
+                    <p class="footer__tagline">想いを記録にかえて、未来を紡ぐ。</p>
+                </div>
+                <nav aria-label="フッターナビゲーション1">
+                    <p class="footer__nav-title">Pages</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../works.html">Works</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../devlog.html">Devlog</a></li>
+                        <li><a href="../story.html">Story</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../links.html">Links</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="フッターナビゲーション2">
+                    <p class="footer__nav-title">Info</p>
+                    <ul class="footer__nav-list" role="list">
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2026 しるふぁ工房 / sylfa Studio. All rights reserved.</p>
+                <div class="footer__links">
+                    <a href="../contact.html">Contact</a>
+                    <a href="../privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
