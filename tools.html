@@ -14,7 +14,7 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools — しるふぁ工房</title>
-    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VN Studio」ベータ版を無償配布中。Windowsに加え、MSX(V9990)・PSP・X68000でも同じスクリプトが動きます。">
+    <meta name="description" content="しるふぁ工房が開発するクリエイター向けツール。ビジュアルノベルエンジン「VN Studio」ベータ版を無償配布中。Windowsに加え、ブラウザ(WebGL)・MSX(V9990)・PSP・X68000でも同じスクリプトが動きます。">
     <meta property="og:title" content="Tools — しるふぁ工房">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
@@ -215,11 +215,12 @@
                 <div class="card fade-in" style="max-width:860px; margin:0 auto;">
                     <div class="card__thumb" style="position:relative; overflow:hidden;">
                         <div class="vns-gallery" style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; gap:0;">
+                            <img src="assets/images/vns093_webgl_scene.webp" alt="VN Studio の作品をブラウザ（WebGL）で実行した画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns093_msx.webp" alt="VN Studio の作品を MSX（openMSX / turboR + V9990）でプレビューした画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns093_x68000.webp" alt="VN Studio の作品を X68000（RetroArch / PX68k）でプレビューした画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns093_psp.webp" alt="VN Studio の作品を PSP（PPSSPP）でプレビューした画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
+                            <img src="assets/images/vns093_webgl_settings.webp" alt="ブラウザ（WebGL）で動作する設定メニュー" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
                             <img src="assets/images/vns_beta_unity.webp" alt="VN Studio エディタと Windows(Unity) のプレビュー" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
-                            <img src="assets/images/vns_beta_msx.webp" alt="VN Studio の作品を MSX(V9990) 実機環境で実行" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
-                            <img src="assets/images/vns_beta_psp.webp" alt="VN Studio の作品を PSP で実行" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
-                            <img src="assets/images/vns_beta_settings.webp" alt="スクリプトで定義できる設定メニュー" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
-                            <img src="assets/images/vns_beta_load.webp" alt="カスタマイズ可能なセーブ／ロード画面" loading="lazy" decoding="async" style="flex:0 0 100%; width:100%; object-fit:cover; scroll-snap-align:start;">
                         </div>
                         <div style="position:absolute; bottom:0.6rem; left:50%; transform:translateX(-50%); display:flex; gap:0.4rem;" class="vns-dots">
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.9);cursor:pointer;" data-idx="0"></span>
@@ -227,6 +228,7 @@
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="2"></span>
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="3"></span>
                             <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="4"></span>
+                            <span style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;" data-idx="5"></span>
                         </div>
                     </div>
                     <script>
@@ -250,36 +252,45 @@
                             <span class="tag">Next-Gen Visual Novel Engine</span>
                             <span class="tag tag--blue">Unity6 + WPF</span>
                             <span class="tag tag--green">Beta Release</span>
-                            <span class="tag">Windows / MSX / PSP / X68000</span>
+                            <span class="tag">Windows / ブラウザ / MSX / PSP / X68000</span>
                         </div>
                         <h2 class="card__title" style="font-size:1.8rem;">VN Studio</h2>
                         <p class="card__desc" style="font-size:1rem; margin-top:0.5rem; line-height:1.8;">
                             <strong
                                 style="font-size: 1.3rem; color: var(--color-primary); display: block; margin-bottom: 0.25rem; letter-spacing: 0.02em;">『まるでiPadでお絵描きをするように…』</strong>
                             <strong>「「あなたの物語」を動かそう」</strong><br>
-                            高度なプログラミング技術を必要とせず、クリエイターが物語と演出の創造に集中できる環境を提供する次世代のビジュアルノベル開発ツールです。独自の軽量スクリプト言語により、文章を書くような感覚でリッチな演出を実現します。
+                            高度なプログラミング技術を必要とせず、クリエイターが物語と演出の創造に集中できる環境を提供する次世代のビジュアルノベル開発ツールです。独自の軽量スクリプト言語により、文章を書くような感覚でリッチな演出を実現します。作った作品は、Windows はもちろん、ブラウザ（WebGL）でも公開できます。
                         </p>
 
                         <!-- ダウンロード -->
                         <div class="download-box fade-in fade-in-delay-1" style="margin-top: 2rem;">
                             <div class="download-box__actions">
-                                <a href="https://github.com/fuujii256/VNStudio/releases/download/v0.92.15-beta.2/VNStudio_0.92.15-beta.2.zip" target="_blank" rel="noopener noreferrer" class="btn" style="font-size:1.1rem; padding:0.75rem 2rem;">💾 Download — v0.92.15-beta.2</a>
+                                <a href="https://studio-sylfa.booth.pm/items/9138623" target="_blank" rel="noopener noreferrer" class="btn" style="font-size:1.1rem; padding:0.75rem 2rem;">💾 Download — v0.93.2-beta（BOOTH）</a>
                             </div>
                             <p class="download-box__desc" style="margin-top:1rem; margin-bottom:0;">
-                                GitHub Releases にて無償配布中。エディタ・Windows(Unity) ランタイム・サンプルプロジェクト・オフライン版ドキュメントを同梱。Windows 10 / 11（64ビット）対応。作った作品は、商用・非商用を問わず配布・販売できます（クレジット表記は任意）。
+                                BOOTH にて無償配布中（¥0）。エディタ・Windows(Unity) ランタイム・サンプルプロジェクト・オフライン版ドキュメントを同梱。Windows 10 / 11（64ビット）対応。作った作品は、商用・非商用を問わず配布・販売できます（クレジット表記は任意）。
                             </p>
                             <p class="download-box__roadmap">
-                                2026.10.27 更新：Windows の FM/MML 再生を強化し、MSX(V9990)・X68000 ランタイムを更新。単体更新用ファイルにもサードパーティのライセンス表記を同梱しました。
-                                <a href="https://github.com/fuujii256/VNStudio/releases/tag/v0.92.15-beta.2" target="_blank" rel="noopener noreferrer"
+                                2026.11.11 更新（v0.93.2-beta）：作品をブラウザで遊べる WebGL（α 版）書き出しに対応しました。GitHub Pages / itch.io / unityroom の3つから公開先を選べ、GitHub Pages はリポジトリの URL を入れてワンクリックで公開できます。スマートフォン・タブレットのタッチ操作（タップで会話を進める／約 0.6 秒の長押しでメニュー）にも対応しました。
+                                <a href="https://github.com/fuujii256/VNStudio/releases/tag/core-v0.93.2-beta" target="_blank" rel="noopener noreferrer"
                                     style="color:#48bb78; text-decoration:underline;">リリース情報・変更履歴</a>
                             </p>
+                            <figure style="margin:1.25rem 0 0; text-align:center;">
+                                <img src="assets/images/dev22_webgl_publish_menu.png" alt="エディタの WebGL 公開パネル。公開先（GitHub Pages / itch.io / unityroom）の選択と、GitHub へのワンクリック公開ボタン" loading="lazy" decoding="async" style="width:300px; max-width:100%; border-radius:8px; border:1px solid rgba(0,0,0,0.12);">
+                                <figcaption style="font-size:0.75rem; color:#666; margin-top:0.5rem; line-height:1.6;">エディタから公開先を選び、GitHub Pages はワンクリックで公開（v0.93.2-beta）</figcaption>
+                            </figure>
                             <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
                                 v0.92.0-beta 以降をお使いの方は、エディタの「コンポーネント」から更新できます。MSX・X68000 を使う場合は、各ランタイムと共通ツールも更新してください。
                                 <a href="https://fuujii256.github.io/VNStudio/getting-started/install/" target="_blank" rel="noopener noreferrer"
                                     style="color:#48bb78; text-decoration:underline;">インストール・更新の手順</a>
                             </p>
                             <p class="download-box__roadmap">
-                                🎮 Windows(Unity) に加え、MSX(V9990)・PSP・X68000 でも同じスクリプトが動きます（レトロ実機向けのランタイムは α 版で、一部の機能は未実装。XZ80 は準備中です）。
+                                🎮 Windows(Unity) に加え、ブラウザ（WebGL）・MSX(V9990)・PSP・X68000 でも同じスクリプトが動きます（ブラウザとレトロ実機向けのランタイムは α 版で、一部の機能は未実装。XZ80 は準備中です）。作品として完成・配布する場合は、Windows(Unity) ランタイムを推奨します。
+                            </p>
+                            <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
+                                🌐 インストール不要で試せる、ブラウザ版のチュートリアル体験版は
+                                <a href="https://fuujii256.github.io/ExplainVNStudio/" target="_blank" rel="noopener noreferrer"
+                                    style="color:#48bb78; text-decoration:underline;">こちら</a>
                             </p>
                             <p class="download-box__roadmap" style="border-top:none; margin-top:0.5rem; padding-top:0;">
                                 📖 ドキュメント・コマンドリファレンスは
@@ -306,7 +317,7 @@
                                     <h4 style="font-size: 0.9rem; color: var(--color-tertiary); margin-bottom: 0.5rem;">
                                         Unity6 Runtime</h4>
                                     <p style="font-size: 0.8rem; color: var(--color-text-muted);">
-                                        圧倒的な描画パフォーマンスを誇るUnityをレンダリングエンジンとして採用。多彩な画像表現力を持ちます。将来的には3Dモデルの表示や最新の画像表現まで幅広く対応可能なポテンシャルを秘めています。
+                                        圧倒的な描画パフォーマンスを誇るUnityをレンダリングエンジンとして採用。多彩な画像表現力を持ち、同じ Unity ランタイムをブラウザ（WebGL）向けにも書き出せます。将来的には3Dモデルの表示や最新の画像表現まで幅広く対応可能なポテンシャルを秘めています。
                                     </p>
                                 </div>
                                 <div
@@ -351,8 +362,15 @@
                                     <span class="feature-item__icon">🎮</span>
                                     <div>
                                         <p class="feature-item__title">マルチランタイム</p>
-                                        <p class="feature-item__desc">同じスクリプトが Windows(Unity) のほか、MSX(V9990)・PSP・X68000 でも動作（レトロ実機向けは α 版）。
+                                        <p class="feature-item__desc">同じスクリプトが Windows(Unity) のほか、ブラウザ（WebGL）・MSX(V9990)・PSP・X68000 でも動作（ブラウザ・レトロ実機向けは α 版）。
                                         </p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-item__icon">🌐</span>
+                                    <div>
+                                        <p class="feature-item__title">ブラウザ公開（WebGL）</p>
+                                        <p class="feature-item__desc">作品をブラウザで遊べる形に書き出し、GitHub Pages / itch.io / unityroom へ公開できます。GitHub Pages はワンクリック公開に対応。スマホ・タブレットのタッチ操作にも対応します。</p>
                                     </div>
                                 </div>
                             </div>
@@ -360,9 +378,9 @@
                     </div>
                     <div class="card__footer">
                         <div>
-                            <p style="font-size:0.75rem; color:var(--color-text-dim);">v0.92.15-beta.2 — 2026.10.27</p>
+                            <p style="font-size:0.75rem; color:var(--color-text-dim);">v0.93.2-beta — 2026.11.11</p>
                         </div>
-                        <a href="https://github.com/fuujii256/VNStudio/releases/download/v0.92.15-beta.2/VNStudio_0.92.15-beta.2.zip" target="_blank" rel="noopener noreferrer" class="btn btn--sm">💾 Download</a>
+                        <a href="https://studio-sylfa.booth.pm/items/9138623" target="_blank" rel="noopener noreferrer" class="btn btn--sm">💾 Download</a>
                     </div>
                 </div>
 
